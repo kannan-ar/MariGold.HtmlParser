@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B83067EE-0BBA-472C-BCE9-19FC4DCC51A7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MariGold.HtmlParser</RootNamespace>
+    <AssemblyName>MariGold.HtmlParser</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnalyzerContext.cs" />
+    <Compile Include="Analyzers\AttributeAnalyzer.cs" />
+    <Compile Include="Analyzers\CloseTagAnalyzer.cs" />
+    <Compile Include="Analyzers\CommentAnalyzer.cs" />
+    <Compile Include="Analyzers\MetaTagAnalyzer.cs" />
+    <Compile Include="Analyzers\OpenTagAnalyzer.cs" />
+    <Compile Include="Analyzers\TextAnalyzer.cs" />
+    <Compile Include="CSS\HtmlCSSInterpreter.cs" />
+    <Compile Include="CSS\CSSParser.cs" />
+    <Compile Include="CSS\CSSelector.cs" />
+    <Compile Include="CSS\Selectors\ClassSelector.cs" />
+    <Compile Include="CSS\Selectors\IdentitySelector.cs" />
+    <Compile Include="CSS\SelectorWeight.cs" />
+    <Compile Include="CSS\StyleSheet.cs" />
+    <Compile Include="HtmlAnalyzer.cs" />
+    <Compile Include="HtmlContext.cs" />
+    <Compile Include="HtmlNode.cs" />
+    <Compile Include="HtmlParser.cs" />
+    <Compile Include="CSS\HtmlStyle.cs" />
+    <Compile Include="HtmlTag.cs" />
+    <Compile Include="HtmlTextParser.cs" />
+    <Compile Include="IAnalyzerContext.cs" />
+    <Compile Include="ICloseTag.cs" />
+    <Compile Include="IOpenTag.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchAnalyzerContext.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
