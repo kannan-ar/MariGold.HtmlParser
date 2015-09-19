@@ -24,6 +24,44 @@
             return openBraceIndex;
         }
 
+        private void FormatStyle(string styleName, string value, CSSelector csSelector)
+        {
+            styleName = styleName.Trim().Replace("\"", string.Empty).Replace("'", string.Empty);
+            value = value.Trim();
+            bool important = false;
+
+            //Replace this with regular expression
+            int importantIndex = value.IndexOf("!important");
+
+            if (importantIndex > -1)
+            {
+                important = true;
+                value = value.Replace("!important", string.Empty);
+            }
+
+            csSelector.AddStyle(new HtmlStyle(styleName, value, important, csSelector.Weight));
+        }
+
+        private void ParseRules(string styleText,CSSelector csSelector)
+        {
+            string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string style in styleSet)
+            {
+                string styleNode = style.Trim();
+
+                if (!string.IsNullOrEmpty(styleNode))
+                {
+                    string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (nodeSet != null && nodeSet.Length > 1)
+                    {
+                        FormatStyle(nodeSet[0], nodeSet[1], csSelector);
+                    }
+                }
+            }
+        }
+
         private void ParseStyles(int position, string styleText, CSSelector csSelector)
         {
             int closeBraceIndex = styleText.IndexOf(closeBrace);
@@ -34,36 +72,7 @@
 
                 if (!string.IsNullOrEmpty(styleText))
                 {
-                    string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    foreach (string style in styleSet)
-                    {
-                        string styleNode = style.Trim();
-
-                        if (!string.IsNullOrEmpty(styleNode))
-                        {
-                            string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-
-                            if (nodeSet != null && nodeSet.Length > 1)
-                            {
-                                string styleName = nodeSet[0].Trim()
-                                    .Replace("\"", string.Empty).Replace("'", string.Empty);
-
-                                string value = nodeSet[1].Trim();
-                                bool important = false;
-                                //Replace this with regular expression
-                                int importantIndex = value.IndexOf("!important");
-
-                                if (importantIndex > -1)
-                                {
-                                    important = true;
-                                    value = value.Replace("!important", string.Empty);
-                                }
-
-                                csSelector.AddStyle(new HtmlStyle(styleName, value, important, csSelector.Weight));
-                            }
-                        }
-                    }
+                    ParseRules(styleText, csSelector);
                 }
             }
         }
@@ -73,7 +82,7 @@
             throw new NotImplementedException();
         }
 
-        private void Parse(string style, StyleSheet styleSheet)
+        private void ParseCSS(string style, StyleSheet styleSheet)
         {
             int eof = style.Length;
             int position = 0;
@@ -93,13 +102,7 @@
             }
         }
 
-        internal CSSParser()
-        {
-            selector = new ClassSelector().SetSuccessor(
-                new IdentitySelector());
-        }
-
-        private void Parse(HtmlNode node, StyleSheet styleSheet)
+        private void ParseHtmlNode(HtmlNode node, StyleSheet styleSheet)
         {
             string style = string.Empty;
 
@@ -119,20 +122,26 @@
 
             if (!string.IsNullOrEmpty(style))
             {
-                Parse(style, styleSheet);
+                ParseCSS(style, styleSheet);
             }
 
             foreach (HtmlNode n in node.Children)
             {
-                Parse(n, styleSheet);
+                ParseHtmlNode(n, styleSheet);
             }
+        }
+
+        internal CSSParser()
+        {
+            selector = new ClassSelector().SetSuccessor(
+                new IdentitySelector());
         }
 
         internal StyleSheet Parse(HtmlNode node)
         {
             StyleSheet styleSheet = new StyleSheet();
 
-            Parse(node, styleSheet);
+            ParseHtmlNode(node, styleSheet);
 
             return styleSheet;
         }
