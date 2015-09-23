@@ -38,6 +38,7 @@
             this.htmlEnd = -1;
             this.context = context;
             this.parent = parent;
+            htmlStyles = new List<HtmlStyle>();
 
             if (parent != null)
             {
@@ -50,6 +51,14 @@
             : this(tag, htmlStart, textStart, context, parent)
         {
             SetBoundary(textEnd, htmlEnd);
+        }
+
+        internal bool IsOpened
+        {
+            get
+            {
+                return textEnd == -1 && htmlEnd == -1;
+            }
         }
 
         internal void SetBoundary(int textEnd, int htmlEnd)
@@ -78,6 +87,33 @@
             if (htmlEnd == -1)
             {
                 htmlEnd = position;
+            }
+        }
+
+        internal void AddStyles(IEnumerable<HtmlStyle> styles)
+        {
+            htmlStyles.AddRange(styles);
+        }
+
+        internal void CopyHtmlStyles(List<HtmlStyle> newStyles)
+        {
+            foreach (HtmlStyle newStyle in newStyles)
+            {
+                bool found = false;
+
+                foreach (HtmlStyle style in htmlStyles)
+                {
+                    if (string.Compare(newStyle.Name, style.Name, true) == 0)
+                    {
+                        found = true;
+                        style.OverWriteIfCan(newStyle);
+                    }
+                }
+
+                if (!found)
+                {
+                    htmlStyles.Add(newStyle);
+                }
             }
         }
 
@@ -167,17 +203,14 @@
                 if (styles == null)
                 {
                     styles = new Dictionary<string, string>();
+
+                    foreach(HtmlStyle style in htmlStyles)
+                    {
+                        styles.Add(style.Name, style.Value);
+                    }
                 }
 
                 return styles;
-            }
-        }
-
-        internal bool IsOpened
-        {
-            get
-            {
-                return textEnd == -1 && htmlEnd == -1;
             }
         }
     }

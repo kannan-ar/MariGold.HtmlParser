@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicHtml.cs" />
+    <Compile Include="BasicStyle.cs" />
     <Compile Include="CaseSensitiveTags.cs" />
     <Compile Include="Comments.cs" />
     <Compile Include="FindTag.cs" />

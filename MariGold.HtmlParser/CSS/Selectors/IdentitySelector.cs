@@ -1,10 +1,15 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
+    using System.Text.RegularExpressions;
 
     internal sealed class IdentitySelector : CSSelector
     {
-        public override SelectorWeight Weight
+        private Regex regex;
+        private string selector;
+        private const string key = "id";
+
+        internal override SelectorWeight Weight
         {
             get
             {
@@ -12,9 +17,42 @@
             }
         }
 
-        public override CSSelector Parse(string selector)
+        internal IdentitySelector()
         {
-            throw new NotImplementedException();
+            regex = new Regex("#[A-Za-z0-9]");
+        }
+
+        internal IdentitySelector(string selector)
+            : this()
+        {
+            this.selector = selector;
+        }
+
+        internal override CSSelector Parse(string selector)
+        {
+            selector = selector.Trim();
+
+            if (regex.IsMatch(selector))
+            {
+                return new IdentitySelector(selector.Replace("#", string.Empty));
+            }
+            else
+            {
+                return PassToSuccessor(selector);
+            }
+        }
+
+        internal override void Parse(HtmlNode node)
+        {
+            string id;
+
+            if (node.Attributes.TryGetValue(key, out id))
+            {
+                if (string.Compare(selector, id, true) == 0)
+                {
+                    node.CopyHtmlStyles(styles);
+                }
+            }
         }
     }
 }

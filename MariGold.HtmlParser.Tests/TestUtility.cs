@@ -49,5 +49,11 @@
             Assert.AreEqual(childrenCount, node.Children.Count);
             Assert.AreEqual(attributeCount, node.Attributes.Count);
         }
+
+        public static void CheckStyle(KeyValuePair<string,string> style, string styleName,string styleValue)
+        {
+            Assert.AreEqual(styleName, style.Key);
+            Assert.AreEqual(styleValue, style.Value);
+        }
     }
 }

@@ -8,15 +8,28 @@
         protected CSSelector successor;
         protected List<HtmlStyle> styles;
 
-        public abstract SelectorWeight Weight { get; }
-        public abstract CSSelector Parse(string selector);
+        internal abstract SelectorWeight Weight { get; }
+        internal abstract CSSelector Parse(string selector);
+        internal abstract void Parse(HtmlNode node);
 
-        public CSSelector()
+        internal CSSelector()
         {
             styles = new List<HtmlStyle>();
         }
 
-        public CSSelector SetSuccessor(CSSelector selector)
+        protected internal CSSelector PassToSuccessor(string selector)
+        {
+            if (successor == null)
+            {
+                return null;
+            }
+
+            return successor.Parse(selector);
+        }
+
+       
+
+        internal CSSelector SetSuccessor(CSSelector selector)
         {
             if (selector == null)
             {
@@ -28,9 +41,9 @@
             return this;
         }
 
-        public void AddStyle(HtmlStyle style)
+        internal void AddRange(IEnumerable<HtmlStyle> styles)
         {
-            styles.Add(style);
+            this.styles.AddRange(styles);
         }
     }
 }

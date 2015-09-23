@@ -1,6 +1,8 @@
 ﻿namespace MariGold.HtmlParser.CSS
 {
     using System;
+    using System.Net;
+    using System.Collections.Generic;
 
     internal sealed class CSSParser
     {
@@ -11,7 +13,7 @@
 
         private int ParseSelector(int position, string style, out CSSelector csSelector)
         {
-            int openBraceIndex = style.IndexOf(openBrace);
+            int openBraceIndex = style.IndexOf(openBrace, position);
             csSelector = null;
 
             if (openBraceIndex > position)
@@ -24,7 +26,7 @@
             return openBraceIndex;
         }
 
-        private void FormatStyle(string styleName, string value, CSSelector csSelector)
+        private HtmlStyle CreateHtmlStyleFromRule(string styleName, string value, SelectorWeight selectWeight)
         {
             styleName = styleName.Trim().Replace("\"", string.Empty).Replace("'", string.Empty);
             value = value.Trim();
@@ -39,47 +41,37 @@
                 value = value.Replace("!important", string.Empty);
             }
 
-            csSelector.AddStyle(new HtmlStyle(styleName, value, important, csSelector.Weight));
+            return new HtmlStyle(styleName, value, important, selectWeight);
         }
 
-        private void ParseRules(string styleText,CSSelector csSelector)
+
+        private int ParseStyles(int position, string styleText, CSSelector csSelector)
         {
-            string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (string style in styleSet)
-            {
-                string styleNode = style.Trim();
-
-                if (!string.IsNullOrEmpty(styleNode))
-                {
-                    string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (nodeSet != null && nodeSet.Length > 1)
-                    {
-                        FormatStyle(nodeSet[0], nodeSet[1], csSelector);
-                    }
-                }
-            }
-        }
-
-        private void ParseStyles(int position, string styleText, CSSelector csSelector)
-        {
-            int closeBraceIndex = styleText.IndexOf(closeBrace);
+            int closeBraceIndex = styleText.IndexOf(closeBrace, position);
 
             if (closeBraceIndex > position)
             {
-                string styles = styleText.Substring(position, closeBraceIndex - position);
+                string styles = styleText.Substring(position + 1, closeBraceIndex - position - 1);
 
-                if (!string.IsNullOrEmpty(styleText))
+                if (!string.IsNullOrEmpty(styles))
                 {
-                    ParseRules(styleText, csSelector);
+                    csSelector.AddRange(ParseRules(styles, csSelector.Weight));
                 }
             }
+
+            return closeBraceIndex;
         }
 
         private string ExtractStylesFromLink(string url)
         {
-            throw new NotImplementedException();
+            string styles = string.Empty;
+
+            using (WebClient client = new WebClient())
+            {
+                styles = client.DownloadString(url);
+            }
+
+            return styles;
         }
 
         private void ParseCSS(string style, StyleSheet styleSheet)
@@ -95,10 +87,18 @@
 
                 if (bracePosition > position && csSelector != null)
                 {
-                    ParseStyles(bracePosition, style, csSelector);
+                    //Returning close brace index
+                    bracePosition = ParseStyles(bracePosition, style, csSelector);
 
                     styleSheet.Add(csSelector);
                 }
+
+                if (bracePosition == -1)
+                {
+                    break;
+                }
+
+                position = bracePosition;
             }
         }
 
@@ -145,5 +145,26 @@
 
             return styleSheet;
         }
+
+        internal IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorWeight selectorWeight)
+        {
+            string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string style in styleSet)
+            {
+                string styleNode = style.Trim();
+
+                if (!string.IsNullOrEmpty(styleNode))
+                {
+                    string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (nodeSet != null && nodeSet.Length > 1)
+                    {
+                        yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], selectorWeight);
+                    }
+                }
+            }
+        }
+
     }
 }

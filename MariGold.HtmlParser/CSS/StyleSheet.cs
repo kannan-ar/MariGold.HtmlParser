@@ -5,29 +5,37 @@
 
     internal sealed class StyleSheet
     {
-        private List<CSSelector> styles;
+        private List<CSSelector> selectors;
 
         internal StyleSheet()
         {
-            styles = new List<CSSelector>();
+            selectors = new List<CSSelector>();
         }
 
         internal CSSelector this[int index]
         {
             get
             {
-                if (index < 0 || index > styles.Count)
+                if (index < 0 || index > selectors.Count)
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
 
-                return styles[index];
+                return selectors[index];
             }
         }
 
         internal void Add(CSSelector selector)
         {
-            styles.Add(selector);
+            selectors.Add(selector);
+        }
+
+        internal void Parse(HtmlNode node)
+        {
+            foreach(CSSelector selector in selectors)
+            {
+                selector.Parse(node);
+            }
         }
     }
 }
