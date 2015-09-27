@@ -68,5 +68,29 @@
                 TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(1), "color", "#000");
             }
         }
+
+        [Test]
+        public void BasicClassTagStyle()
+        {
+            string html = "<html><style>.cls{font:verdana,arial;color:#000}</style><div class='cls'>test</div></html>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            if (parser.Traverse())
+            {
+                parser.ParseCSS();
+
+                Assert.IsNotNull(parser.Current);
+                Assert.IsNotNull(parser.Current.Children);
+                Assert.AreEqual(2, parser.Current.Children.Count);
+                TestUtility.AnalyzeNode(parser.Current.Children[1], "div", "test", "<div class='cls'>test</div>",
+                    parser.Current, false, true, 1, 1);
+
+                Assert.IsNotNull(parser.Current.Children[1].Styles);
+                Assert.AreEqual(2, parser.Current.Children[1].Styles.Count);
+                TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(0), "font", "verdana,arial");
+                TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(1), "color", "#000");
+            }
+        }
     }
 }

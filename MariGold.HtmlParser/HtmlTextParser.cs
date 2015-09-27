@@ -155,9 +155,11 @@
         {
             if (current != null)
             {
-                StyleSheet styleSheet = new CSS.CSSParser().Parse(current);
+                CSS.CSSParser cssParser = new CSS.CSSParser();
 
-                new HtmlCSSInterpreter().Parse(styleSheet, current);
+                StyleSheet styleSheet = cssParser.Parse(current);
+
+                cssParser.InterpretStyles(styleSheet, current);
             }
         }
     }

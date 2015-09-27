@@ -6,6 +6,8 @@
     {
         Inline = 0,
         Identity = 1,
-        Class = 2
+        Class = 2,
+        Element = 3,
+        Global = 4
     }
 }

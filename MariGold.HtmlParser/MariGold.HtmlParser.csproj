@@ -41,7 +41,8 @@
     <Compile Include="Analyzers\MetaTagAnalyzer.cs" />
     <Compile Include="Analyzers\OpenTagAnalyzer.cs" />
     <Compile Include="Analyzers\TextAnalyzer.cs" />
-    <Compile Include="HtmlCSSInterpreter.cs" />
+    <Compile Include="CSS\Selectors\ElementSelector.cs" />
+    <Compile Include="CSS\Selectors\GlobalSelector.cs" />
     <Compile Include="CSS\CSSParser.cs" />
     <Compile Include="CSS\CSSelector.cs" />
     <Compile Include="CSS\Selectors\ClassSelector.cs" />

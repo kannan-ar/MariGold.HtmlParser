@@ -44,7 +44,6 @@
             return new HtmlStyle(styleName, value, important, selectWeight);
         }
 
-
         private int ParseStyles(int position, string styleText, CSSelector csSelector)
         {
             int closeBraceIndex = styleText.IndexOf(closeBrace, position);
@@ -166,5 +165,21 @@
             }
         }
 
+        internal void InterpretStyles(StyleSheet styleSheet, HtmlNode htmlNode)
+        {
+            string style;
+
+            if (htmlNode.Attributes.TryGetValue("style", out style))
+            {
+                htmlNode.AddStyles(ParseRules(style, SelectorWeight.Inline));
+            }
+
+            styleSheet.Parse(htmlNode);
+
+            foreach (HtmlNode node in htmlNode.Children)
+            {
+                InterpretStyles(styleSheet, node);
+            }
+        }
     }
 }

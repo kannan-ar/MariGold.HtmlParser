@@ -27,8 +27,6 @@
             return successor.Parse(selector);
         }
 
-       
-
         internal CSSelector SetSuccessor(CSSelector selector)
         {
             if (selector == null)
