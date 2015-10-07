@@ -118,6 +118,8 @@
                 {
                     context.SetAnalyzer(context.GetTextAnalyzer(position + 1, nextNode));
                 }
+
+                InnerTagClosed(current);
             }
 
             return tagCreated;

@@ -19,7 +19,7 @@
 
         internal IdentitySelector()
         {
-            regex = new Regex("#[A-Za-z0-9]");
+            regex = new Regex("^#[-_]*([a-zA-Z]+[0-9_-]*)+$");
         }
 
         internal IdentitySelector(string selector)

@@ -11,6 +11,8 @@
         private readonly IList<ICloseTag> closeTags;
         private readonly HtmlContext htmlContext;
 
+        private HtmlNode previousNode;
+
         public event Action<HtmlAnalyzer> OnAnalyzerChange;
         public event Action<int> OnPositionChange;
 
@@ -51,6 +53,19 @@
             get
             {
                 return htmlContext;
+            }
+        }
+
+        public HtmlNode PreviousNode
+        {
+            get
+            {
+                return previousNode;
+            }
+
+            set
+            {
+                previousNode = value;
             }
         }
 

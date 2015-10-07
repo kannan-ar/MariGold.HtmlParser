@@ -15,9 +15,12 @@
         private int htmlEnd;
         private bool selfClosing;
         private List<HtmlNode> children;
+        private HtmlNode previous;
+        private HtmlNode next;
         private Dictionary<string, string> attributes;
         private Dictionary<string, string> styles;
         private List<HtmlStyle> htmlStyles;
+        private string[] potentialStyles;
 
         internal HtmlNode(string tag, int htmlStart, int textStart, HtmlContext context, HtmlNode parent)
         {
@@ -61,14 +64,27 @@
             }
         }
 
+        internal string[] PotentialStyles
+        {
+            get
+            {
+                return potentialStyles;
+            }
+
+            set
+            {
+                potentialStyles = value;
+            }
+        }
+
         internal void SetBoundary(int textEnd, int htmlEnd)
         {
-            if (textEnd < textStart)
+            if (textEnd != -1 && textEnd < textStart)
             {
                 throw new ArgumentOutOfRangeException("textEnd");
             }
 
-            if (htmlEnd <= htmlStart)
+            if (htmlEnd != -1 && htmlEnd <= htmlStart)
             {
                 throw new ArgumentOutOfRangeException("htmlEnd");
             }
@@ -162,6 +178,32 @@
             }
         }
 
+        public HtmlNode Previous
+        {
+            get
+            {
+                return previous;
+            }
+
+            internal set
+            {
+                previous = value;
+            }
+        }
+
+        public HtmlNode Next
+        {
+            get
+            {
+                return next;
+            }
+
+            internal set
+            {
+                next = value;
+            }
+        }
+
         public bool HasChildren
         {
             get
@@ -204,7 +246,7 @@
                 {
                     styles = new Dictionary<string, string>();
 
-                    foreach(HtmlStyle style in htmlStyles)
+                    foreach (HtmlStyle style in htmlStyles)
                     {
                         styles.Add(style.Name, style.Value);
                     }

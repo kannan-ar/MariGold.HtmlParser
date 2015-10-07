@@ -6,7 +6,6 @@
     {
         private readonly IAnalyzerContext context;
         private readonly int eof;
-        private bool parseCSS;
 
         private int index;
         private HtmlAnalyzer analyzer;

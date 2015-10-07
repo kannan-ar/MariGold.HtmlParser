@@ -47,6 +47,7 @@
     <Compile Include="InvalidMultiElements.cs" />
     <Compile Include="InvalidOpenClose.cs" />
     <Compile Include="OneLevelHierarchy.cs" />
+    <Compile Include="PreviousNextNodes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelfClosing.cs" />
     <Compile Include="SpecialTags.cs" />

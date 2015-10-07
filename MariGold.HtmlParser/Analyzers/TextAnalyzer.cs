@@ -39,14 +39,16 @@
             if (IsOpenTag(position, out openTag))
             {
                 //+1 is required because the Html is zero based array so the position is always -1 of total length.
-                tagCreated = CreateTag(HtmlTag.TEXT, startPosition, startPosition, position, 
+                tagCreated = CreateTag(HtmlTag.TEXT, startPosition, startPosition, position,
                     position, parent, out node);
+
                 context.SetAnalyzer(openTag.GetAnalyzer(position, parent));
             }
             else if (IsCloseTag(position, out closeTag))
             {
                 tagCreated = CreateTag(HtmlTag.TEXT, startPosition, startPosition, position,
                     position, parent, out node);
+
                 closeTag.Init(position, parent);
                 context.SetAnalyzer(closeTag.GetAnalyzer());
             }

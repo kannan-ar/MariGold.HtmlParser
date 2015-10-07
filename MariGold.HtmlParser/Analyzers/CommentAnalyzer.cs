@@ -30,7 +30,9 @@
 
             if (isEnd)
             {
-                tagCreated = CreateTag(HtmlTag.COMMENT, startPosition, startPosition, position + 3, position + 3, parent, out node);
+                tagCreated = CreateTag(HtmlTag.COMMENT, startPosition, startPosition, position + 3,
+                    position + 3, parent, out node);
+
                 context.SetPosition(position + 3);
             }
 

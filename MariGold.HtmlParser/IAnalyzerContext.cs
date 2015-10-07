@@ -10,6 +10,7 @@
         IList<IOpenTag> OpenTags { get; }
         IList<ICloseTag> CloseTags { get; }
         HtmlContext HtmlContext { get; }
+        HtmlNode PreviousNode { get; set; }
 
         void SetAnalyzer(HtmlAnalyzer analyzer);
         void SetPosition(int position);

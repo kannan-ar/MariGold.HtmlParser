@@ -11,6 +11,8 @@
         private readonly IList<IOpenTag> openTags;
         private readonly IList<ICloseTag> closeTags;
         private readonly HtmlContext htmlContext;
+        
+        private HtmlNode previousNode;
 
         public string Html
         {
@@ -49,6 +51,19 @@
             get
             {
                 return htmlContext;
+            }
+        }
+
+        public HtmlNode PreviousNode
+        {
+            get
+            {
+                return previousNode;
+            }
+
+            set
+            {
+                previousNode = value;
             }
         }
 

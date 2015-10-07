@@ -45,7 +45,8 @@
                     ExtractTag(position - 1);
                 }
 
-                tagCreated = CreateTag(tag, startPosition, startPosition, position + 1, position + 1, parent, out node);
+                tagCreated = CreateTag(tag, startPosition, startPosition, position + 1,
+                    position + 1, parent, out node);
 
                 if (node != null)
                 {

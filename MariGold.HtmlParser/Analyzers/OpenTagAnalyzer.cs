@@ -37,6 +37,7 @@
 
             tagCreated = CreateTag(tag, startPosition, startPosition, position + 2, position + 2,
                     parent, out node);
+
             node.SelfClosing = true;
             //+ 2 is to find next position of />
             if (!AssignNextAnalyzer(position + 2, parent))
@@ -108,7 +109,9 @@
             {
                 if (HtmlTag.IsSelfClosing(tag))
                 {
-                    tagCreated = CreateTag(tag, startPosition, startPosition, position + 1, position + 1, parent, out node);
+                    tagCreated = CreateTag(tag, startPosition, startPosition, position + 1,
+                        position + 1, parent, out node);
+
                     node.SelfClosing = true;
 
                     if (!AssignNextAnalyzer(position + 1, parent))
@@ -118,12 +121,14 @@
                 }
                 else
                 {
-                    node = new HtmlNode(tag, startPosition, position + 1, context.HtmlContext, parent);
+                    CreateTag(tag, startPosition, position + 1, -1, -1, parent, out node);
 
                     if (!AssignNextAnalyzer(position + 1, node))
                     {
                         context.SetAnalyzer(context.GetTextAnalyzer(position + 1, node));
                     }
+
+                    InnerTagOpened(node);
                 }
 
                 this.FinalizeSubAnalyzers(position, ref node);

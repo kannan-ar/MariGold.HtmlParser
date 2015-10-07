@@ -49,21 +49,29 @@
         }
 
         protected bool CreateTag(string tag, int htmlStart, int textStart, int textEnd, int htmlEnd,
-            HtmlNode parent, out HtmlNode node)
+           HtmlNode parent, out HtmlNode node)
         {
             node = null;
 
-            if (htmlEnd <= htmlStart)
+            if (htmlEnd != -1 && htmlEnd <= htmlStart)
             {
                 return false;
             }
 
-            if (textEnd < textStart)
+            if (textEnd != -1 && textEnd < textStart)
             {
                 return false;
             }
 
             node = new HtmlNode(tag, htmlStart, textStart, textEnd, htmlEnd, context.HtmlContext, parent);
+
+            if (context.PreviousNode != null)
+            {
+                node.Previous = context.PreviousNode;
+                context.PreviousNode.Next = node;
+            }
+
+            context.PreviousNode = node;
 
             return parent == null;
         }
@@ -131,6 +139,18 @@
             {
                 OnTagCreate(tag);
             }
+        }
+
+        protected void InnerTagOpened(HtmlNode parentNode)
+        {
+            //New inner rows opened. So clearing the previous node.
+            context.PreviousNode = null;
+        }
+
+        protected void InnerTagClosed(HtmlNode currentNode)
+        {
+            //Closed a row of nodes. So current node assigned as previous node.
+            context.PreviousNode = currentNode;
         }
 
         public bool Process(int position, ref HtmlNode node)
