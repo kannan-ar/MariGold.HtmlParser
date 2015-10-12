@@ -1,24 +1,17 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
+    using System.Collections.Generic;
 
     internal sealed class GlobalSelector : CSSelector
     {
         private const string globalSelector = "*";
 
-        internal override SelectorWeight Weight
-        {
-            get
-            {
-                return SelectorWeight.Global;
-            }
-        }
-
         internal override CSSelector Parse(string selector)
         {
             if (selector == globalSelector)
             {
-                return new GlobalSelector();
+                return this;
             }
             else
             {
@@ -26,9 +19,12 @@
             }
         }
 
-        internal override void Parse(HtmlNode node)
+        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            node.CopyHtmlStyles(styles);
+            if (HtmlStyle.IsNonStyleElement(node.Tag))
+            {
+                node.CopyHtmlStyles(htmlStyles, SelectorWeight.Global);
+            }
         }
     }
 }

@@ -20,7 +20,6 @@
         private Dictionary<string, string> attributes;
         private Dictionary<string, string> styles;
         private List<HtmlStyle> htmlStyles;
-        private string[] potentialStyles;
 
         internal HtmlNode(string tag, int htmlStart, int textStart, HtmlContext context, HtmlNode parent)
         {
@@ -64,19 +63,6 @@
             }
         }
 
-        internal string[] PotentialStyles
-        {
-            get
-            {
-                return potentialStyles;
-            }
-
-            set
-            {
-                potentialStyles = value;
-            }
-        }
-
         internal void SetBoundary(int textEnd, int htmlEnd)
         {
             if (textEnd != -1 && textEnd < textStart)
@@ -111,18 +97,20 @@
             htmlStyles.AddRange(styles);
         }
 
-        internal void CopyHtmlStyles(List<HtmlStyle> newStyles)
+        internal void CopyHtmlStyles(List<HtmlStyle> newStyles, SelectorWeight weight)
         {
             foreach (HtmlStyle newStyle in newStyles)
             {
                 bool found = false;
+
+                newStyle.Weight = weight;
 
                 foreach (HtmlStyle style in htmlStyles)
                 {
                     if (string.Compare(newStyle.Name, style.Name, true) == 0)
                     {
                         found = true;
-                        style.OverWriteIfCan(newStyle);
+                        style.OverWrite(newStyle);
                     }
                 }
 

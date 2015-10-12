@@ -45,6 +45,11 @@
             {
                 return weight;
             }
+
+            set
+            {
+                weight = value;
+            }
         }
 
         internal HtmlStyle(string name, string value, bool important, SelectorWeight weight)
@@ -70,11 +75,11 @@
             this.weight = weight;
         }
 
-        internal void OverWriteIfCan(HtmlStyle htmlStyle)
+        internal void OverWrite(HtmlStyle htmlStyle)
         {
             if (string.Compare(name, htmlStyle.Name, true) == 0)
             {
-                if (htmlStyle.Weight < weight &&
+                if (htmlStyle.Weight > weight &&
                     ((!important && htmlStyle.Important) ||
                     important && htmlStyle.Important))
                 {
@@ -82,6 +87,13 @@
                     important = htmlStyle.Important;
                 }
             }
+        }
+
+        static internal bool IsNonStyleElement(string tag)
+        {
+            tag = tag.ToLower();
+
+            return tag == "style" || tag == "script" || tag == "html";
         }
     }
 }

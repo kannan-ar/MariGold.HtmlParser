@@ -6,18 +6,12 @@
     internal abstract class CSSelector
     {
         protected CSSelector successor;
-        protected List<HtmlStyle> styles;
+        protected ISelectorContext context;
 
-        internal abstract SelectorWeight Weight { get; }
         internal abstract CSSelector Parse(string selector);
-        internal abstract void Parse(HtmlNode node);
+        internal abstract void Parse(HtmlNode node, List<HtmlStyle> htmlStyles);
 
-        internal CSSelector()
-        {
-            styles = new List<HtmlStyle>();
-        }
-
-        protected internal CSSelector PassToSuccessor(string selector)
+        protected CSSelector PassToSuccessor(string selector)
         {
             if (successor == null)
             {
@@ -25,6 +19,16 @@
             }
 
             return successor.Parse(selector);
+        }
+
+        protected void ParseBehaviour(string selectorText, HtmlNode node, List<HtmlStyle> htmlStyles)
+        {
+            ICSSBehavior behavior = context.FindBehavior(selectorText);
+
+            if (behavior == null)
+            {
+                behavior.Do(node, htmlStyles);
+            }
         }
 
         internal CSSelector SetSuccessor(CSSelector selector)
@@ -37,11 +41,6 @@
             successor = selector;
 
             return this;
-        }
-
-        internal void AddRange(IEnumerable<HtmlStyle> styles)
-        {
-            this.styles.AddRange(styles);
         }
     }
 }

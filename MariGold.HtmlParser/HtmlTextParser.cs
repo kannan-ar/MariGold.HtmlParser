@@ -156,7 +156,7 @@
             {
                 CSS.CSSParser cssParser = new CSS.CSSParser();
 
-                StyleSheet styleSheet = cssParser.Parse(current);
+                StyleSheet styleSheet = cssParser.ParseStyleSheet(current);
 
                 cssParser.InterpretStyles(styleSheet, current);
             }

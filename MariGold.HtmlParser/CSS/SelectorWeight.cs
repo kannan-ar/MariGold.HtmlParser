@@ -4,10 +4,11 @@
 
     internal enum SelectorWeight
     {
-        Inline = 0,
-        Identity = 1,
-        Class = 2,
-        Element = 3,
-        Global = 4
+        None = 0,
+        Global = 1,
+        Element = 2,
+        Class = 3,
+        Identity = 4,
+        Inline = 5,
     }
 }

@@ -1,40 +1,58 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
+    using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
     internal sealed class ClassSelector : CSSelector
     {
-        private Regex regex;
-        private string selector;
         private const string key = "class";
 
-        internal override SelectorWeight Weight
-        {
-            get
-            {
-                return SelectorWeight.Class;
-            }
-        }
+        private Regex regex;
+        private string currentSelector;
+        private string selectorText;
 
-        internal ClassSelector()
+        internal ClassSelector(ISelectorContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            this.context = context;
             regex = new Regex(@"^\.[-_]*([a-zA-Z]+[0-9_-]*)+$");
         }
 
-        internal ClassSelector(string selector)
-            : this()
+        internal ClassSelector(string currentSelector, string selectorText, ISelectorContext context)
         {
-            this.selector = selector;
+            this.currentSelector = currentSelector;
+            this.selectorText = selectorText;
+            this.context = context;
+        }
+
+        private void ApplyIfMatch(HtmlNode node, List<HtmlStyle> htmlStyles)
+        {
+            string className;
+
+            if (node.Attributes.TryGetValue(key, out className))
+            {
+                if (string.Compare(currentSelector, className, true) == 0)
+                {
+                    node.CopyHtmlStyles(htmlStyles, SelectorWeight.Class);
+                }
+            }
         }
 
         internal override CSSelector Parse(string selector)
         {
-            selector = selector.Trim();
+            Match match = regex.Match(selector);
 
-            if(regex.IsMatch(selector))
+            if (match.Success)
             {
-                return new ClassSelector(selector.Replace(".", string.Empty));
+                string trimmedSelector = selector.Substring(match.Value.Length);
+
+                return new ClassSelector(
+                    match.Value.Replace(".", string.Empty), trimmedSelector, context);
             }
             else
             {
@@ -42,16 +60,15 @@
             }
         }
 
-        internal override void Parse(HtmlNode node)
+        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            string className;
-
-            if (node.Attributes.TryGetValue(key, out className))
+            if (string.IsNullOrEmpty(selectorText))
             {
-                if (string.Compare(selector, className, true) == 0)
-                {
-                    node.CopyHtmlStyles(styles);
-                }
+                ApplyIfMatch(node, htmlStyles);
+            }
+            else
+            {
+                ParseBehaviour(selectorText, node, htmlStyles);
             }
         }
     }

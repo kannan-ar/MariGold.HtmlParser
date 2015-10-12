@@ -3,30 +3,28 @@
     using System;
     using System.Net;
     using System.Collections.Generic;
+    using System.Linq;
 
     internal sealed class CSSParser
     {
         private const char openBrace = '{';
         private const char closeBrace = '}';
 
-        private readonly CSSelector selector;
-
-        private int ParseSelector(int position, string style, out CSSelector csSelector)
+        private int ParseSelector(int position, string style, out string selectorText)
         {
+            selectorText = string.Empty;
+
             int openBraceIndex = style.IndexOf(openBrace, position);
-            csSelector = null;
 
             if (openBraceIndex > position)
             {
-                string selectorText = style.Substring(position, openBraceIndex - position).Trim();
-
-                csSelector = selector.Parse(selectorText);
+                selectorText = style.Substring(position, openBraceIndex - position).Trim();
             }
 
             return openBraceIndex;
         }
 
-        private HtmlStyle CreateHtmlStyleFromRule(string styleName, string value, SelectorWeight selectWeight)
+        private HtmlStyle CreateHtmlStyleFromRule(string styleName, string value, SelectorWeight weight)
         {
             styleName = styleName.Trim().Replace("\"", string.Empty).Replace("'", string.Empty);
             value = value.Trim();
@@ -41,11 +39,13 @@
                 value = value.Replace("!important", string.Empty);
             }
 
-            return new HtmlStyle(styleName, value, important, selectWeight);
+            return new HtmlStyle(styleName, value, important, weight);
         }
 
-        private int ParseStyles(int position, string styleText, CSSelector csSelector)
+        private int ParseHtmlStyles(int position, string styleText, out List<HtmlStyle> htmlStyles)
         {
+            htmlStyles = new List<HtmlStyle>();
+
             int closeBraceIndex = styleText.IndexOf(closeBrace, position);
 
             if (closeBraceIndex > position)
@@ -54,7 +54,7 @@
 
                 if (!string.IsNullOrEmpty(styles))
                 {
-                    csSelector.AddRange(ParseRules(styles, csSelector.Weight));
+                    htmlStyles = ParseRules(styles, SelectorWeight.None).ToList();
                 }
             }
 
@@ -80,16 +80,17 @@
 
             while (position < eof)
             {
-                CSSelector csSelector;
+                string selectorText;
 
-                int bracePosition = ParseSelector(position, style, out csSelector);
+                int bracePosition = ParseSelector(position, style, out selectorText);
 
-                if (bracePosition > position && csSelector != null)
+                if (bracePosition > position && selectorText != string.Empty)
                 {
+                    List<HtmlStyle> htmlStyles;
                     //Returning close brace index
-                    bracePosition = ParseStyles(bracePosition, style, csSelector);
+                    bracePosition = ParseHtmlStyles(bracePosition, style, out htmlStyles);
 
-                    styleSheet.Add(csSelector);
+                    styleSheet.Add(selectorText, htmlStyles);
                 }
 
                 if (bracePosition == -1)
@@ -101,7 +102,27 @@
             }
         }
 
-        private void ParseHtmlNode(HtmlNode node, StyleSheet styleSheet)
+        private IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorWeight weight)
+        {
+            string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string style in styleSet)
+            {
+                string styleNode = style.Trim();
+
+                if (!string.IsNullOrEmpty(styleNode))
+                {
+                    string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (nodeSet != null && nodeSet.Length > 1)
+                    {
+                        yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], weight);
+                    }
+                }
+            }
+        }
+
+        private void TravelParseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
         {
             string style = string.Empty;
 
@@ -126,43 +147,17 @@
 
             foreach (HtmlNode n in node.Children)
             {
-                ParseHtmlNode(n, styleSheet);
+                TravelParseHtmlNodes(n, styleSheet);
             }
         }
 
-        internal CSSParser()
+        internal StyleSheet ParseStyleSheet(HtmlNode node)
         {
-            selector = new ClassSelector().SetSuccessor(
-                new IdentitySelector());
-        }
+            StyleSheet styleSheet = new StyleSheet(new SelectorContext());
 
-        internal StyleSheet Parse(HtmlNode node)
-        {
-            StyleSheet styleSheet = new StyleSheet();
-
-            ParseHtmlNode(node, styleSheet);
+            TravelParseHtmlNodes(node, styleSheet);
 
             return styleSheet;
-        }
-
-        internal IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorWeight selectorWeight)
-        {
-            string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (string style in styleSet)
-            {
-                string styleNode = style.Trim();
-
-                if (!string.IsNullOrEmpty(styleNode))
-                {
-                    string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (nodeSet != null && nodeSet.Length > 1)
-                    {
-                        yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], selectorWeight);
-                    }
-                }
-            }
         }
 
         internal void InterpretStyles(StyleSheet styleSheet, HtmlNode htmlNode)
@@ -179,6 +174,11 @@
             foreach (HtmlNode node in htmlNode.Children)
             {
                 InterpretStyles(styleSheet, node);
+            }
+
+            if (htmlNode.Next != null)
+            {
+                InterpretStyles(styleSheet, htmlNode.Next);
             }
         }
     }

@@ -3,55 +3,47 @@
     using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
-    using System.Linq;
 
     internal sealed class ElementSelector : CSSelector
     {
         private Regex regex;
-        private Regex spliter;
-        private Regex isElementOnly;
-        private Regex isElementWithProp;
+        private string currentSelector;
+        private string selectorText;
 
-        private string[] selectorSplit;
-
-        internal override SelectorWeight Weight
+        internal ElementSelector(ISelectorContext context)
         {
-            get 
+            if (context == null)
             {
-                return SelectorWeight.Element;
+                throw new ArgumentNullException("context");
             }
+
+            this.context = context;
+            regex = new Regex(@"^([a-zA-Z]+[0-9]*)+(:[a-zA-Z]+[0-9]*)*");
         }
 
-        internal ElementSelector()
+        private ElementSelector(string currentSelector, string selectorText, ISelectorContext context)
         {
-            regex = new Regex(@"^([a-zA-Z]+[0-9]*([:\.#][a-zA-Z]+[0-9]*)*)+(\s*[>~\+]?\s*([a-zA-Z]+[0-9]*([:\.#][a-zA-Z]+[0-9]*)*)+)*$");
-            spliter = new Regex(@"([a-zA-Z]+[0-9]*([:\.#][a-zA-Z]+[0-9]*)*)|[>~\+]|\s");
-
-            isElementOnly = new Regex(@"^([a-zA-Z]+[0-9]*)$");
-            isElementWithProp = new Regex(@"^([a-zA-Z]+[0-9]*([:\.#][a-zA-Z]+[0-9]*)*)$");
+            this.currentSelector = currentSelector;
+            this.selectorText = selectorText;
+            this.context = context;
         }
 
-        internal ElementSelector(string[] selectorSplit)
-            : this()
+        private void ApplyIfMatch(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            this.selectorSplit = selectorSplit;
-        }
-
-        private IEnumerable<string> SplitSelector(string selector)
-        {
-            foreach(Match m in spliter.Matches(selector))
+            if (string.Compare(node.Tag, currentSelector, true) == 0)
             {
-                yield return m.Value;
+                node.CopyHtmlStyles(htmlStyles, SelectorWeight.Element);
             }
         }
 
         internal override CSSelector Parse(string selector)
         {
-            selector = selector.Trim();
+            Match match = regex.Match(selector);
 
-            if(regex.IsMatch(selector))
+            if (match.Success)
             {
-                return new ElementSelector(SplitSelector(selector).ToArray());
+                string trimmedSelector = selector.Substring(match.Value.Length);
+                return new ElementSelector(match.Value, trimmedSelector, context);
             }
             else
             {
@@ -59,17 +51,15 @@
             }
         }
 
-        internal override void Parse(HtmlNode node)
+        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            if (selectorSplit != null && selectorSplit.Length > 0)
+            if (string.IsNullOrEmpty(selectorText))
             {
-                string selector = selectorSplit[0];
-
-                if (isElementOnly.IsMatch(selector) && 
-                    string.Compare(selector, node.Tag, true) == 0)
-                {
-                    //node.PotentialStyles
-                }
+                ApplyIfMatch(node, htmlStyles);
+            }
+            else
+            {
+                ParseBehaviour(selectorText, node, htmlStyles);
             }
         }
     }
