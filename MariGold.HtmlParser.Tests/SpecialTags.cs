@@ -41,7 +41,7 @@
 			Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children.Count);
 			Assert.AreEqual(true, parser.Current.Children[0].Children[0].SelfClosing);
 			Assert.AreEqual(1, parser.Current.Children[0].Children[0].Attributes.Count);
-			TestUtility.CheckAttribute(parser.Current.Children[0].Children[0].Attributes.ElementAt(0), "charset", "utf-8");
+			TestUtility.CheckKeyValuePair(parser.Current.Children[0].Children[0].Attributes.ElementAt(0), "charset", "utf-8");
 			
 			Assert.IsNotNull(parser.Current.Children[1]);
 			TestUtility.AreEqual(parser.Current.Children[1], "body", "", "<body></body>");
@@ -81,9 +81,9 @@
 			Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
 			Assert.AreEqual(true, parser.Current.Children[0].SelfClosing);
 			Assert.AreEqual(3, parser.Current.Children[0].Attributes.Count);
-			TestUtility.CheckAttribute(parser.Current.Children[0].Attributes.ElementAt(0), "href", "/favicon.ico");
-			TestUtility.CheckAttribute(parser.Current.Children[0].Attributes.ElementAt(1), "rel", "shortcut icon");
-			TestUtility.CheckAttribute(parser.Current.Children[0].Attributes.ElementAt(2), "type", "image/x-icon");
+			TestUtility.CheckKeyValuePair(parser.Current.Children[0].Attributes.ElementAt(0), "href", "/favicon.ico");
+			TestUtility.CheckKeyValuePair(parser.Current.Children[0].Attributes.ElementAt(1), "rel", "shortcut icon");
+			TestUtility.CheckKeyValuePair(parser.Current.Children[0].Attributes.ElementAt(2), "type", "image/x-icon");
 			
 			Assert.IsNotNull(parser.Current.Children[1]);
 			TestUtility.AreEqual(parser.Current.Children[1], "link", "<link href=\"/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\">", "<link href=\"/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\">");
@@ -93,9 +93,9 @@
 			Assert.AreEqual(0, parser.Current.Children[1].Children.Count);
 			Assert.AreEqual(true, parser.Current.Children[1].SelfClosing);
 			Assert.AreEqual(3, parser.Current.Children[1].Attributes.Count);
-			TestUtility.CheckAttribute(parser.Current.Children[1].Attributes.ElementAt(0), "href", "/favicon.ico");
-			TestUtility.CheckAttribute(parser.Current.Children[1].Attributes.ElementAt(1), "rel", "shortcut icon");
-			TestUtility.CheckAttribute(parser.Current.Children[1].Attributes.ElementAt(2), "type", "image/x-icon");
+			TestUtility.CheckKeyValuePair(parser.Current.Children[1].Attributes.ElementAt(0), "href", "/favicon.ico");
+			TestUtility.CheckKeyValuePair(parser.Current.Children[1].Attributes.ElementAt(1), "rel", "shortcut icon");
+			TestUtility.CheckKeyValuePair(parser.Current.Children[1].Attributes.ElementAt(2), "type", "image/x-icon");
 			
 			Assert.AreEqual(false, parser.Traverse());
 			Assert.IsNull(parser.Current);
@@ -116,7 +116,7 @@
 			Assert.AreEqual(0, parser.Current.Children.Count);
 			Assert.AreEqual(true, parser.Current.SelfClosing);
 			Assert.AreEqual(1, parser.Current.Attributes.Count);
-			TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "html", "");
+			TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "html", "");
 			
 			Assert.AreEqual(true, parser.Traverse());
 			Assert.IsNotNull(parser.Current);
@@ -146,7 +146,7 @@
             Assert.AreEqual(0, parser.Current.Children.Count);
             Assert.AreEqual(true, parser.Current.SelfClosing);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "html", "");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "html", "");
 
             Assert.AreEqual(true, parser.Traverse());
             Assert.IsNotNull(parser.Current);
@@ -194,10 +194,10 @@
             Assert.AreEqual(0, parser.Current.Children.Count);
             Assert.AreEqual(true, parser.Current.SelfClosing);
             Assert.AreEqual(4, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "html", "");
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(1), "PUBLIC", "");
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(2), "-//W3C//DTD XHTML 1.0 Transitional//EN", "");
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(3), "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd", "");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "html", "");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "PUBLIC", "");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(2), "-//W3C//DTD XHTML 1.0 Transitional//EN", "");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(3), "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd", "");
 
             Assert.AreEqual(true, parser.Traverse());
             Assert.IsNotNull(parser.Current);
@@ -207,7 +207,7 @@
             Assert.AreEqual(1, parser.Current.Children.Count);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "xmlns", "http://www.w3.org/1999/xhtml");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "xmlns", "http://www.w3.org/1999/xhtml");
 
             Assert.IsNotNull(parser.Current.Children[0]);
             TestUtility.AreEqual(parser.Current.Children[0], "head", "<link href=\"http://google.com\" />", "<head><link href=\"http://google.com\" /></head>");
@@ -226,7 +226,7 @@
             Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children.Count);
             Assert.AreEqual(true, parser.Current.Children[0].Children[0].SelfClosing);
             Assert.AreEqual(1, parser.Current.Children[0].Children[0].Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Children[0].Children[0].Attributes.ElementAt(0),
+            TestUtility.CheckKeyValuePair(parser.Current.Children[0].Children[0].Attributes.ElementAt(0),
                 "href", "http://google.com");
 
             Assert.AreEqual(false, parser.Traverse());

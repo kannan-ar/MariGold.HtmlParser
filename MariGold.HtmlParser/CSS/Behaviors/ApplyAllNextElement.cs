@@ -4,14 +4,14 @@
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    internal sealed class ApplyImmediateChildren : ICSSBehavior
+    internal sealed class ApplyAllNextElement : ICSSBehavior
     {
         private readonly ISelectorContext context;
 
         private Regex regex;
         private string selectorText;
 
-        internal ApplyImmediateChildren(ISelectorContext context)
+        internal ApplyAllNextElement(ISelectorContext context)
         {
             if (context == null)
             {
@@ -20,7 +20,17 @@
 
             this.context = context;
 
-            regex = new Regex(@"^\s*>\s*");
+            regex = new Regex(@"^\s*~\s*");
+        }
+
+        private void ApplyStyle(CSSelector selector, HtmlNode node, List<HtmlStyle> htmlStyles)
+        {
+            if (node.Next != null)
+            {
+                selector.Parse(node.Next, htmlStyles);
+
+                ApplyStyle(selector, node.Next, htmlStyles);
+            }
         }
 
         public bool IsValidBehavior(string selectorText)
@@ -29,7 +39,7 @@
 
             Match match = regex.Match(selectorText);
 
-            if(match.Success)
+            if (match.Success)
             {
                 this.selectorText = selectorText.Substring(match.Value.Length);
             }
@@ -39,17 +49,11 @@
 
         public void Do(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            if (node.HasChildren)
-            {
-                CSSelector selector = context.Selector.Parse(selectorText);
+            CSSelector selector = context.Selector.Parse(selectorText);
 
-                if (selector != null)
-                {
-                    foreach (HtmlNode child in node.Children)
-                    {
-                        selector.Parse(child, htmlStyles);
-                    }
-                }
+            if (selector != null)
+            {
+                ApplyStyle(selector, node, htmlStyles);
             }
         }
     }

@@ -25,7 +25,7 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -48,8 +48,8 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(2, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "");
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(1), "name", "");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "name", "");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -72,7 +72,7 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -95,7 +95,7 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "1");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "1");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -118,7 +118,7 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "1");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "1");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -141,7 +141,7 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "1");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "1");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -164,7 +164,7 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "1");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "1");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -187,7 +187,7 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "abc");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -210,7 +210,7 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "abc");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -233,7 +233,7 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", " abc");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", " abc");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -256,8 +256,8 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(2, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "abc");
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(1), "type", "text");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "type", "text");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -280,8 +280,8 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(2, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "abc");
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(1), "type", "text");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "type", "text");
 
             Assert.IsNotNull(parser.Current.Children[0]);
             TestUtility.AreEqual(parser.Current.Children[0], "span", "", "<span id=\"sp\"></span>");
@@ -293,7 +293,7 @@
 
             Assert.IsNotNull(parser.Current.Children[0].Attributes);
             Assert.AreEqual(1, parser.Current.Children[0].Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Children[0].Attributes.ElementAt(0), "id", "sp");
+            TestUtility.CheckKeyValuePair(parser.Current.Children[0].Attributes.ElementAt(0), "id", "sp");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -316,8 +316,8 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(2, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "abc");
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(1), "type", "text");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "type", "text");
 
             Assert.IsNotNull(parser.Current.Children[0]);
             TestUtility.AreEqual(parser.Current.Children[0], "span", "", "<span id=sp></span>");
@@ -329,7 +329,7 @@
 
             Assert.IsNotNull(parser.Current.Children[0].Attributes);
             Assert.AreEqual(1, parser.Current.Children[0].Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Children[0].Attributes.ElementAt(0), "id", "sp");
+            TestUtility.CheckKeyValuePair(parser.Current.Children[0].Attributes.ElementAt(0), "id", "sp");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -352,8 +352,8 @@
 
             Assert.IsNotNull(parser.Current.Attributes);
             Assert.AreEqual(2, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "abc");
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(1), "type", "text");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "type", "text");
 
             Assert.IsNotNull(parser.Current.Children[0]);
             TestUtility.AreEqual(parser.Current.Children[0], "p", "<span style=\"color:#fff\">test<span>",
@@ -366,7 +366,7 @@
 
             Assert.IsNotNull(parser.Current.Children[0].Attributes);
             Assert.AreEqual(1, parser.Current.Children[0].Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Children[0].Attributes.ElementAt(0), "width", "100px");
+            TestUtility.CheckKeyValuePair(parser.Current.Children[0].Attributes.ElementAt(0), "width", "100px");
 
             Assert.IsNotNull(parser.Current.Children[0].Children[0]);
             TestUtility.AreEqual(parser.Current.Children[0].Children[0], "span", "test<span>", "<span style=\"color:#fff\">test<span>");
@@ -378,7 +378,7 @@
 
             Assert.IsNotNull(parser.Current.Children[0].Children[0].Attributes);
             Assert.AreEqual(1, parser.Current.Children[0].Children[0].Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Children[0].Children[0].Attributes.ElementAt(0), "style", "color:#fff");
+            TestUtility.CheckKeyValuePair(parser.Current.Children[0].Children[0].Attributes.ElementAt(0), "style", "color:#fff");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -399,7 +399,7 @@
             Assert.AreEqual(1, parser.Current.Children.Count);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "style", "font:'verdana arial'");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "style", "font:'verdana arial'");
 
             Assert.IsNotNull(parser.Current.Children[0]);
             TestUtility.AreEqual(parser.Current.Children[0], "#text", "test", "test");
@@ -425,7 +425,7 @@
             Assert.AreEqual(1, parser.Current.Children.Count);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "style", "font:\"verdana arial\"");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "style", "font:\"verdana arial\"");
 
             Assert.IsNotNull(parser.Current.Children[0]);
             TestUtility.AreEqual(parser.Current.Children[0], "#text", "test", "test");

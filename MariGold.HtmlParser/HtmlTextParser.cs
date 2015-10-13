@@ -161,5 +161,22 @@
                 cssParser.InterpretStyles(styleSheet, current);
             }
         }
+
+        public override bool Parse()
+        {
+            HtmlNode temp = null;
+            bool isParsed = Traverse();
+
+            if (isParsed)
+            {
+                temp = current;
+
+                while (Traverse()) ;
+            }
+
+            current = temp;
+
+            return isParsed;
+        }
     }
 }

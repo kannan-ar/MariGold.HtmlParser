@@ -25,7 +25,7 @@
         {
             ICSSBehavior behavior = context.FindBehavior(selectorText);
 
-            if (behavior == null)
+            if (behavior != null)
             {
                 behavior.Do(node, htmlStyles);
             }

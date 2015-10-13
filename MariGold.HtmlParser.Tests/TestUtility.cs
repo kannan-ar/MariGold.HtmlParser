@@ -14,7 +14,7 @@
             Assert.AreEqual(html, node.Html);
         }
 
-        public static void CheckAttribute(KeyValuePair<string, string> attribute, string key, string value)
+        public static void CheckKeyValuePair(KeyValuePair<string, string> attribute, string key, string value)
         {
             Assert.AreEqual(key, attribute.Key);
             Assert.AreEqual(value, attribute.Value);

@@ -608,7 +608,7 @@
             Assert.AreEqual(0, parser.Current.Children.Count);
             Assert.AreEqual(true, parser.Current.SelfClosing);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "img");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "img");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -629,8 +629,8 @@
             Assert.AreEqual(0, parser.Current.Children.Count);
             Assert.AreEqual(true, parser.Current.SelfClosing);
             Assert.AreEqual(2, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "img");
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(1), "src", "http://google.com/1.jpg");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "img");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "src", "http://google.com/1.jpg");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -651,7 +651,7 @@
             Assert.AreEqual(2, parser.Current.Children.Count);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(1, parser.Current.Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Attributes.ElementAt(0), "id", "dv");
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "dv");
 
             Assert.IsNotNull(parser.Current.Children[0]);
             TestUtility.AreEqual(parser.Current.Children[0], "img", "<img id='im'>", "<img id='im'>");
@@ -661,7 +661,7 @@
             Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
             Assert.AreEqual(true, parser.Current.Children[0].SelfClosing);
             Assert.AreEqual(1, parser.Current.Children[0].Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Children[0].Attributes.ElementAt(0), "id", "im");
+            TestUtility.CheckKeyValuePair(parser.Current.Children[0].Attributes.ElementAt(0), "id", "im");
 
             Assert.IsNotNull(parser.Current.Children[1]);
             TestUtility.AreEqual(parser.Current.Children[1], "br", "<br id='b'>", "<br id='b'>");
@@ -671,7 +671,7 @@
             Assert.AreEqual(0, parser.Current.Children[1].Children.Count);
             Assert.AreEqual(true, parser.Current.Children[1].SelfClosing);
             Assert.AreEqual(1, parser.Current.Children[1].Attributes.Count);
-            TestUtility.CheckAttribute(parser.Current.Children[1].Attributes.ElementAt(0), "id", "b");
+            TestUtility.CheckKeyValuePair(parser.Current.Children[1].Attributes.ElementAt(0), "id", "b");
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);

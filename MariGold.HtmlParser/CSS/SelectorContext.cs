@@ -16,9 +16,9 @@
                 {
                     behaviors = new List<ICSSBehavior>()
                     {
-                        new ApplyAllChildren(),
-                        new ApplyImmediateChildren(),
-                        new ApplyNextElement()
+                        new ApplyAllChildren(this),
+                        new ApplyImmediateChildren(this),
+                        new ApplyNextElement(this)
                     };
                 }
 

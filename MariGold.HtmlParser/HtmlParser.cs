@@ -12,5 +12,6 @@
 
         public abstract bool Traverse();
         public abstract bool FindFirst(string tag);
+        public abstract bool Parse();
     }
 }

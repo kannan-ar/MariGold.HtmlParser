@@ -15,7 +15,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            if(parser.Traverse())
+            if (parser.Traverse())
             {
                 parser.ParseCSS();
 
@@ -52,21 +52,20 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            if (parser.Traverse())
-            {
-                parser.ParseCSS();
+            Assert.IsTrue(parser.Traverse());
 
-                Assert.IsNotNull(parser.Current);
-                Assert.IsNotNull(parser.Current.Children);
-                Assert.AreEqual(2, parser.Current.Children.Count);
-                TestUtility.AnalyzeNode(parser.Current.Children[1], "div", "test", "<div id='dv'>test</div>",
-                    parser.Current, false, true, 1, 1);
+            parser.ParseCSS();
 
-                Assert.IsNotNull(parser.Current.Children[1].Styles);
-                Assert.AreEqual(2, parser.Current.Children[1].Styles.Count);
-                TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(0), "font", "verdana,arial");
-                TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(1), "color", "#000");
-            }
+            Assert.IsNotNull(parser.Current);
+            Assert.IsNotNull(parser.Current.Children);
+            Assert.AreEqual(2, parser.Current.Children.Count);
+            TestUtility.AnalyzeNode(parser.Current.Children[1], "div", "test", "<div id='dv'>test</div>",
+                parser.Current, false, true, 1, 1);
+
+            Assert.IsNotNull(parser.Current.Children[1].Styles);
+            Assert.AreEqual(2, parser.Current.Children[1].Styles.Count);
+            TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(0), "font", "verdana,arial");
+            TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(1), "color", "#000");
         }
 
         [Test]
@@ -76,21 +75,106 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            if (parser.Traverse())
+            Assert.IsTrue(parser.Traverse());
+
+            parser.ParseCSS();
+
+            Assert.IsNotNull(parser.Current);
+            Assert.IsNotNull(parser.Current.Children);
+            Assert.AreEqual(2, parser.Current.Children.Count);
+            TestUtility.AnalyzeNode(parser.Current.Children[1], "div", "test", "<div class='cls'>test</div>",
+                parser.Current, false, true, 1, 1);
+
+            Assert.IsNotNull(parser.Current.Children[1].Styles);
+            Assert.AreEqual(2, parser.Current.Children[1].Styles.Count);
+            TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(0), "font", "verdana,arial");
+            TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(1), "color", "#000");
+        }
+
+        [Test]
+        public void DivIdGreatherThanP()
+        {
+            string html = @"<style>
+                                #dv > p
+                                {
+                                    color:#fff;
+                                }
+                            </style>
+                            <div id='dv'>
+                                <p>test</p>
+                            </div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+
+            parser.ParseCSS();
+
+            HtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            foreach (HtmlNode child in node.Children)
             {
-                parser.ParseCSS();
-
-                Assert.IsNotNull(parser.Current);
-                Assert.IsNotNull(parser.Current.Children);
-                Assert.AreEqual(2, parser.Current.Children.Count);
-                TestUtility.AnalyzeNode(parser.Current.Children[1], "div", "test", "<div class='cls'>test</div>",
-                    parser.Current, false, true, 1, 1);
-
-                Assert.IsNotNull(parser.Current.Children[1].Styles);
-                Assert.AreEqual(2, parser.Current.Children[1].Styles.Count);
-                TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(0), "font", "verdana,arial");
-                TestUtility.CheckStyle(parser.Current.Children[1].Styles.ElementAt(1), "color", "#000");
+                if (child.Tag == "p")
+                {
+                    Assert.AreEqual(1, child.Styles.Count);
+                    TestUtility.CheckKeyValuePair(child.Styles.ElementAt(0), "color", "#fff");
+                    break;
+                }
             }
+        }
+
+        [Test]
+        public void DivIdSpaceP()
+        {
+            string html = @"<style>
+                                #dv p
+                                {
+                                    color:#fff;
+                                }
+                            </style>
+                            <div id='dv'>
+                                <a href='#'>link</a>
+                                <p>test</p>
+                                <art>
+                                
+                            </div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+
+            parser.ParseCSS();
+
+            HtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            bool aTagFound = false;
+            bool pTagFound = false;
+
+            foreach (HtmlNode child in node.Children)
+            {
+                if (child.Tag == "a")
+                {
+                    aTagFound = true;
+                    Assert.AreEqual(0, child.Styles.Count);
+                }
+
+                if (child.Tag == "p")
+                {
+                    pTagFound = true;
+                    Assert.AreEqual(1, child.Styles.Count);
+                    TestUtility.CheckKeyValuePair(child.Styles.ElementAt(0), "color", "#fff");
+                    break;
+                }
+            }
+
+            Assert.IsTrue(aTagFound);
+            Assert.IsTrue(pTagFound);
         }
     }
 }

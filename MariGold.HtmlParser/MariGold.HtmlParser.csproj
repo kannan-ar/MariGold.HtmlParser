@@ -42,6 +42,7 @@
     <Compile Include="Analyzers\OpenTagAnalyzer.cs" />
     <Compile Include="Analyzers\TextAnalyzer.cs" />
     <Compile Include="CSS\Behaviors\ApplyAllChildren.cs" />
+    <Compile Include="CSS\Behaviors\ApplyAllNextElement.cs" />
     <Compile Include="CSS\Behaviors\ApplyImmediateChildren.cs" />
     <Compile Include="CSS\Behaviors\ApplyNextElement.cs" />
     <Compile Include="CSS\SelectorContext.cs" />
