@@ -29,7 +29,10 @@
 
         private void ApplyStyle(CSSelector selector, HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            selector.Parse(node, htmlStyles);
+            if (selector.IsValidNode(node))
+            {
+                selector.Parse(node, htmlStyles);
+            }
 
             foreach (HtmlNode child in node.Children)
             {

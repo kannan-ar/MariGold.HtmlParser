@@ -8,9 +8,9 @@
     {
         private const string key = "id";
 
-        private Regex regex;
-        private string currentSelector;
-        private string selectorText;
+        private readonly Regex regex;
+        private readonly string currentSelector;
+        private readonly string selectorText;
 
         internal IdentitySelector(ISelectorContext context)
         {

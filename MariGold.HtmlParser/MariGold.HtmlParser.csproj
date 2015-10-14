@@ -48,6 +48,7 @@
     <Compile Include="CSS\SelectorContext.cs" />
     <Compile Include="CSS\ICSSBehavior.cs" />
     <Compile Include="CSS\ISelectorContext.cs" />
+    <Compile Include="CSS\Selectors\AttributeSelector.cs" />
     <Compile Include="CSS\Selectors\ElementSelector.cs" />
     <Compile Include="CSS\Selectors\GlobalSelector.cs" />
     <Compile Include="CSS\CSSParser.cs" />

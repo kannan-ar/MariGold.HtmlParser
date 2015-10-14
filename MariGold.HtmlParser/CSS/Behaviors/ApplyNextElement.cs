@@ -53,7 +53,7 @@
                 {
                     CSSelector selector = context.Selector.Parse(selectorText);
 
-                    if (selector != null)
+                    if (selector != null && selector.IsValidNode(temp))
                     {
                         selector.Parse(temp, htmlStyles);
                     }

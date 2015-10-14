@@ -47,7 +47,10 @@
                 {
                     foreach (HtmlNode child in node.Children)
                     {
-                        selector.Parse(child, htmlStyles);
+                        if (selector.IsValidNode(child))
+                        {
+                            selector.Parse(child, htmlStyles);
+                        }
                     }
                 }
             }

@@ -6,9 +6,9 @@
 
     internal sealed class ElementSelector : CSSelector
     {
-        private Regex regex;
-        private string currentSelector;
-        private string selectorText;
+        private readonly Regex regex;
+        private readonly string currentSelector;
+        private readonly string selectorText;
 
         internal ElementSelector(ISelectorContext context)
         {
