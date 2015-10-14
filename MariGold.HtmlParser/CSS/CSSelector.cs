@@ -10,6 +10,7 @@
 
         internal abstract CSSelector Parse(string selector);
         internal abstract void Parse(HtmlNode node, List<HtmlStyle> htmlStyles);
+        internal abstract bool IsValidNode(HtmlNode node);
 
         protected CSSelector PassToSuccessor(string selector)
         {

@@ -55,7 +55,7 @@
 
                     if (selector != null)
                     {
-                        selector.Parse(node.Next, htmlStyles);
+                        selector.Parse(temp, htmlStyles);
                     }
                 }
             }

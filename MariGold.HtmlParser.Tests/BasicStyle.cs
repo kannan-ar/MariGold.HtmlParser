@@ -139,7 +139,8 @@
                                 <a href='#'>link</a>
                                 <p>test</p>
                                 <art>
-                                
+                                    <p>one</p>
+                                </art>
                             </div>";
 
             HtmlParser parser = new HtmlTextParser(html);
@@ -155,6 +156,8 @@
 
             bool aTagFound = false;
             bool pTagFound = false;
+            bool artTagFound = false;
+            bool innerPTagFound = false;
 
             foreach (HtmlNode child in node.Children)
             {
@@ -163,18 +166,162 @@
                     aTagFound = true;
                     Assert.AreEqual(0, child.Styles.Count);
                 }
-
-                if (child.Tag == "p")
+                else if (child.Tag == "p")
                 {
                     pTagFound = true;
                     Assert.AreEqual(1, child.Styles.Count);
                     TestUtility.CheckKeyValuePair(child.Styles.ElementAt(0), "color", "#fff");
-                    break;
+                }
+                else if (child.Tag == "art")
+                {
+                    artTagFound = true;
+
+                    foreach (HtmlNode child1 in child.Children)
+                    {
+                        if (child1.Tag == "p")
+                        {
+                            innerPTagFound = true;
+                            Assert.AreEqual(1, child1.Styles.Count);
+                            TestUtility.CheckKeyValuePair(child1.Styles.ElementAt(0),
+                                "color", "#fff");
+                        }
+                    }
                 }
             }
 
             Assert.IsTrue(aTagFound);
             Assert.IsTrue(pTagFound);
+            Assert.IsTrue(artTagFound);
+            Assert.IsTrue(innerPTagFound);
+        }
+
+        [Test]
+        public void DivImmediateP()
+        {
+            string html = @"<style>
+                                #dv + p
+                                {
+                                    color:#fff;
+                                }
+                            </style>
+                            <div id='dv'></div>
+                            <p>one</p>
+                            <p>two</p>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseCSS();
+
+            Assert.IsNotNull(parser.Current);
+
+            HtmlNode temp = parser.Current;
+            bool divFound = false;
+
+            while (temp != null)
+            {
+                if (temp.Tag == "div")
+                {
+                    divFound = true;
+
+                    TestUtility.AreEqual(temp, "div", "", "<div id='dv'></div>");
+
+                    while (temp != null && (temp.Tag == "#text" || temp.Tag == "div"))
+                        temp = temp.Next;
+
+                    Assert.IsNotNull(temp);
+                    TestUtility.AreEqual(temp, "p", "one", "<p>one</p>");
+                    Assert.AreEqual(1, temp.Styles.Count);
+                    TestUtility.CheckKeyValuePair(temp.Styles.ElementAt(0),
+                        "color", "#fff");
+
+                    temp = temp.Next;
+
+                    while (temp != null && temp.Tag == "#text")
+                        temp = temp.Next;
+
+                    Assert.IsNotNull(temp);
+                    TestUtility.AreEqual(temp, "p", "two", "<p>two</p>");
+                    Assert.AreEqual(0, temp.Styles.Count);
+
+                    break;
+                }
+
+                temp = temp.Next;
+            }
+
+            Assert.IsTrue(divFound);
+        }
+
+        [Test]
+        public void DivAllNextP()
+        {
+            string html = @"<style>
+                                #dv ~ p
+                                {
+                                    color:#fff;
+                                }
+                            </style>
+                            <div id='dv'></div>
+                            <p>one</p>
+                            <a href='#'>tt</a>
+                            <p>two</p>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseCSS();
+
+            Assert.IsNotNull(parser.Current);
+
+            HtmlNode temp = parser.Current;
+            bool divFound = false;
+
+            while (temp != null)
+            {
+                if (temp.Tag == "div")
+                {
+                    divFound = true;
+
+                    TestUtility.AreEqual(temp, "div", "", "<div id='dv'></div>");
+
+                    while (temp != null && (temp.Tag == "#text" || temp.Tag == "div"))
+                        temp = temp.Next;
+
+                    Assert.IsNotNull(temp);
+                    TestUtility.AreEqual(temp, "p", "one", "<p>one</p>");
+                    Assert.AreEqual(1, temp.Styles.Count);
+                    TestUtility.CheckKeyValuePair(temp.Styles.ElementAt(0),
+                        "color", "#fff");
+
+                    temp = temp.Next;
+
+                    while (temp != null && temp.Tag == "#text")
+                        temp = temp.Next;
+
+
+                    Assert.IsNotNull(temp);
+                    TestUtility.AreEqual(temp, "a", "tt", "<a href='#'>tt</a>");
+                    Assert.AreEqual(0, temp.Styles.Count);
+
+                    temp = temp.Next;
+
+                    while (temp != null && temp.Tag == "#text")
+                        temp = temp.Next;
+
+                    Assert.IsNotNull(temp);
+                    TestUtility.AreEqual(temp, "p", "two", "<p>two</p>");
+                    Assert.AreEqual(1, temp.Styles.Count);
+                    TestUtility.CheckKeyValuePair(temp.Styles.ElementAt(0),
+                        "color", "#fff");
+
+                    break;
+                }
+
+                temp = temp.Next;
+            }
+
+            Assert.IsTrue(divFound);
         }
     }
 }

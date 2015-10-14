@@ -30,7 +30,7 @@
 
         private void ApplyIfMatch(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            if (string.Compare(node.Tag, currentSelector, true) == 0)
+            if (IsValidNode(node))
             {
                 node.CopyHtmlStyles(htmlStyles, SelectorWeight.Element);
             }
@@ -61,6 +61,28 @@
             {
                 ParseBehaviour(selectorText, node, htmlStyles);
             }
+        }
+
+        internal override bool IsValidNode(HtmlNode node)
+        {
+            if (node == null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(currentSelector))
+            {
+                return false;
+            }
+
+            bool isValid = false;
+
+            if (string.Compare(node.Tag, currentSelector, true) == 0)
+            {
+                isValid = true;
+            }
+
+            return isValid;
         }
     }
 }

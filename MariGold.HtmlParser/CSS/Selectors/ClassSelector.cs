@@ -32,14 +32,9 @@
 
         private void ApplyIfMatch(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            string className;
-
-            if (node.Attributes.TryGetValue(key, out className))
+            if(IsValidNode(node))
             {
-                if (string.Compare(currentSelector, className, true) == 0)
-                {
-                    node.CopyHtmlStyles(htmlStyles, SelectorWeight.Class);
-                }
+                node.CopyHtmlStyles(htmlStyles, SelectorWeight.Class);
             }
         }
 
@@ -70,6 +65,33 @@
             {
                 ParseBehaviour(selectorText, node, htmlStyles);
             }
+        }
+
+        internal override bool IsValidNode(HtmlNode node)
+        {
+            if (node == null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(currentSelector))
+            {
+                return false;
+            }
+
+            bool isValid = false;
+
+            string className;
+
+            if (node.Attributes.TryGetValue(key, out className))
+            {
+                if (string.Compare(currentSelector, className, true) == 0)
+                {
+                    isValid = true;
+                }
+            }
+
+            return isValid;
         }
     }
 }

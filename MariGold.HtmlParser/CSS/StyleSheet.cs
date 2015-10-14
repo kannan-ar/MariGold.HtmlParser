@@ -27,7 +27,10 @@
 
                 if (selector != null)
                 {
-                    selector.Parse(node, style.Value);
+                    if (selector.IsValidNode(node))
+                    {
+                        selector.Parse(node, style.Value);
+                    }
                 }
             }
         }

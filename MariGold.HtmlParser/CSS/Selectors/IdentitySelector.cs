@@ -7,7 +7,7 @@
     internal sealed class IdentitySelector : CSSelector
     {
         private const string key = "id";
-        
+
         private Regex regex;
         private string currentSelector;
         private string selectorText;
@@ -62,7 +62,7 @@
 
         internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            if(string.IsNullOrEmpty(selectorText))
+            if (string.IsNullOrEmpty(selectorText))
             {
                 ApplyIfMatch(node, htmlStyles);
             }
@@ -70,6 +70,32 @@
             {
                 ParseBehaviour(selectorText, node, htmlStyles);
             }
+        }
+
+        internal override bool IsValidNode(HtmlNode node)
+        {
+            if (node == null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(currentSelector))
+            {
+                return false;
+            }
+
+            bool isValid = false;
+            string id;
+
+            if (node.Attributes.TryGetValue(key, out id))
+            {
+                if (string.Compare(currentSelector, id, true) == 0)
+                {
+                    isValid = true;
+                }
+            }
+
+            return isValid;
         }
     }
 }

@@ -21,10 +21,20 @@
 
         internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            if (HtmlStyle.IsNonStyleElement(node.Tag))
+            if (IsValidNode(node))
             {
                 node.CopyHtmlStyles(htmlStyles, SelectorWeight.Global);
             }
+        }
+
+        internal override bool IsValidNode(HtmlNode node)
+        {
+            if (node == null)
+            {
+                return false;
+            }
+
+            return HtmlStyle.IsNonStyleElement(node.Tag);
         }
     }
 }
