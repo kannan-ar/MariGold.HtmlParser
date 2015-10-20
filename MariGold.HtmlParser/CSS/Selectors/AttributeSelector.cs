@@ -15,7 +15,7 @@
             internal string SelectorText { get; set; }
             internal string AttributeName { get; set; }
             internal bool HasValue { get; set; }
-            internal Action Filter { get; set; }
+            internal Func<string, string, bool> Filter { get; set; }
             internal string Value { get; set; }
         }
 
@@ -38,6 +38,45 @@
             this.context = context;
         }
 
+        #region Filters
+
+        private bool EqualTo(string selectorValue, string attributeValue)
+        {
+            return string.Compare(selectorValue, attributeValue, true) == 0;
+        }
+
+        private bool StartsWith(string selectorValue, string attributeValue)
+        {
+            if (string.IsNullOrEmpty(attributeValue))
+            {
+                return false;
+            }
+
+            return attributeValue.StartsWith(selectorValue);
+        }
+
+        private bool EndsWith(string selectorValue, string attributeValue)
+        {
+            if (string.IsNullOrEmpty(attributeValue))
+            {
+                return false;
+            }
+
+            return attributeValue.EndsWith(selectorValue);
+        }
+
+        private bool Contains(string selectorValue, string attributeValue)
+        {
+            if (string.IsNullOrEmpty(attributeValue))
+            {
+                return false;
+            }
+
+            return attributeValue.Contains(selectorValue);
+        }
+
+        #endregion Filters
+
         private List<string> SplitSelector(string selector)
         {
             List<string> elements = new List<string>();
@@ -55,13 +94,54 @@
             return elements;
         }
 
+        private Func<string, string, bool> ChooseFilter(string filter)
+        {
+            Func<string, string, bool> act = EqualTo;
+
+            switch (filter)
+            {
+                case "|":
+                case "^":
+                    act = StartsWith;
+                    break;
+
+                case "$":
+                    act = EndsWith;
+                    break;
+
+                case "*":
+                    act = Contains;
+                    break;
+            }
+            return act;
+        }
+
+        private void FillAttributeElements(List<string> elements, AttributeElements element)
+        {
+            if (elements.Count > 0)
+            {
+                element.AttributeName = elements[0];
+            }
+
+            if (elements.Count > 1)
+            {
+                element.HasValue = true;
+                element.Filter = ChooseFilter(elements[1]);
+            }
+
+            if (elements.Count > 2)
+            {
+                element.Value = elements[elements.Count - 1];
+            }
+        }
+
         private AttributeElements ParseSelector(string selector, Match match)
         {
             AttributeElements element = new AttributeElements();
 
-            string trimmedSelector = selector.Substring(match.Value.Length);
+            element.SelectorText = selector.Substring(match.Value.Length);
 
-            List<string> elements = SplitSelector(trimmedSelector);
+            FillAttributeElements(SplitSelector(match.Value), element);
 
             return element;
         }
