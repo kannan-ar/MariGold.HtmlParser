@@ -77,6 +77,8 @@
 
         #endregion Filters
 
+        #region Private Functions
+        
         private List<string> SplitSelector(string selector)
         {
             List<string> elements = new List<string>();
@@ -146,6 +148,8 @@
             return element;
         }
 
+        #endregion
+        
         internal override bool IsValidNode(HtmlNode node)
         {
             throw new NotImplementedException();
