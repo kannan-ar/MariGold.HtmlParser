@@ -3,7 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
-    	
+	
 	internal sealed class ApplyFirstChild : CSSBehavior
 	{
 		private readonly Regex regex;
@@ -56,6 +56,10 @@
 								}
 								
 								selector.ApplyStyle(node, htmlStyles);
+							}
+							else
+							{
+								ParseSelectorOrBehavior(this.selectorText, node, htmlStyles);
 							}
 						}
 						
