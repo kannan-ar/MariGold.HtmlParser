@@ -4,11 +4,10 @@
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    internal sealed class ApplyAllNextElement : ICSSBehavior
+    internal sealed class ApplyAllNextElement : CSSBehavior
     {
-        private readonly ISelectorContext context;
-
-        private Regex regex;
+        private readonly Regex regex;
+        
         private string selectorText;
 
         internal ApplyAllNextElement(ISelectorContext context)
@@ -36,7 +35,7 @@
             }
         }
 
-        public bool IsValidBehavior(string selectorText)
+        internal override bool IsValidBehavior(string selectorText)
         {
             this.selectorText = string.Empty;
 
@@ -50,7 +49,7 @@
             return match.Success;
         }
 
-        public void Do(HtmlNode node, List<HtmlStyle> htmlStyles)
+        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             CSSelector selector = context.Selector.Parse(selectorText);
 

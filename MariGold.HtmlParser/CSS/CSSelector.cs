@@ -8,10 +8,11 @@
         protected CSSelector successor;
         protected ISelectorContext context;
 
+        internal abstract bool IsValidNode(HtmlNode node);
         internal abstract CSSelector Parse(string selector);
         internal abstract void Parse(HtmlNode node, List<HtmlStyle> htmlStyles);
-        internal abstract bool IsValidNode(HtmlNode node);
-
+		internal abstract void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles);
+		
         protected CSSelector PassToSuccessor(string selector)
         {
             if (successor == null)
@@ -24,11 +25,12 @@
 
         protected void ParseBehaviour(string selectorText, HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            ICSSBehavior behavior = context.FindBehavior(selectorText);
+            CSSBehavior behavior = context.FindBehavior(selectorText);
 
             if (behavior != null)
             {
-                behavior.Do(node, htmlStyles);
+				behavior.AddCurrentSelector(this);
+                behavior.Parse(node, htmlStyles);
             }
         }
 

@@ -38,7 +38,7 @@
             {
                 if (string.Compare(currentSelector, id, true) == 0)
                 {
-                    node.CopyHtmlStyles(htmlStyles, SelectorWeight.Identity);
+					ApplyStyle(node, htmlStyles);
                 }
             }
         }
@@ -97,5 +97,10 @@
 
             return isValid;
         }
+        
+		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+		{
+			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Identity);
+		}
     }
 }

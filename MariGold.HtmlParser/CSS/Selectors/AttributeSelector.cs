@@ -21,7 +21,8 @@
 
 		internal AttributeSelector(ISelectorContext context)
 		{
-			if (context == null) {
+			if (context == null)
+			{
 				throw new ArgumentNullException("context");
 			}
 
@@ -148,12 +149,12 @@
 		}
 
 		private void ApplyIfMatch(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if(IsValidNode(node))
-            {
-                node.CopyHtmlStyles(htmlStyles, SelectorWeight.Class);
-            }
-        }
+		{
+			if (IsValidNode(node))
+			{
+				ApplyStyle(node, htmlStyles);
+			}
+		}
 		
 		#endregion Private Functions
 		
@@ -169,7 +170,7 @@
 				return false;
 			}
 
-			if (element == null) 
+			if (element == null)
 			{
 				return false;
 			}
@@ -181,18 +182,18 @@
 			
 			bool valid = false;
 			
-			if(node.Attributes.ContainsKey(element.AttributeName))
+			if (node.Attributes.ContainsKey(element.AttributeName))
 			{
 				//Here we assume the element has the attribute and thus it is valid. But it will further test the attribute value also.
 				valid = true;
 				
-				if(element.HasValue)
+				if (element.HasValue)
 				{
 					string value;
 					
 					valid = node.Attributes.TryGetValue(element.AttributeName, out value);
 					
-					if(valid)
+					if (valid)
 					{
 						valid = element.Filter(value, element.Value);
 					}
@@ -219,13 +220,18 @@
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			if (string.IsNullOrEmpty(element.SelectorText))
-            {
-                ApplyIfMatch(node, htmlStyles);
-            }
-            else
-            {
-                ParseBehaviour(element.SelectorText, node, htmlStyles);
-            }
+			{
+				ApplyIfMatch(node, htmlStyles);
+			}
+			else
+			{
+				ParseBehaviour(element.SelectorText, node, htmlStyles);
+			}
+		}
+		
+		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+		{
+			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Class);
 		}
 	}
 }

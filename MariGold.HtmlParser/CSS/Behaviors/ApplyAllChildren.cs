@@ -4,12 +4,11 @@
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    internal sealed class ApplyAllChildren : ICSSBehavior
+    internal sealed class ApplyAllChildren : CSSBehavior
     {
-        private readonly ISelectorContext context;
-
-        private Regex isValid;
-        private Regex parse;
+        private readonly Regex isValid;
+        private readonly Regex parse;
+        
         private string selectorText;
 
         internal ApplyAllChildren(ISelectorContext context)
@@ -40,7 +39,7 @@
             }
         }
 
-        public bool IsValidBehavior(string selectorText)
+        internal override bool IsValidBehavior(string selectorText)
         {
             bool found = false;
             this.selectorText = string.Empty;
@@ -57,7 +56,7 @@
             return found;
         }
 
-        public void Do(HtmlNode node, List<HtmlStyle> htmlStyles)
+        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             CSSelector selector = context.Selector.Parse(selectorText);
 

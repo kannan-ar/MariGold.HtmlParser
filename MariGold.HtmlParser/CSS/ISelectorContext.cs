@@ -5,9 +5,9 @@
 
     internal interface ISelectorContext
     {
-        List<ICSSBehavior> CSSBehaviors { get; }
+        List<CSSBehavior> CSSBehaviors { get; }
         CSSelector Selector { get; }
 
-        ICSSBehavior FindBehavior(string selectorText);
+        CSSBehavior FindBehavior(string selectorText);
     }
 }

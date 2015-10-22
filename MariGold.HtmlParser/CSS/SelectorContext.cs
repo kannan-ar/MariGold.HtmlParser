@@ -6,21 +6,22 @@
     internal sealed class SelectorContext : ISelectorContext
     {
         private CSSelector selector;
-        private List<ICSSBehavior> behaviors;
+        private List<CSSBehavior> behaviors;
 
-        public List<ICSSBehavior> CSSBehaviors
+        public List<CSSBehavior> CSSBehaviors
         {
             get
             {
                 if (behaviors == null)
                 {
-                    behaviors = new List<ICSSBehavior>()
+                    behaviors = new List<CSSBehavior>()
                     {
                         new ApplyAllChildren(this),
                         new ApplyImmediateChildren(this),
                         new ApplyNextElement(this),
                         new ApplyAllNextElement(this),
-                        new ApplyToAttribute(this)
+                        new ApplyAttribute(this),
+                        new ApplyFirstChild(this)
                     };
                 }
 
@@ -44,9 +45,9 @@
             }
         }
 
-        public ICSSBehavior FindBehavior(string selectorText)
+        public CSSBehavior FindBehavior(string selectorText)
         {
-            foreach (ICSSBehavior behavior in CSSBehaviors)
+            foreach (CSSBehavior behavior in CSSBehaviors)
             {
                 if (behavior.IsValidBehavior(selectorText))
                 {

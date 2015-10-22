@@ -32,7 +32,7 @@
         {
             if (IsValidNode(node))
             {
-                node.CopyHtmlStyles(htmlStyles, SelectorWeight.Element);
+				ApplyStyle(node, htmlStyles);
             }
         }
 
@@ -84,5 +84,10 @@
 
             return isValid;
         }
+        
+		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+		{
+			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Element);
+		}
     }
 }

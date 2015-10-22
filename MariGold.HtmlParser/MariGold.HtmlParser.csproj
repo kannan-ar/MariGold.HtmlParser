@@ -45,9 +45,11 @@
     <Compile Include="CSS\Behaviors\ApplyAllNextElement.cs" />
     <Compile Include="CSS\Behaviors\ApplyImmediateChildren.cs" />
     <Compile Include="CSS\Behaviors\ApplyNextElement.cs" />
-    <Compile Include="CSS\Behaviors\ApplyToAttribute.cs" />
+    <Compile Include="CSS\Behaviors\ApplyAttribute.cs" />
+    <Compile Include="CSS\Behaviors\ApplyFirstChild.cs" />
+    <Compile Include="CSS\ICSSElement.cs" />
     <Compile Include="CSS\SelectorContext.cs" />
-    <Compile Include="CSS\ICSSBehavior.cs" />
+    <Compile Include="CSS\CSSBehavior.cs" />
     <Compile Include="CSS\ISelectorContext.cs" />
     <Compile Include="CSS\Selectors\AttributeSelector.cs" />
     <Compile Include="CSS\Selectors\ElementSelector.cs" />

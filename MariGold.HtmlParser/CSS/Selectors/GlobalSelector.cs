@@ -23,7 +23,7 @@
         {
             if (IsValidNode(node))
             {
-                node.CopyHtmlStyles(htmlStyles, SelectorWeight.Global);
+				ApplyStyle(node, htmlStyles);
             }
         }
 
@@ -36,5 +36,10 @@
 
             return HtmlStyle.IsNonStyleElement(node.Tag);
         }
+        
+		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+		{
+			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Global);
+		}
     }
 }
