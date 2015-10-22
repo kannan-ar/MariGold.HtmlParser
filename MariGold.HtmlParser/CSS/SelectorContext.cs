@@ -19,7 +19,8 @@
                         new ApplyAllChildren(this),
                         new ApplyImmediateChildren(this),
                         new ApplyNextElement(this),
-                        new ApplyAllNextElement(this)
+                        new ApplyAllNextElement(this),
+                        new ApplyToAttribute(this)
                     };
                 }
 

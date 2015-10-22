@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    public sealed class HtmlStyle
+    internal sealed class HtmlStyle
     {
         private string name;
         private string value;
