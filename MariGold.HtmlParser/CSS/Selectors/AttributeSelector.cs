@@ -175,11 +175,6 @@
 				return false;
 			}
 			
-			if (string.IsNullOrEmpty(element.SelectorText))
-			{
-				return false;
-			}
-			
 			bool valid = false;
 			
 			if (node.Attributes.ContainsKey(element.AttributeName))
@@ -231,7 +226,7 @@
 		
 		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Class);
+			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Attribute);
 		}
 	}
 }

@@ -36,9 +36,10 @@
                 if (selector == null)
                 {
                     selector = new IdentitySelector(this).SetSuccessor(
-                        new ClassSelector(this).SetSuccessor(
+                		new ClassSelector(this).SetSuccessor(
+                			new AttributeSelector(this).SetSuccessor(
                         new ElementSelector(this).SetSuccessor(
-                        new GlobalSelector())));
+                					new GlobalSelector()))));
                 }
 
                 return selector;

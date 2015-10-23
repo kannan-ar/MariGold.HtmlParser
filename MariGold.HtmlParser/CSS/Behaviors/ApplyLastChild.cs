@@ -24,7 +24,16 @@
 		
 		internal override bool IsValidBehavior(string selectorText)
 		{
-			throw new NotImplementedException();
+			this.selectorText = string.Empty;
+
+			Match match = regex.Match(selectorText);
+
+			if (match.Success)
+			{
+				this.selectorText = selectorText.Substring(match.Value.Length);
+			}
+
+			return match.Success;
 		}
 		
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
