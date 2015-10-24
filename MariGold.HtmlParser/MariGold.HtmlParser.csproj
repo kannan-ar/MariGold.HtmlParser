@@ -48,6 +48,8 @@
     <Compile Include="CSS\Behaviors\ApplyNextElement.cs" />
     <Compile Include="CSS\Behaviors\ApplyAttribute.cs" />
     <Compile Include="CSS\Behaviors\ApplyFirstChild.cs" />
+    <Compile Include="CSS\Behaviors\ApplyNotElement.cs" />
+    <Compile Include="CSS\IAttachedSelector.cs" />
     <Compile Include="CSS\SelectorContext.cs" />
     <Compile Include="CSS\CSSBehavior.cs" />
     <Compile Include="CSS\ISelectorContext.cs" />
