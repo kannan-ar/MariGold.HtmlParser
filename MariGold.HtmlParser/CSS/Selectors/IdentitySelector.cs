@@ -9,8 +9,9 @@
         private const string key = "id";
 
         private readonly Regex regex;
-        private readonly string currentSelector;
-        private readonly string selectorText;
+        
+        private string currentSelector;
+        private string selectorText;
 
         internal IdentitySelector(ISelectorContext context)
         {
@@ -23,53 +24,20 @@
             regex = new Regex("^#[-_]*([a-zA-Z]+[0-9_-]*)+");
         }
 
-        internal IdentitySelector(string currentSelector, string selectorText, ISelectorContext context)
-        {
-            this.currentSelector = currentSelector;
-            this.selectorText = selectorText;
-            this.context = context;
-        }
-
-        private void ApplyIfMatch(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            string id;
-
-            if (node.Attributes.TryGetValue(key, out id))
-            {
-                if (string.Compare(currentSelector, id, true) == 0)
-                {
-					ApplyStyle(node, htmlStyles);
-                }
-            }
-        }
-
-        internal override CSSelector Parse(string selector)
+        internal override bool Prepare(string selector)
         {
             Match match = regex.Match(selector);
 
-            if (match.Success)
-            {
-                string trimmedSelector = selector.Substring(match.Value.Length);
-
-                return new IdentitySelector(
-                    match.Value.Replace("#", string.Empty), trimmedSelector, context);
-            }
-            else
-            {
-                return PassToSuccessor(selector);
-            }
-        }
-
-        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (string.IsNullOrEmpty(selectorText))
-            {
-                ApplyIfMatch(node, htmlStyles);
-            }
-            else
-            {
-                ParseBehaviour(selectorText, node, htmlStyles);
-            }
+			this.currentSelector = string.Empty;
+			this.selectorText = string.Empty;
+            
+			if (match.Success)
+			{
+				this.currentSelector = match.Value.Replace("#", string.Empty);
+				this.selectorText = selector.Substring(match.Value.Length);
+			}
+			
+			return match.Success;
         }
 
         internal override bool IsValidNode(HtmlNode node)
@@ -98,9 +66,30 @@
             return isValid;
         }
         
+        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+        {
+            if (string.IsNullOrEmpty(selectorText))
+            {
+                ApplyStyle(node, htmlStyles);
+            }
+            else
+            {
+                context.ParseSelectorOrBehavior(this.selectorText, this, node, htmlStyles);
+            }
+        }
+        
 		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Identity);
+			string id;
+
+            if (node.Attributes.TryGetValue(key, out id))
+            {
+                if (string.Compare(currentSelector, id, true) == 0)
+                {
+					node.CopyHtmlStyles(htmlStyles, SelectorWeight.Identity);
+                }
+            }
+			
 		}
     }
 }

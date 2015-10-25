@@ -50,12 +50,16 @@
 
                 if (temp != null)
                 {
-                    CSSelector selector = context.Selector.Parse(selectorText);
+                    CSSelector nextSelector;
+			
+					if (context.ParseSelector(this.selectorText, out nextSelector))
+					{
 
-                    if (selector != null && selector.IsValidNode(temp))
-                    {
-                        selector.Parse(temp, htmlStyles);
-                    }
+						if (nextSelector != null && nextSelector.IsValidNode(temp))
+						{
+							nextSelector.Parse(temp, htmlStyles);
+						}
+					}
                 }
             }
         }

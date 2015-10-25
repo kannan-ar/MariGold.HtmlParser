@@ -7,24 +7,19 @@
     {
         private const string globalSelector = "*";
 
-        internal override CSSelector Parse(string selector)
+        internal override bool Prepare(string selector)
         {
             if (selector == globalSelector)
             {
-                return this;
+				return true;
             }
-            else
-            {
-                return PassToSuccessor(selector);
-            }
+            
+			return false;
         }
 
         internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            if (IsValidNode(node))
-            {
-				ApplyStyle(node, htmlStyles);
-            }
+			ApplyStyle(node, htmlStyles);
         }
 
         internal override bool IsValidNode(HtmlNode node)
@@ -39,7 +34,10 @@
         
 		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Global);
+			if (IsValidNode(node))
+			{
+				node.CopyHtmlStyles(htmlStyles, SelectorWeight.Global);
+			}
 		}
     }
 }

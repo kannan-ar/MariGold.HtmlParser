@@ -40,18 +40,21 @@
         {
             if (node.HasChildren)
             {
-                CSSelector selector = context.Selector.Parse(selectorText);
-
-                if (selector != null)
-                {
-                    foreach (HtmlNode child in node.Children)
-                    {
-                        if (selector.IsValidNode(child))
-                        {
-                            selector.Parse(child, htmlStyles);
-                        }
-                    }
-                }
+                CSSelector nextSelector;
+			
+				if (context.ParseSelector(this.selectorText, out nextSelector))
+				{
+					if (nextSelector != null)
+					{
+						foreach (HtmlNode child in node.Children)
+						{
+							if (nextSelector.IsValidNode(child))
+							{
+								nextSelector.Parse(child, htmlStyles);
+							}
+						}
+					}
+				}
             }
         }
     }

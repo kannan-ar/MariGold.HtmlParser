@@ -9,8 +9,9 @@
 		private const string key = "class";
 
 		private readonly Regex regex;
-		private readonly string currentSelector;
-		private readonly string selectorText;
+		
+		private string currentSelector;
+		private string selectorText;
 
 		internal ClassSelector(ISelectorContext context)
 		{
@@ -23,47 +24,31 @@
 			regex = new Regex(@"^\.[-_]*([a-zA-Z]+[0-9_-]*)+$");
 		}
 
-		internal ClassSelector(string currentSelector, string selectorText, ISelectorContext context)
-		{
-			this.currentSelector = currentSelector;
-			this.selectorText = selectorText;
-			this.context = context;
-		}
-
-		private void ApplyIfMatch(HtmlNode node, List<HtmlStyle> htmlStyles)
-		{
-			if (IsValidNode(node))
-			{
-				ApplyStyle(node, htmlStyles);
-			}
-		}
-
-		internal override CSSelector Parse(string selector)
+		internal override bool Prepare(string selector)
 		{
 			Match match = regex.Match(selector);
-
+			
+			this.currentSelector = string.Empty;
+			this.selectorText = string.Empty;
+			
 			if (match.Success)
 			{
-				string trimmedSelector = selector.Substring(match.Value.Length);
-
-				return new ClassSelector(
-					match.Value.Replace(".", string.Empty), trimmedSelector, context);
+				this.currentSelector = match.Value.Replace(".", string.Empty);
+				this.selectorText = selector.Substring(match.Value.Length);
 			}
-			else
-			{
-				return PassToSuccessor(selector);
-			}
+			
+			return match.Success;
 		}
 
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			if (string.IsNullOrEmpty(selectorText))
+			if (string.IsNullOrEmpty(selectorText) && IsValidNode(node))
 			{
-				ApplyIfMatch(node, htmlStyles);
+				ApplyStyle(node, htmlStyles);
 			}
 			else
 			{
-				ParseBehaviour(selectorText, node, htmlStyles);
+				context.ParseSelectorOrBehavior(this.selectorText, this, node, htmlStyles);
 			}
 		}
 
@@ -93,7 +78,7 @@
 
 			return isValid;
 		}
-        
+		
 		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Class);

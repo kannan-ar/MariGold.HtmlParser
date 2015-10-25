@@ -8,7 +8,8 @@
 	{
 		private readonly Regex isValid;
 		private readonly Regex spliter;
-		private readonly AttributeElements element;
+		
+		private  AttributeElements element;
 
 		internal class AttributeElements
 		{
@@ -26,16 +27,13 @@
 				throw new ArgumentNullException("context");
 			}
 
+			//Attribute Selector can be next a selector or an independent selector.
+			context.AddAttachedSelector(this);
+			
 			this.context = context;
 
 			isValid = new Regex("^\\[([a-zA-Z]+[0-9]*)+([~|^$*]?=+[\"']?([a-zA-Z]+[0-9]*)+[\"']?)*\\]");
 			spliter = new Regex(@"\w+|[~|^$*]|=");
-		}
-
-		internal AttributeSelector(AttributeElements element, ISelectorContext context)
-		{
-			this.element = element;
-			this.context = context;
 		}
 
 		#region Filters
@@ -137,7 +135,7 @@
 			}
 		}
 
-		private AttributeElements ParseSelector(string selector, Match match)
+		private AttributeElements PrepareElement(string selector, Match match)
 		{
 			AttributeElements elm = new AttributeElements();
 
@@ -148,14 +146,6 @@
 			return elm;
 		}
 
-		private void ApplyIfMatch(HtmlNode node, List<HtmlStyle> htmlStyles)
-		{
-			if (IsValidNode(node))
-			{
-				ApplyStyle(node, htmlStyles);
-			}
-		}
-		
 		#endregion Private Functions
 		
 		internal bool IsValidNode(string selector)
@@ -198,35 +188,37 @@
 			return valid;
 		}
 
-		internal override CSSelector Parse(string selector)
+		internal override bool Prepare(string selector)
 		{
 			Match match = isValid.Match(selector);
-
+			element = null;
+			
 			if (match.Success)
 			{
-				return new AttributeSelector(ParseSelector(selector, match), context);
+				element = PrepareElement(selector, match);
 			}
-			else
-			{
-				return PassToSuccessor(selector);
-			}
+			
+			return match.Success;
 		}
 
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			if (string.IsNullOrEmpty(element.SelectorText))
 			{
-				ApplyIfMatch(node, htmlStyles);
+				ApplyStyle(node, htmlStyles);
 			}
 			else
 			{
-				ParseBehaviour(element.SelectorText, node, htmlStyles);
+				context.ParseBehavior(element.SelectorText, this, node, htmlStyles);
 			}
 		}
 		
 		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Attribute);
-		}
+			if (IsValidNode(node))
+			{
+				node.CopyHtmlStyles(htmlStyles, SelectorWeight.Attribute);
+			}
+		}		
 	}
 }

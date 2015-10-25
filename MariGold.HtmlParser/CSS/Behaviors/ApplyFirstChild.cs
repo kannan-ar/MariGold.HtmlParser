@@ -59,7 +59,7 @@
 							}
 							else
 							{
-								ParseSelectorOrBehavior(this.selectorText, node, htmlStyles);
+								//ParseBehavior(this.selectorText, node, htmlStyles);
 							}
 						}
 						

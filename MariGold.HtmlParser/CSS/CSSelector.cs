@@ -5,45 +5,11 @@
 
     internal abstract class CSSelector
     {
-        protected CSSelector successor;
         protected ISelectorContext context;
 
+        internal abstract bool Prepare(string selector);
         internal abstract bool IsValidNode(HtmlNode node);
-        internal abstract CSSelector Parse(string selector);
         internal abstract void Parse(HtmlNode node, List<HtmlStyle> htmlStyles);
 		internal abstract void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles);
-		
-        protected CSSelector PassToSuccessor(string selector)
-        {
-            if (successor == null)
-            {
-                return null;
-            }
-
-            return successor.Parse(selector);
-        }
-
-        protected void ParseBehaviour(string selectorText, HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            CSSBehavior behavior = context.FindBehavior(selectorText);
-
-            if (behavior != null)
-            {
-				behavior.AddCurrentSelector(this);
-                behavior.Parse(node, htmlStyles);
-            }
-        }
-
-        internal CSSelector SetSuccessor(CSSelector selector)
-        {
-            if (selector == null)
-            {
-                throw new ArgumentNullException("selector");
-            }
-
-            successor = selector;
-
-            return this;
-        }
     }
 }

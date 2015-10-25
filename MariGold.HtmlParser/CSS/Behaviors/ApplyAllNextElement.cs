@@ -22,16 +22,16 @@
             regex = new Regex(@"^\s*~\s*");
         }
 
-        private void ApplyStyle(CSSelector selector, HtmlNode node, List<HtmlStyle> htmlStyles)
+        private void ApplyStyle(CSSelector nextSelector, HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             if (node.Next != null)
             {
-                if (selector.IsValidNode(node.Next))
+                if (nextSelector.IsValidNode(node.Next))
                 {
-                    selector.Parse(node.Next, htmlStyles);
+                    nextSelector.Parse(node.Next, htmlStyles);
                 }
 
-                ApplyStyle(selector, node.Next, htmlStyles);
+                ApplyStyle(nextSelector, node.Next, htmlStyles);
             }
         }
 
@@ -51,12 +51,16 @@
 
         internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            CSSelector selector = context.Selector.Parse(selectorText);
+            CSSelector nextSelector;
+			
+			if (context.ParseSelector(this.selectorText, out nextSelector))
+			{
 
-            if (selector != null)
-            {
-                ApplyStyle(selector, node, htmlStyles);
-            }
+				if (nextSelector != null)
+				{
+					ApplyStyle(nextSelector, node, htmlStyles);
+				}
+			}
         }
     }
 }
