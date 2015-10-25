@@ -4,22 +4,21 @@
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 	
-	internal sealed class FirstChildSelector : CSSelector
+	internal sealed class LastChildSelector : CSSelector
 	{
-		private string selectorText;
-		
 		private readonly Regex regex;
 		
-		internal FirstChildSelector(ISelectorContext context)
+		private string selectorText;
+		
+		internal LastChildSelector(ISelectorContext context)
 		{
 			if (context == null)
-			{
-				throw new ArgumentNullException("context");
-			}
+            {
+                throw new ArgumentNullException("context");
+            }
 
-			this.context = context;
-			
-			regex = new Regex("^:first-child");
+            this.context = context;
+            regex = new Regex("^(:last-child)|(:last-of-type)");
 		}
 		
 		internal override bool Prepare(string selector)
@@ -42,19 +41,17 @@
 			
 			if (node != null && node.Parent != null)
 			{
+				HtmlNode lastChild = null;
+				
 				foreach (HtmlNode child in node.Parent.Children)
 				{
-					//Find first child tag which matches the node's tag. The break statement will discard the loop after finding the first matching node.
 					if (string.Compare(node.Tag, child.Tag, true) == 0)
 					{
-						//If the node is the first child, it will apply the styles.
-						if (node == child)
-						{
-							isValid = true;
-							break;
-						}
+						lastChild = child;
 					}
 				}
+				
+				isValid = lastChild != null && lastChild == node;
 			}
 			
 			return isValid;

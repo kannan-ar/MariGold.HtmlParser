@@ -1,15 +1,17 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
+	using System;
 
-    internal enum SelectorWeight
-    {
-        None = 0,
-        Global = 1,
-        Element = 2,
-        Attribute = 3, //Attribute and Class have same weight
-        Class = 3,
-        Identity = 4,
-        Inline = 5,
-    }
+	internal enum SelectorWeight
+	{
+		None = 0,
+		Global = 1,
+		Child = 2,
+		Element = 3,
+		Attribute = 4,
+		//Attribute and Class have same weight
+		Class = 4,
+		Identity = 5,
+		Inline = 6,
+	}
 }

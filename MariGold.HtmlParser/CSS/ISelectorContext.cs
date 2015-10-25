@@ -11,7 +11,7 @@
 		
 		void AddAttachedSelector(CSSelector selector);
 		bool ParseSelector(string selectorText, out CSSelector selector);
-		bool ParseBehavior(string selectorText, CSSelector currentSelector, HtmlNode node, List<HtmlStyle> htmlStyles);
-		bool ParseSelectorOrBehavior(string selectorText, CSSelector currentSelector, HtmlNode node, List<HtmlStyle> htmlStyles);
+		bool ParseBehavior(string selectorText, HtmlNode node, List<HtmlStyle> htmlStyles);
+		bool ParseSelectorOrBehavior(string selectorText, HtmlNode node, List<HtmlStyle> htmlStyles);
     }
 }

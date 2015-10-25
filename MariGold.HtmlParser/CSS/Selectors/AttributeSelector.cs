@@ -209,7 +209,7 @@
 			}
 			else
 			{
-				context.ParseBehavior(element.SelectorText, this, node, htmlStyles);
+				context.ParseBehavior(element.SelectorText, node, htmlStyles);
 			}
 		}
 		

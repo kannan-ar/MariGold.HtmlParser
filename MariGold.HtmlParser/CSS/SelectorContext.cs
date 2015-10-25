@@ -18,8 +18,7 @@
 				new ApplyAllChildren(this),
 				new ApplyImmediateChildren(this),
 				new ApplyNextElement(this),
-				new ApplyAllNextElement(this),
-				new ApplyFirstChild(this)
+				new ApplyAllNextElement(this)
 			};
 			
 			selectors = new List<CSSelector>()
@@ -28,6 +27,7 @@
 				new ClassSelector(this),
 				new AttributeSelector(this),
 				new ElementSelector(this),
+				new FirstChildSelector(this),
 				new GlobalSelector()
 			};			
 		}
@@ -78,7 +78,7 @@
 			return false;
 		}
 		
-		public bool ParseBehavior(string selectorText, CSSelector currentSelector, HtmlNode node, List<HtmlStyle> htmlStyles)
+		public bool ParseBehavior(string selectorText, HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			bool foundBehavior = false;
 			
@@ -88,7 +88,6 @@
 				{
 					foundBehavior = true;
 					
-					behavior.AddCurrentSelector(currentSelector);
 					behavior.Parse(node, htmlStyles);
 					
 					break;
@@ -98,7 +97,7 @@
 			return foundBehavior;
 		}
 		
-		public bool ParseSelectorOrBehavior(string selectorText, CSSelector currentSelector, HtmlNode node, List<HtmlStyle> htmlStyles)
+		public bool ParseSelectorOrBehavior(string selectorText, HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			bool found = false;
 			
@@ -116,7 +115,7 @@
 			
 			if (!found)
 			{
-				found = ParseBehavior(selectorText, currentSelector, node, htmlStyles);
+				found = ParseBehavior(selectorText, node, htmlStyles);
 			}
 			
 			return found;

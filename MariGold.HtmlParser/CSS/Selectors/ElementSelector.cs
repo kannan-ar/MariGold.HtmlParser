@@ -46,7 +46,7 @@
             }
             else
             {
-				context.ParseSelectorOrBehavior(this.selectorText, this, node, htmlStyles);
+				context.ParseSelectorOrBehavior(this.selectorText, node, htmlStyles);
             }
         }
 
