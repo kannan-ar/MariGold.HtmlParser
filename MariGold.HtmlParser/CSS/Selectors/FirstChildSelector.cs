@@ -44,16 +44,18 @@
 			{
 				foreach (HtmlNode child in node.Parent.Children)
 				{
-					//Find first child tag which matches the node's tag. The break statement will discard the loop after finding the first matching node.
-					if (string.Compare(node.Tag, child.Tag, true) == 0)
+					if (child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
 					{
-						//If the node is the first child, it will apply the styles.
-						if (node == child)
-						{
-							isValid = true;
-							break;
-						}
+						continue;
 					}
+					
+					//Find first child tag which matches the node's tag. The break statement will discard the loop after finding the first matching node.
+					//If the node is the first child, it will apply the styles.
+					isValid = string.Compare(node.Tag, child.Tag, true) == 0 && node == child;
+					
+					//The loop only needs to check the first child element except the empty text element. So we can skip here.
+					break;
+					
 				}
 			}
 			

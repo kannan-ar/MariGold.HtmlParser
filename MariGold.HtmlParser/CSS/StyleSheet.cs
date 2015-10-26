@@ -31,6 +31,8 @@
 						{
 							selector.Parse(node, style.Value);
 						}
+						
+						break;
 					}
 				}
                 
