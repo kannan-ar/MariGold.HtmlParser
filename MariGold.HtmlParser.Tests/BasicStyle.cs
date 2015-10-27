@@ -166,13 +166,15 @@
 					aTagFound = true;
 					Assert.AreEqual(0, child.Styles.Count);
 				}
-				else if (child.Tag == "p")
+				else
+				if (child.Tag == "p")
 				{
 					pTagFound = true;
 					Assert.AreEqual(1, child.Styles.Count);
 					TestUtility.CheckKeyValuePair(child.Styles.ElementAt(0), "color", "#fff");
 				}
-				else if (child.Tag == "art")
+				else
+				if (child.Tag == "art")
 				{
 					artTagFound = true;
 
@@ -512,5 +514,158 @@
 			Assert.AreEqual(0, temp.Styles.Count);
 			
 		}
+		
+		[Test]
+		public void BasicLastChild()
+		{
+			string html = @"<style>
+                                :last-child
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <div id='dv'><p id='p1'>one</p><p id='p2'>two</p></div>";
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode temp = parser.Current;
+			
+			while (temp.Tag != "div")
+				temp = temp.Next;
+			
+			TestUtility.AreEqual(temp, "div", "<p id='p1'>one</p><p id='p2'>two</p>",
+				"<div id='dv'><p id='p1'>one</p><p id='p2'>two</p></div>");
+			
+			Assert.AreEqual(2, temp.Children.Count);
+			Assert.AreEqual(1, temp.Attributes.Count);
+			TestUtility.CheckKeyValuePair(temp.Attributes.ElementAt(0), "id", "dv");
+			
+			temp = temp.Children[0];
+			
+			Assert.IsNotNull(temp);
+			TestUtility.AreEqual(temp, "p", "one", "<p id='p1'>one</p>");
+			Assert.AreEqual(1, temp.Attributes.Count);
+			TestUtility.CheckKeyValuePair(temp.Attributes.ElementAt(0), "id", "p1");
+			
+			Assert.AreEqual(0, temp.Styles.Count);
+			
+			temp = temp.Next;
+			
+			Assert.IsNotNull(temp);
+			TestUtility.AreEqual(temp, "p", "two", "<p id='p2'>two</p>");
+			Assert.AreEqual(1, temp.Attributes.Count);
+			TestUtility.CheckKeyValuePair(temp.Attributes.ElementAt(0), "id", "p2");
+			
+			Assert.AreEqual(1, temp.Styles.Count);
+			TestUtility.CheckKeyValuePair(temp.Styles.ElementAt(0), "color", "#fff");
+			
+		}
+		
+		[Test]
+		public void BasicLastOfType()
+		{
+			string html = @"<style>
+                                :last-of-type
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <div id='dv'><p id='p1'>one</p><p id='p2'>two</p></div>";
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode temp = parser.Current;
+			
+			while (temp.Tag != "div")
+				temp = temp.Next;
+			
+			TestUtility.AreEqual(temp, "div", "<p id='p1'>one</p><p id='p2'>two</p>",
+				"<div id='dv'><p id='p1'>one</p><p id='p2'>two</p></div>");
+			
+			Assert.AreEqual(2, temp.Children.Count);
+			Assert.AreEqual(1, temp.Attributes.Count);
+			TestUtility.CheckKeyValuePair(temp.Attributes.ElementAt(0), "id", "dv");
+			
+			temp = temp.Children[0];
+			
+			Assert.IsNotNull(temp);
+			TestUtility.AreEqual(temp, "p", "one", "<p id='p1'>one</p>");
+			Assert.AreEqual(1, temp.Attributes.Count);
+			TestUtility.CheckKeyValuePair(temp.Attributes.ElementAt(0), "id", "p1");
+			
+			Assert.AreEqual(0, temp.Styles.Count);
+			
+			temp = temp.Next;
+			
+			Assert.IsNotNull(temp);
+			TestUtility.AreEqual(temp, "p", "two", "<p id='p2'>two</p>");
+			Assert.AreEqual(1, temp.Attributes.Count);
+			TestUtility.CheckKeyValuePair(temp.Attributes.ElementAt(0), "id", "p2");
+			
+			Assert.AreEqual(1, temp.Styles.Count);
+			TestUtility.CheckKeyValuePair(temp.Styles.ElementAt(0), "color", "#fff");
+			
+		}
+		
+		[Test]
+		public void PFirstChild()
+		{
+			string html = @"<style>
+                                p:first-child
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <div><span>dspan1</span><span>dspan2</span></div>
+							<p><span>pspan1</span><span>pspan2</span></p>";
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode div = parser.Current;
+			
+			while (div.Tag != "div")
+				div = div.Next;
+			
+			TestUtility.AnalyzeNode(div, "div", "<span>dspan1</span><span>dspan2</span>", "<div><span>dspan1</span><span>dspan2</span></div>",
+				null, false, true, 2, 0);
+			Assert.AreEqual(0, div.Styles.Count);
+			
+			TestUtility.AnalyzeNode(div.Children[0], "span", "dspan1", "<span>dspan1</span>", div, false, true, 1, 0);
+			Assert.AreEqual(0, div.Children[0].Styles.Count);
+			
+			TestUtility.AnalyzeNode(div.Children[1], "span", "dspan2", "<span>dspan2</span>", div, false, true, 1, 0);
+			Assert.AreEqual(0, div.Children[1].Styles.Count);
+			
+			HtmlNode p = div.Next;
+			
+			while (p.Tag == "#text")
+				p = p.Next;
+			
+			TestUtility.AnalyzeNode(p, "p", "<span>pspan1</span><span>pspan2</span>", "<p><span>pspan1</span><span>pspan2</span></p>",
+				null, false, true, 2, 0);
+			Assert.AreEqual(0, p.Styles.Count);
+			
+			TestUtility.AnalyzeNode(p.Children[0], "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0);
+			Assert.AreEqual(1, p.Children[0].Styles.Count);
+			
+			TestUtility.AnalyzeNode(p.Children[1], "span", "pspan2", "<span>pspan2</span>", p, false, true, 1, 0);
+			Assert.AreEqual(0, p.Children[1].Styles.Count);
+		}
+		
 	}
 }

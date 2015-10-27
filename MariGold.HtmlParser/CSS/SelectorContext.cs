@@ -28,6 +28,7 @@
 				new AttributeSelector(this),
 				new ElementSelector(this),
 				new FirstChildSelector(this),
+				new LastChildSelector(this),
 				new GlobalSelector()
 			};			
 		}

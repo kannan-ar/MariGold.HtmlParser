@@ -19,7 +19,7 @@
             }
 
             this.context = context;
-            regex = new Regex(@"^([a-zA-Z]+[0-9]*)+(:[a-zA-Z]+[0-9]*)*");
+            regex = new Regex(@"^([a-zA-Z]+[0-9]*)+");
         }
 
         internal override bool Prepare(string selector)

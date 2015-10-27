@@ -17,6 +17,7 @@
 				throw new ArgumentNullException("context");
 			}
 
+			context.AddAttachedSelector(this);
 			this.context = context;
 			
 			regex = new Regex("^:first-child");
