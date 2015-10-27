@@ -4,40 +4,36 @@
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 	
-	internal sealed class FirstChildSelector : CSSelector, IAttachedSelector
+	internal sealed class NotSelector : CSSelector, IAttachedSelector
 	{
-		private string selectorText;
-		
 		private readonly Regex regex;
+		private readonly Regex elementName;
 		
-		internal FirstChildSelector(ISelectorContext context)
+		private string selectorText;
+		private string currentSelector;
+		
+		internal NotSelector(ISelectorContext context)
 		{
 			if (context == null)
 			{
 				throw new ArgumentNullException("context");
 			}
 
-			context.AddAttachedSelector(this);
 			this.context = context;
 			
-			regex = new Regex("^:first-child");
+			regex = new Regex("^:not\\([a-zA-Z]+[0-9]*\\)");
+			elementName = new Regex("\\([a-zA-Z]+[0-9]*\\)");
 		}
 		
-		private void ApplyToFirstChild(HtmlNode node, List<HtmlStyle> htmlStyles)
+		private void ApplyToChildren(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			if (node.HasChildren)
+			if (IsValidNode(node))
 			{
-				HtmlNode child = node.Children[0];
+				ApplyStyle(node, htmlStyles);
 				
-				//Loop to skip empty text children
-				while (child != null && child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
+				foreach (HtmlNode child in node.Children)
 				{
-					child = child.Next;
-				}
-				
-				if (child != null)
-				{
-					ApplyStyle(child, htmlStyles);
+					ApplyToChildren(child, htmlStyles);
 				}
 			}
 		}
@@ -47,10 +43,18 @@
 			Match match = regex.Match(selector);
 			
 			this.selectorText = string.Empty;
+			this.currentSelector = string.Empty;
 			
 			if (match.Success)
 			{
 				this.selectorText = selector.Substring(match.Value.Length);
+				
+				Match elementMatch = elementName.Match(match.Value);
+				
+				if (elementMatch.Success)
+				{
+					this.currentSelector = elementMatch.Value;
+				}
 			}
 			
 			return match.Success;
@@ -63,30 +67,12 @@
 				return false;
 			}
 			
-			if (node.Parent == null)
+			if (string.IsNullOrEmpty(currentSelector))
 			{
 				return false;
 			}
 			
-			bool isValid = false;
-			
-			foreach (HtmlNode child in node.Parent.Children)
-			{
-				if (child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
-				{
-					continue;
-				}
-					
-				//Find first child tag which matches the node's tag. The break statement will discard the loop after finding the first matching node.
-				//If the node is the first child, it will apply the styles.
-				isValid = string.Compare(node.Tag, child.Tag, true) == 0 && node == child;
-					
-				//The loop only needs to check the first child element except the empty text element. So we can skip here.
-				break;
-					
-			}
-			
-			return isValid;
+			return string.Compare(node.Tag, currentSelector, true) != 0;
 		}
 		
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
@@ -118,7 +104,10 @@
 		{
 			if (string.IsNullOrEmpty(this.selectorText))
 			{
-				ApplyToFirstChild(node, htmlStyles);
+				foreach (HtmlNode child in node.Children)
+				{
+					ApplyToChildren(child, htmlStyles);
+				}
 			}
 			else
 			{

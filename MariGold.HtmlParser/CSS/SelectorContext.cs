@@ -5,13 +5,14 @@
 
 	internal sealed class SelectorContext : ISelectorContext
 	{
+		private readonly List<IAttachedSelector> attachedSelectors;
+		
 		private List<CSSelector> selectors;
 		private List<CSSBehavior> behaviors;
-		private List<CSSelector> attachedSelectors;
 		
 		internal SelectorContext()
 		{
-			attachedSelectors = new List<CSSelector>();
+			attachedSelectors = new List<IAttachedSelector>();
 			
 			behaviors = new List<CSSBehavior>()
 			{
@@ -29,6 +30,8 @@
 				new ElementSelector(this),
 				new FirstChildSelector(this),
 				new LastChildSelector(this),
+				new NotSelector(this),
+				new NthChildSelector(this),
 				new GlobalSelector()
 			};			
 		}
@@ -49,7 +52,7 @@
 			}
 		}
 		
-		public List<CSSelector> AttachedSelectors
+		public List<IAttachedSelector> AttachedSelectors
 		{
 			get
 			{
@@ -57,7 +60,7 @@
 			}
 		}
 		
-		public void AddAttachedSelector(CSSelector selector)
+		public void AddAttachedSelector(IAttachedSelector selector)
 		{
 			attachedSelectors.Add(selector);
 		}
@@ -102,7 +105,7 @@
 		{
 			bool found = false;
 			
-			foreach (CSSelector selector in attachedSelectors)
+			foreach (IAttachedSelector selector in attachedSelectors)
 			{
 				if (selector.Prepare(selectorText))
 				{

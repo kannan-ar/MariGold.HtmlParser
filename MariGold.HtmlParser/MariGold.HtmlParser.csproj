@@ -45,6 +45,7 @@
     <Compile Include="CSS\Behaviors\ApplyAllNextElement.cs" />
     <Compile Include="CSS\Behaviors\ApplyImmediateChildren.cs" />
     <Compile Include="CSS\Behaviors\ApplyNextElement.cs" />
+    <Compile Include="CSS\IAttachedSelector.cs" />
     <Compile Include="CSS\SelectorContext.cs" />
     <Compile Include="CSS\CSSBehavior.cs" />
     <Compile Include="CSS\ISelectorContext.cs" />
@@ -57,6 +58,9 @@
     <Compile Include="CSS\Selectors\ClassSelector.cs" />
     <Compile Include="CSS\Selectors\IdentitySelector.cs" />
     <Compile Include="CSS\Selectors\LastChildSelector.cs" />
+    <Compile Include="CSS\Selectors\NotSelector.cs" />
+    <Compile Include="CSS\Selectors\NthChildSelector.cs" />
+    <Compile Include="CSS\Selectors\NthLastChildSelector.cs" />
     <Compile Include="CSS\SelectorWeight.cs" />
     <Compile Include="CSS\StyleSheet.cs" />
     <Compile Include="HtmlAnalyzer.cs" />

@@ -4,7 +4,7 @@
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 
-	internal sealed class AttributeSelector : CSSelector
+	internal sealed class AttributeSelector : CSSelector, IAttachedSelector
 	{
 		private readonly Regex isValid;
 		private readonly Regex spliter;
@@ -219,6 +219,16 @@
 			{
 				node.CopyHtmlStyles(htmlStyles, SelectorWeight.Attribute);
 			}
-		}		
+		}
+		
+		bool IAttachedSelector.Prepare(string selector)
+		{
+			return Prepare(selector);
+		}
+		
+		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+		{
+			Parse(node, htmlStyles);
+		}
 	}
 }

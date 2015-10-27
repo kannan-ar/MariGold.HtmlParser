@@ -7,9 +7,9 @@
     {
         List<CSSBehavior> CSSBehaviors { get; }
         List<CSSelector> Selectors { get; }
-		List<CSSelector> AttachedSelectors{ get; }
+		List<IAttachedSelector> AttachedSelectors{ get; }
 		
-		void AddAttachedSelector(CSSelector selector);
+		void AddAttachedSelector(IAttachedSelector selector);
 		bool ParseSelector(string selectorText, out CSSelector selector);
 		bool ParseBehavior(string selectorText, HtmlNode node, List<HtmlStyle> htmlStyles);
 		bool ParseSelectorOrBehavior(string selectorText, HtmlNode node, List<HtmlStyle> htmlStyles);

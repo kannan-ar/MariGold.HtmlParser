@@ -4,7 +4,7 @@
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 	
-	internal sealed class LastChildSelector : CSSelector
+	internal sealed class LastChildSelector : CSSelector, IAttachedSelector
 	{
 		private readonly Regex regex;
 		
@@ -13,13 +13,33 @@
 		internal LastChildSelector(ISelectorContext context)
 		{
 			if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+			{
+				throw new ArgumentNullException("context");
+			}
 
 			context.AddAttachedSelector(this);
-            this.context = context;
-            regex = new Regex("^(:last-child)|(:last-of-type)");
+			this.context = context;
+			regex = new Regex("^(:last-child)|(:last-of-type)");
+		}
+		
+		private void ApplyToLastChild(HtmlNode node, List<HtmlStyle> htmlStyles)
+		{
+			if (node.HasChildren)
+			{
+				//Finds the last child
+				HtmlNode child = node.Children[node.Children.Count - 1];
+				
+				//Loop to skip empty text children
+				while (child != null && child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
+				{
+					child = child.Previous;
+				}
+				
+				if (child != null)
+				{
+					ApplyStyle(child, htmlStyles);
+				}
+			}
 		}
 		
 		internal override bool Prepare(string selector)
@@ -76,6 +96,23 @@
 		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Child);
+		}
+		
+		bool IAttachedSelector.Prepare(string selector)
+		{
+			return Prepare(selector);
+		}
+		
+		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+		{
+			if (string.IsNullOrEmpty(this.selectorText))
+			{
+				ApplyToLastChild(node, htmlStyles);
+			}
+			else
+			{
+				context.ParseBehavior(this.selectorText, node, htmlStyles);
+			}
 		}
 	}
 }

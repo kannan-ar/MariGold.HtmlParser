@@ -4,42 +4,43 @@
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 	
-	internal sealed class FirstChildSelector : CSSelector, IAttachedSelector
+	internal sealed class NthChildSelector : CSSelector, IAttachedSelector
 	{
-		private string selectorText;
-		
 		private readonly Regex regex;
 		
-		internal FirstChildSelector(ISelectorContext context)
+		private string selectorText;
+		private int position;
+		
+		internal NthChildSelector(ISelectorContext context)
 		{
 			if (context == null)
 			{
 				throw new ArgumentNullException("context");
 			}
 
-			context.AddAttachedSelector(this);
 			this.context = context;
 			
-			regex = new Regex("^:first-child");
+			regex = new Regex("^:nth-child\\(\\d+\\)");
 		}
 		
-		private void ApplyToFirstChild(HtmlNode node, List<HtmlStyle> htmlStyles)
+		private void ApplyToChild(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			if (node.HasChildren)
+			if (node == null)
 			{
-				HtmlNode child = node.Children[0];
-				
-				//Loop to skip empty text children
-				while (child != null && child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
-				{
-					child = child.Next;
-				}
-				
-				if (child != null)
-				{
-					ApplyStyle(child, htmlStyles);
-				}
+				return;
 			}
+			
+			if (!node.HasChildren)
+			{
+				return;
+			}
+			
+			if (node.Children.Count < this.position)
+			{
+				return;
+			}
+			
+			ApplyStyle(node.Children[this.position - 1], htmlStyles);
 		}
 		
 		internal override bool Prepare(string selector)
@@ -47,10 +48,18 @@
 			Match match = regex.Match(selector);
 			
 			this.selectorText = string.Empty;
+			this.position = -1;
 			
 			if (match.Success)
 			{
 				this.selectorText = selector.Substring(match.Value.Length);
+				
+				int value;
+				
+				if (int.TryParse(new Regex("\\d+").Match(match.Value).Value, out value))
+				{
+					this.position = value;
+				}
 			}
 			
 			return match.Success;
@@ -63,30 +72,22 @@
 				return false;
 			}
 			
+			if (this.position == -1)
+			{
+				return false;
+			}
+			
 			if (node.Parent == null)
 			{
 				return false;
 			}
 			
-			bool isValid = false;
-			
-			foreach (HtmlNode child in node.Parent.Children)
+			if (node.Parent.Children.Count < this.position)
 			{
-				if (child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
-				{
-					continue;
-				}
-					
-				//Find first child tag which matches the node's tag. The break statement will discard the loop after finding the first matching node.
-				//If the node is the first child, it will apply the styles.
-				isValid = string.Compare(node.Tag, child.Tag, true) == 0 && node == child;
-					
-				//The loop only needs to check the first child element except the empty text element. So we can skip here.
-				break;
-					
+				return false;
 			}
 			
-			return isValid;
+			return node.Parent.Children[this.position - 1] == node;
 		}
 		
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
@@ -118,7 +119,7 @@
 		{
 			if (string.IsNullOrEmpty(this.selectorText))
 			{
-				ApplyToFirstChild(node, htmlStyles);
+				ApplyToChild(node, htmlStyles);
 			}
 			else
 			{
