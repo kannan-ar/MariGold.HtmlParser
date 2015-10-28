@@ -662,10 +662,330 @@
 			
 			TestUtility.AnalyzeNode(p.Children[0], "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0);
 			Assert.AreEqual(1, p.Children[0].Styles.Count);
+			TestUtility.CheckStyle(p.Children[0].Styles.ElementAt(0), "color", "#fff");
 			
 			TestUtility.AnalyzeNode(p.Children[1], "span", "pspan2", "<span>pspan2</span>", p, false, true, 1, 0);
 			Assert.AreEqual(0, p.Children[1].Styles.Count);
 		}
 		
+		[Test]
+		public void PLastChild()
+		{
+			string html = @"<style>
+                                p:last-child
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <div><span>dspan1</span><span>dspan2</span></div>
+							<p><span>pspan1</span><span>pspan2</span></p>";
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode div = parser.Current;
+			
+			while (div.Tag != "div")
+				div = div.Next;
+			
+			TestUtility.AnalyzeNode(div, "div", "<span>dspan1</span><span>dspan2</span>", "<div><span>dspan1</span><span>dspan2</span></div>",
+				null, false, true, 2, 0);
+			Assert.AreEqual(0, div.Styles.Count);
+			
+			TestUtility.AnalyzeNode(div.Children[0], "span", "dspan1", "<span>dspan1</span>", div, false, true, 1, 0);
+			Assert.AreEqual(0, div.Children[0].Styles.Count);
+			
+			TestUtility.AnalyzeNode(div.Children[1], "span", "dspan2", "<span>dspan2</span>", div, false, true, 1, 0);
+			Assert.AreEqual(0, div.Children[1].Styles.Count);
+			
+			HtmlNode p = div.Next;
+			
+			while (p.Tag == "#text")
+				p = p.Next;
+			
+			TestUtility.AnalyzeNode(p, "p", "<span>pspan1</span><span>pspan2</span>", "<p><span>pspan1</span><span>pspan2</span></p>",
+				null, false, true, 2, 0);
+			Assert.AreEqual(0, p.Styles.Count);
+			
+			TestUtility.AnalyzeNode(p.Children[0], "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0);
+			Assert.AreEqual(0, p.Children[0].Styles.Count);
+			
+			TestUtility.AnalyzeNode(p.Children[1], "span", "pspan2", "<span>pspan2</span>", p, false, true, 1, 0);
+			Assert.AreEqual(1, p.Children[1].Styles.Count);
+			TestUtility.CheckStyle(p.Children[1].Styles.ElementAt(0), "color", "#fff");
+		}
+		
+		[Test]
+		public void NthChild()
+		{
+			string html = @"<style>
+                                :nth-child(1)
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <div><span>dspan1</span><span>dspan2</span></div>
+							<p><span>pspan1</span><span>pspan2</span></p>";
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode div = parser.Current;
+			
+			while (div.Tag != "div")
+				div = div.Next;
+			
+			TestUtility.AnalyzeNode(div, "div", "<span>dspan1</span><span>dspan2</span>", "<div><span>dspan1</span><span>dspan2</span></div>",
+				null, false, true, 2, 0);
+			Assert.AreEqual(0, div.Styles.Count);
+			
+			TestUtility.AnalyzeNode(div.Children[0], "span", "dspan1", "<span>dspan1</span>", div, false, true, 1, 0);
+			Assert.AreEqual(1, div.Children[0].Styles.Count);
+			TestUtility.CheckStyle(div.Children[0].Styles.ElementAt(0), "color", "#fff");
+			
+			TestUtility.AnalyzeNode(div.Children[1], "span", "dspan2", "<span>dspan2</span>", div, false, true, 1, 0);
+			Assert.AreEqual(0, div.Children[1].Styles.Count);
+			
+			HtmlNode p = div.Next;
+			
+			while (p.Tag == "#text")
+				p = p.Next;
+			
+			TestUtility.AnalyzeNode(p, "p", "<span>pspan1</span><span>pspan2</span>", "<p><span>pspan1</span><span>pspan2</span></p>",
+				null, false, true, 2, 0);
+			Assert.AreEqual(0, p.Styles.Count);
+			
+			TestUtility.AnalyzeNode(p.Children[0], "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0);
+			Assert.AreEqual(1, p.Children[0].Styles.Count);
+			TestUtility.CheckStyle(p.Children[0].Styles.ElementAt(0), "color", "#fff");
+			
+			TestUtility.AnalyzeNode(p.Children[1], "span", "pspan2", "<span>pspan2</span>", p, false, true, 1, 0);
+			Assert.AreEqual(0, p.Children[1].Styles.Count);
+			
+		}
+		
+		[Test]
+		public void BodyNthChild()
+		{
+			string html = @"<style>
+                                :nth-child(2)
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <body><p>p tag</p><div>div tag</div></body>";
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode body = parser.Current;
+			
+			while (body.Tag != "body")
+			{
+				body = body.Next;
+			}
+			
+			TestUtility.AnalyzeNode(body, "body", "<p>p tag</p><div>div tag</div>", "<body><p>p tag</p><div>div tag</div></body>",
+				null, false, true, 2, 0);
+			
+			foreach (HtmlNode child in body.Children)
+			{
+				if (child.Tag == "p")
+				{
+					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
+					Assert.AreEqual(0, child.Styles.Count);
+				}
+				else
+				if (child.Tag == "div")
+				{
+					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
+					Assert.AreEqual(1, child.Styles.Count);
+					TestUtility.CheckStyle(child.Styles.ElementAt(0), "color", "#fff");
+				}
+				else
+				{
+					throw new Exception("Invalid child tag found in body node");
+				}
+			}
+		}
+		
+		[Test]
+		public void PNotValidNthChild()
+		{
+			string html = @"<style>
+                                p:nth-child(2)
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <body><p>p tag</p><div>div tag</div></body>";
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode body = parser.Current;
+			
+			while (body.Tag != "body")
+			{
+				body = body.Next;
+			}
+			
+			TestUtility.AnalyzeNode(body, "body", "<p>p tag</p><div>div tag</div>", "<body><p>p tag</p><div>div tag</div></body>",
+				null, false, true, 2, 0);
+			
+			foreach (HtmlNode child in body.Children)
+			{
+				if (child.Tag == "p")
+				{
+					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
+					Assert.AreEqual(0, child.Styles.Count);
+				}
+				else
+				if (child.Tag == "div")
+				{
+					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
+					Assert.AreEqual(0, child.Styles.Count);
+				}
+				else
+				{
+					throw new Exception("Invalid child tag found in body node");
+				}
+			}
+		}
+		
+		[Test]
+		public void PValidNthChild()
+		{
+			string html = @"<style>
+                                p:nth-child(1)
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <body><p>p tag</p><div>div tag</div></body>";
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode body = parser.Current;
+			
+			while (body.Tag != "body")
+			{
+				body = body.Next;
+			}
+			
+			TestUtility.AnalyzeNode(body, "body", "<p>p tag</p><div>div tag</div>", "<body><p>p tag</p><div>div tag</div></body>",
+				null, false, true, 2, 0);
+			
+			foreach (HtmlNode child in body.Children)
+			{
+				if (child.Tag == "p")
+				{
+					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
+					Assert.AreEqual(1, child.Styles.Count);
+					TestUtility.CheckStyle(child.Styles.ElementAt(0), "color", "#fff");
+				}
+				else
+				if (child.Tag == "div")
+				{
+					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
+					Assert.AreEqual(0, child.Styles.Count);
+				}
+				else
+				{
+					throw new Exception("Invalid child tag found in body node");
+				}
+			}
+		}
+		
+		[Test]
+		public void NotP()
+		{
+			string html = @"<style>
+                                :not(p)
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <p>p tag</p>
+							<div>div tag</div>
+							<span>span tag</span>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			bool pTagFound = false;
+			bool divTagFound = false;
+			bool spanTagFound = false;
+			
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
+					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
+					Assert.AreEqual(0, node.Styles.Count);
+					pTagFound = true;
+				}
+				else
+				if (node.Tag == "div")
+				{
+					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
+					Assert.AreEqual(1, node.Styles.Count);
+					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
+					divTagFound = true;
+				}
+				else
+				if (node.Tag == "span")
+				{
+					TestUtility.AnalyzeNode(node, "span", "span tag", "<span>span tag</span>", null, false, true, 1, 0);
+					Assert.AreEqual(1, node.Styles.Count);
+					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
+					spanTagFound = true;
+				}
+				
+				node = node.Next;
+			}
+			
+			if (!pTagFound)
+			{
+				throw new Exception("p tag not found");
+			}
+			
+			if (!divTagFound)
+			{
+				throw new Exception("div tag not found");
+			}
+			
+			if (!spanTagFound)
+			{
+				throw new Exception("span not found");
+			}
+		}
 	}
 }

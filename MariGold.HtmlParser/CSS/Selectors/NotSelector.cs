@@ -19,6 +19,7 @@
 				throw new ArgumentNullException("context");
 			}
 
+			context.AddAttachedSelector(this);
 			this.context = context;
 			
 			regex = new Regex("^:not\\([a-zA-Z]+[0-9]*\\)");
@@ -53,7 +54,7 @@
 				
 				if (elementMatch.Success)
 				{
-					this.currentSelector = elementMatch.Value;
+					this.currentSelector = elementMatch.Value.Replace("(", string.Empty).Replace(")", string.Empty);
 				}
 			}
 			

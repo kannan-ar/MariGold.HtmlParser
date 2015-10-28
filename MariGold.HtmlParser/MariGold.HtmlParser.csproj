@@ -61,6 +61,7 @@
     <Compile Include="CSS\Selectors\NotSelector.cs" />
     <Compile Include="CSS\Selectors\NthChildSelector.cs" />
     <Compile Include="CSS\Selectors\NthLastChildSelector.cs" />
+    <Compile Include="CSS\Selectors\OnlyChildSelector.cs" />
     <Compile Include="CSS\SelectorWeight.cs" />
     <Compile Include="CSS\StyleSheet.cs" />
     <Compile Include="HtmlAnalyzer.cs" />

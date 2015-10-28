@@ -4,14 +4,13 @@
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 	
-	internal sealed class NthChildSelector : CSSelector, IAttachedSelector
+	internal sealed class OnlyChildSelector : CSSelector, IAttachedSelector
 	{
 		private readonly Regex regex;
 		
 		private string selectorText;
-		private int position;
 		
-		internal NthChildSelector(ISelectorContext context)
+		internal OnlyChildSelector(ISelectorContext context)
 		{
 			if (context == null)
 			{
@@ -21,27 +20,7 @@
 			context.AddAttachedSelector(this);
 			this.context = context;
 			
-			regex = new Regex("^:nth-child\\(\\d+\\)");
-		}
-		
-		private void ApplyToChild(HtmlNode node, List<HtmlStyle> htmlStyles)
-		{
-			if (node == null)
-			{
-				return;
-			}
-			
-			if (!node.HasChildren)
-			{
-				return;
-			}
-			
-			if (node.Children.Count < this.position)
-			{
-				return;
-			}
-			
-			ApplyStyle(node.Children[this.position - 1], htmlStyles);
+			regex = new Regex("^:only-child");
 		}
 		
 		internal override bool Prepare(string selector)
@@ -49,18 +28,10 @@
 			Match match = regex.Match(selector);
 			
 			this.selectorText = string.Empty;
-			this.position = -1;
 			
 			if (match.Success)
 			{
 				this.selectorText = selector.Substring(match.Value.Length);
-				
-				int value;
-				
-				if (int.TryParse(new Regex("\\d+").Match(match.Value).Value, out value))
-				{
-					this.position = value;
-				}
 			}
 			
 			return match.Success;
@@ -73,22 +44,24 @@
 				return false;
 			}
 			
-			if (this.position == -1)
-			{
-				return false;
-			}
-			
 			if (node.Parent == null)
 			{
 				return false;
 			}
 			
-			if (node.Parent.Children.Count < this.position)
+			bool isValid = true;
+			
+			foreach (HtmlNode child in node.Parent.Children)
 			{
-				return false;
+				//There is a non text node other than current node. So the selector is not valid
+				if (child != node && child.Tag != HtmlTag.TEXT)
+				{
+					isValid = false;
+					break;
+				}
 			}
 			
-			return node.Parent.Children[this.position - 1] == node;
+			return isValid;
 		}
 		
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
@@ -118,15 +91,6 @@
 		
 		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			/*if (string.IsNullOrEmpty(this.selectorText))
-			{
-				ApplyToChild(node, htmlStyles);
-			}
-			else
-			{
-				context.ParseBehavior(this.selectorText, node, htmlStyles);
-			}*/
-			
 			Parse(node, htmlStyles);
 		}
 	}

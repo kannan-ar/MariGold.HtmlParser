@@ -18,6 +18,7 @@
 				throw new ArgumentNullException("context");
 			}
 
+			context.AddAttachedSelector(this);
 			this.context = context;
 			
 			regex = new Regex("^(:nth-last-child\\(\\d+\\))|(:nth-last-of-type\\(\\d+\\))");
