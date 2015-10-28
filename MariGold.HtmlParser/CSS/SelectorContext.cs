@@ -32,6 +32,7 @@
 				new LastChildSelector(this),
 				new NotSelector(this),
 				new NthChildSelector(this),
+				new OnlyChildSelector(this),
 				new GlobalSelector()
 			};			
 		}

@@ -166,15 +166,13 @@
 					aTagFound = true;
 					Assert.AreEqual(0, child.Styles.Count);
 				}
-				else
-				if (child.Tag == "p")
+				else if (child.Tag == "p")
 				{
 					pTagFound = true;
 					Assert.AreEqual(1, child.Styles.Count);
 					TestUtility.CheckKeyValuePair(child.Styles.ElementAt(0), "color", "#fff");
 				}
-				else
-				if (child.Tag == "art")
+				else if (child.Tag == "art")
 				{
 					artTagFound = true;
 
@@ -807,8 +805,7 @@
 					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
 				}
-				else
-				if (child.Tag == "div")
+				else if (child.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(1, child.Styles.Count);
@@ -856,8 +853,7 @@
 					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
 				}
-				else
-				if (child.Tag == "div")
+				else if (child.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
@@ -905,8 +901,7 @@
 					Assert.AreEqual(1, child.Styles.Count);
 					TestUtility.CheckStyle(child.Styles.ElementAt(0), "color", "#fff");
 				}
-				else
-				if (child.Tag == "div")
+				else if (child.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
@@ -952,16 +947,14 @@
 					Assert.AreEqual(0, node.Styles.Count);
 					pTagFound = true;
 				}
-				else
-				if (node.Tag == "div")
+				else if (node.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
 					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
 					divTagFound = true;
 				}
-				else
-				if (node.Tag == "span")
+				else if (node.Tag == "span")
 				{
 					TestUtility.AnalyzeNode(node, "span", "span tag", "<span>span tag</span>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
@@ -985,6 +978,211 @@
 			if (!spanTagFound)
 			{
 				throw new Exception("span not found");
+			}
+		}
+		
+		[Test]
+		public void NotDiv()
+		{
+			string html = @"<style>
+                                :not(div)
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <p>p tag</p>
+							<div>div tag</div>
+							<span>span tag</span>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			bool pTagFound = false;
+			bool divTagFound = false;
+			bool spanTagFound = false;
+			
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
+					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
+					Assert.AreEqual(1, node.Styles.Count);
+					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
+					pTagFound = true;
+				}
+				else if (node.Tag == "div")
+				{
+					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
+					Assert.AreEqual(0, node.Styles.Count);
+					divTagFound = true;
+				}
+				else if (node.Tag == "span")
+				{
+					TestUtility.AnalyzeNode(node, "span", "span tag", "<span>span tag</span>", null, false, true, 1, 0);
+					Assert.AreEqual(1, node.Styles.Count);
+					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
+					spanTagFound = true;
+				}
+				
+				node = node.Next;
+			}
+			
+			if (!pTagFound)
+			{
+				throw new Exception("p tag not found");
+			}
+			
+			if (!divTagFound)
+			{
+				throw new Exception("div tag not found");
+			}
+			
+			if (!spanTagFound)
+			{
+				throw new Exception("span not found");
+			}
+		}
+		
+		[Test]
+		public void StandAloneOnlyChild()
+		{
+			string html = @"<style>
+                                :only-child
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <p>p tag</p>
+							<div>div tag</div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			bool pTagFound = false;
+			bool divTagFound = false;
+			
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
+					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
+					Assert.AreEqual(0, node.Styles.Count);
+					pTagFound = true;
+				}
+				else if (node.Tag == "div")
+				{
+					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
+					Assert.AreEqual(0, node.Styles.Count);
+					divTagFound = true;
+				}
+				
+				node = node.Next;
+			}
+			
+			if (!pTagFound)
+			{
+				throw new Exception("p tag not found");
+			}
+			
+			if (!divTagFound)
+			{
+				throw new Exception("div tag not found");
+			}
+		}
+		
+		[Test]
+		public void POnlyChild()
+		{
+			string html = @"<style>
+                                p:only-child
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <p>p tag</p>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			bool pTagFound = false;
+			
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
+					pTagFound = true;
+					
+					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
+					Assert.AreEqual(0, node.Styles.Count);
+				}
+				
+				node = node.Next;				
+			}
+			
+			if(!pTagFound)
+			{
+				throw new Exception("p tag not found");
+			}
+		}
+		
+		[Test]
+		public void PSpanOnlyChild()
+		{
+			string html = @"<style>
+                                span:only-child
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <p><span>one</span></p>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			bool pTagFound = false;
+			
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
+					pTagFound = true;
+					
+					TestUtility.AnalyzeNode(node, "p", "<span>one</span>", "<p><span>one</span></p>", null, false, true, 1, 0);
+					Assert.AreEqual(0, node.Styles.Count);
+					
+					TestUtility.AnalyzeNode(node.Children[0], "span", "one", "<span>one</span>", node, false, true, 1, 0);
+					Assert.AreEqual(1, node.Styles.Count);
+					TestUtility.CheckStyle(node.Children[0].Styles.ElementAt(0), "color", "#fff");
+				}
+				
+				node = node.Next;				
+			}
+			
+			if(!pTagFound)
+			{
+				throw new Exception("p tag not found");
 			}
 		}
 	}
