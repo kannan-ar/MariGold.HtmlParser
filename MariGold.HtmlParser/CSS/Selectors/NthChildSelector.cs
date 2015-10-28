@@ -117,14 +117,16 @@
 		
 		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			if (string.IsNullOrEmpty(this.selectorText))
+			/*if (string.IsNullOrEmpty(this.selectorText))
 			{
 				ApplyToChild(node, htmlStyles);
 			}
 			else
 			{
 				context.ParseBehavior(this.selectorText, node, htmlStyles);
-			}
+			}*/
+			
+			Parse(node, htmlStyles);
 		}
 	}
 }
