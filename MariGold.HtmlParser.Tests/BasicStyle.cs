@@ -1136,7 +1136,7 @@
 				node = node.Next;				
 			}
 			
-			if(!pTagFound)
+			if (!pTagFound)
 			{
 				throw new Exception("p tag not found");
 			}
@@ -1172,18 +1172,65 @@
 					TestUtility.AnalyzeNode(node, "p", "<span>one</span>", "<p><span>one</span></p>", null, false, true, 1, 0);
 					Assert.AreEqual(0, node.Styles.Count);
 					
-					TestUtility.AnalyzeNode(node.Children[0], "span", "one", "<span>one</span>", node, false, true, 1, 0);
-					Assert.AreEqual(1, node.Styles.Count);
+					TestUtility.AnalyzeNode(node.Children[0], "span", "one", "<span>one</span>", node, false, true, 1, 0, 1);
+					
 					TestUtility.CheckStyle(node.Children[0].Styles.ElementAt(0), "color", "#fff");
 				}
 				
 				node = node.Next;				
 			}
 			
-			if(!pTagFound)
+			if (!pTagFound)
 			{
 				throw new Exception("p tag not found");
 			}
 		}
+		
+		[Test]
+		public void PSpanTextOnlyChild()
+		{
+			string html = @"<style>
+                                span:only-child
+                                {
+                                	color:#fff;
+                                }
+                            </style>
+                            <p><span>one</span>this is a test</p>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			bool pTagFound = false;
+			
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
+					pTagFound = true;
+					
+					TestUtility.AnalyzeNode(node, "p", "<span>one</span>this is a test", 
+					                        "<p><span>one</span>this is a test</p>", null, false, true, 2, 0);
+					Assert.AreEqual(0, node.Styles.Count);
+					
+					TestUtility.AnalyzeNode(node.Children[0], "span", "one", "<span>one</span>", node, false, true, 1, 0, 1);
+					TestUtility.CheckStyle(node.Children[0].Styles.ElementAt(0), "color", "#fff");
+					
+					TestUtility.AnalyzeNode(node.Children[1], "#text", "this is a test", "this is a test", node, false, false, 0, 0, 0);
+				}
+				
+				node = node.Next;				
+			}
+			
+			if (!pTagFound)
+			{
+				throw new Exception("p tag not found");
+			}
+		}
+
 	}
 }

@@ -41,6 +41,7 @@
     <Compile Include="BasicStyle.cs" />
     <Compile Include="CaseSensitiveTags.cs" />
     <Compile Include="Comments.cs" />
+    <Compile Include="ComplexStyles.cs" />
     <Compile Include="FindTag.cs" />
     <Compile Include="FromFile.cs" />
     <Compile Include="HtmlAttributes.cs" />
