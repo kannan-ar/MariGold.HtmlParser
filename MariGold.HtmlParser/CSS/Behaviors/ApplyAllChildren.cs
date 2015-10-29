@@ -21,7 +21,7 @@
 			this.context = context;
 
 			//Atleast one space should occur preceeded by an occurance of an element selector
-			isValid = new Regex(@"^\s+([a-zA-Z]+[0-9]*)+");
+			isValid = new Regex(@"^\s+[^\s]+");
 			//Parse all the space
 			parse = new Regex(@"\s+");
 		}

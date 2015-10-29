@@ -21,7 +21,7 @@
 			}
 
 			this.context = context;
-			regex = new Regex(@"^\.[-_]*([a-zA-Z]+[0-9_-]*)+$");
+			regex = new Regex(@"^\.[-_]*([a-zA-Z]+[0-9_-]*)+");
 		}
 
 		internal override bool Prepare(string selector)

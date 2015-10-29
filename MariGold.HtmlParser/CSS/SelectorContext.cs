@@ -16,10 +16,10 @@
 			
 			behaviors = new List<CSSBehavior>()
 			{
-				new ApplyAllChildren(this),
 				new ApplyImmediateChildren(this),
 				new ApplyNextElement(this),
-				new ApplyAllNextElement(this)
+				new ApplyAllNextElement(this),
+				new ApplyAllChildren(this)
 			};
 			
 			selectors = new List<CSSelector>()
