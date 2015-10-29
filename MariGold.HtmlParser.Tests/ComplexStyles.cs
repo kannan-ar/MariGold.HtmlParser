@@ -228,7 +228,7 @@
 			
 			TestUtility.AnalyzeNode(node.Children[0], "div", "<p>one</p>", "<div><p>one</p></div>", node, false, true, 1, 0, 0);
 			TestUtility.AnalyzeNode(node.Children[0].Children[0], "p", "one", "<p>one</p>", node.Children[0], false, true, 1, 0, 0);
-			TestUtility.AnalyzeNode(node.Children[0].Children[0].Children[0], "#text", "one", "one", 
+			TestUtility.AnalyzeNode(node.Children[0].Children[0].Children[0], "#text", "one", "one",
 				node.Children[0].Children[0], false, false, 0, 0, 0);
 			
 			TestUtility.AnalyzeNode(node.Children[1], "p", "two", "<p>two</p>", node, false, true, 1, 0, 1);
@@ -269,7 +269,7 @@
 			
 			TestUtility.AnalyzeNode(node.Children[1], "div", "<p>one</p>", "<div><p>one</p></div>", node, false, true, 1, 0, 0);
 			TestUtility.AnalyzeNode(node.Children[1].Children[0], "p", "one", "<p>one</p>", node.Children[1], false, true, 1, 0, 0);
-			TestUtility.AnalyzeNode(node.Children[1].Children[0].Children[0], "#text", "one", "one", 
+			TestUtility.AnalyzeNode(node.Children[1].Children[0].Children[0], "#text", "one", "one",
 				node.Children[1].Children[0], false, false, 0, 0, 0);
 			
 			TestUtility.AnalyzeNode(node.Children[2], "p", "two", "<p>two</p>", node, false, true, 1, 0, 1);
@@ -298,7 +298,6 @@
 			HtmlNode node = parser.Current;
 			
 			bool pFound = false;
-			bool textFound = false;
 			bool spanFound = false;
 			
 			while (node != null)
@@ -307,12 +306,6 @@
 				{
 					pFound = true;
 					TestUtility.AnalyzeNode(node, "p", "one", "<p>one</p>", null, false, true, 1, 0, 0);
-				}
-				
-				if (node.Tag == "#text")
-				{
-					textFound = true;
-					TestUtility.AnalyzeNode(node, "#text", "", "", null, false, false, 0, 0, 0);
 				}
 				
 				if (node.Tag == "span")
@@ -325,6 +318,204 @@
 				node = node.Next;
 			}
 			
+			if (!pFound)
+			{
+				throw new Exception("p tag not found");
+			}
+			
+			if (!spanFound)
+			{
+				throw new Exception("span tag not found");
+			}
+		}
+		
+		[Test]
+		public void PNextTextSpan()
+		{
+			string html = @"<style>
+                                p + span
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <p>one</p>
+                            test
+							<span>two</span>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			bool pFound = false;
+			bool spanFound = false;
+			
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
+					pFound = true;
+					TestUtility.AnalyzeNode(node, "p", "one", "<p>one</p>", null, false, true, 1, 0, 0);
+				}
+				
+				if (node.Tag == "span")
+				{
+					spanFound = true;
+					TestUtility.AnalyzeNode(node, "span", "two", "<span>two</span>", null, false, true, 1, 0, 1);
+					TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
+				}
+				
+				node = node.Next;
+			}
+			
+			if (!pFound)
+			{
+				throw new Exception("p tag not found");
+			}
+			
+			if (!spanFound)
+			{
+				throw new Exception("span tag not found");
+			}
+		}
+		
+		[Test]
+		public void PNextDivSpan()
+		{
+			string html = @"<style>
+                                p + span
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <p>one</p>
+                            <div>test</div>
+							<span>two</span>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			bool pFound = false;
+			bool divFound = false;
+			bool spanFound = false;
+			
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
+					pFound = true;
+					TestUtility.AnalyzeNode(node, "p", "one", "<p>one</p>", null, false, true, 1, 0, 0);
+				}
+				
+				if (node.Tag == "div")
+				{
+					divFound = true;
+					TestUtility.AnalyzeNode(node, "div", "test", "<div>test</div>", null, false, true, 1, 0, 0);
+				}
+				
+				if (node.Tag == "span")
+				{
+					spanFound = true;
+					TestUtility.AnalyzeNode(node, "span", "two", "<span>two</span>", null, false, true, 1, 0, 0);
+				}
+				
+				node = node.Next;
+			}
+			
+			if (!pFound)
+			{
+				throw new Exception("p tag not found");
+			}
+			
+			if (!divFound)
+			{
+				throw new Exception("div tag not found");
+			}
+			
+			if (!spanFound)
+			{
+				throw new Exception("span tag not found");
+			}
+		}
+		
+		[Test]
+		public void DivAllNextP()
+		{
+			string html = @"<style>
+                                div~p
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <div><p>1</p></div>
+							test
+							<p>one</p>
+							<span>two</span>
+							<p>three</p>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			bool divFound = false;
+			bool spanFound = false;
+			int pCount = 0;
+			
+			while (node != null)
+			{
+				if (node.Tag == "div")
+				{
+					divFound = true;
+					TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div><p>1</p></div>", null, false, true, 1, 0, 0);
+					TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 0);
+				}
+				
+				if (node.Tag == "span")
+				{
+					spanFound = true;
+					TestUtility.AnalyzeNode(node, "span", "two", "<span>two</span>", null, false, true, 1, 0, 0);
+				}
+				
+				if (node.Tag == "p")
+				{
+					++pCount;
+					
+					Assert.AreEqual(1, node.Styles.Count);
+					TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
+				}
+				
+				node = node.Next;
+			}
+			
+			if (!divFound)
+			{
+				throw new Exception("div tag not found");
+			}
+			
+			if (!spanFound)
+			{
+				throw new Exception("span tag not found");
+			}
+			
+			if (pCount != 2)
+			{
+				throw new Exception("mismatch in p count");
+			}
 		}
 	}
 }

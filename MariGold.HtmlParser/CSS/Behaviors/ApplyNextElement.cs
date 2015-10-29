@@ -42,8 +42,7 @@
                 HtmlNode temp = node.Next;
 
                 //Empty text nodes can be avoid. This loop will skip those.
-                while (temp != null && temp.Tag == HtmlTag.TEXT &&
-                    temp.Html.Trim() == string.Empty)
+                while (temp != null && temp.Tag == HtmlTag.TEXT)
                 {
                     temp = temp.Next;
                 }
