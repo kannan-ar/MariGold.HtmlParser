@@ -517,5 +517,39 @@
 				throw new Exception("mismatch in p count");
 			}
 		}
+		
+		[Test]
+		public void DivWithClass()
+		{
+			string html = @"<style>
+                                div.cls
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <div class='cls'>one</div><div>two</div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "one", "<div class='cls'>one</div>", null, false, true, 1, 1, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
+			
+			node = node.Next;
+			
+			TestUtility.AnalyzeNode(node, "div", "two", "<div>two</div>", null, false, true, 1, 0, 0);
+		}
 	}
 }
