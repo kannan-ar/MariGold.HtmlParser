@@ -6,6 +6,7 @@
 	internal interface IAttachedSelector
 	{
 		bool Prepare(string selector);
+		bool IsValidNode(HtmlNode node);
 		void Parse(HtmlNode node, List<HtmlStyle> htmlStyles);
 	}
 }

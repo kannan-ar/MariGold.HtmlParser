@@ -14,16 +14,14 @@
 		{
 			attachedSelectors = new List<IAttachedSelector>();
 			
-			behaviors = new List<CSSBehavior>()
-			{
+			behaviors = new List<CSSBehavior>() {
 				new ApplyImmediateChildren(this),
 				new ApplyNextElement(this),
 				new ApplyAllNextElement(this),
 				new ApplyAllChildren(this)
 			};
 			
-			selectors = new List<CSSelector>()
-			{
+			selectors = new List<CSSelector>() {
 				new IdentitySelector(this),
 				new ClassSelector(this),
 				new AttributeSelector(this),
@@ -110,9 +108,13 @@
 			{
 				if (selector.Prepare(selectorText))
 				{
-					found = true;
+					if (selector.IsValidNode(node))
+					{
+						found = true;
 					
-					selector.Parse(node, htmlStyles);
+						selector.Parse(node, htmlStyles);
+					
+					}
 					
 					break;
 				}

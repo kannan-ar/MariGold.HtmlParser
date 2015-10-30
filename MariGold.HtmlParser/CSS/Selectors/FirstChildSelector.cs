@@ -76,14 +76,14 @@
 				{
 					continue;
 				}
-					
+				
 				//Find first child tag which matches the node's tag. The break statement will discard the loop after finding the first matching node.
 				//If the node is the first child, it will apply the styles.
 				isValid = string.Compare(node.Tag, child.Tag, true) == 0 && node == child;
-					
+				
 				//The loop only needs to check the first child element except the empty text element. So we can skip here.
 				break;
-					
+				
 			}
 			
 			return isValid;
@@ -112,6 +112,27 @@
 		bool IAttachedSelector.Prepare(string selector)
 		{
 			return Prepare(selector);
+		}
+		
+		bool IAttachedSelector.IsValidNode(HtmlNode node)
+		{
+			if (node == null)
+			{
+				return false;
+			}
+			
+			bool isValid = false;
+			
+			foreach (HtmlNode  child in node.Children)
+			{
+				if (child.Tag != HtmlTag.TEXT)
+				{
+					isValid = true;
+					break;
+				}
+			}
+			
+			return isValid;
 		}
 		
 		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)

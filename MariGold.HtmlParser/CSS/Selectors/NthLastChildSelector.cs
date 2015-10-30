@@ -96,6 +96,11 @@
 			return Prepare(selector);
 		}
 		
+		bool IAttachedSelector.IsValidNode(HtmlNode node)
+		{
+			return IsValidNode(node);
+		}
+		
 		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			Parse(node, htmlStyles);

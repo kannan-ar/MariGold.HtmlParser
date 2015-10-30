@@ -101,6 +101,16 @@
 			return Prepare(selector);
 		}
 		
+		bool IAttachedSelector.IsValidNode(HtmlNode node)
+		{
+			if (node == null)
+			{
+				return false;
+			}
+			
+			return node.Children.Count > 0;
+		}
+		
 		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			if (string.IsNullOrEmpty(this.selectorText))

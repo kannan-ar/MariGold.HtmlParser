@@ -103,6 +103,27 @@
 			return Prepare(selector);
 		}
 		
+		bool IAttachedSelector.IsValidNode(HtmlNode node)
+		{
+			if (node == null)
+			{
+				return false;
+			}
+			
+			bool isValid = false;
+			
+			foreach (HtmlNode  child in node.Children)
+			{
+				if (child.Tag != HtmlTag.TEXT)
+				{
+					isValid = true;
+					break;
+				}
+			}
+			
+			return isValid;
+		}
+		
 		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			if (string.IsNullOrEmpty(this.selectorText))

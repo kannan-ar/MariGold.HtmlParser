@@ -8,7 +8,7 @@
 	[TestFixture]
 	public partial class ComplexStyles
 	{
-		
+		[Test]
 		public void DivClassAllNextP()
 		{
 			string html = @"<style>
@@ -17,7 +17,7 @@
                                 	font-weight:bold;
                                 }
                             </style>
-                            <div><p>1</p></div>
+                            <div class='cls'><p>1</p></div>
 							test
 							<p>one</p>
 							<span>two</span>
@@ -41,7 +41,9 @@
 				if (node.Tag == "div")
 				{
 					divFound = true;
-					TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div><p>1</p></div>", null, false, true, 1, 0, 0);
+					TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
+					TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+					
 					TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 0);
 				}
 				
@@ -76,6 +78,75 @@
 			{
 				throw new Exception("mismatch in p count");
 			}
+		}
+		
+		[Test]
+		public void DivClassImmediateP()
+		{
+			string html = @"<style>
+                                div.cls > p
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <div class='cls'><p>1</p></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+				
+			TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
+		}
+		
+		[Test]
+		public void DivClassFirstChild()
+		{
+			string html = @"<style>
+                                div.cls:first-child
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <div class='cls'><p>1</p></div><div><p>2</p></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+				
+			TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
+			
+			node = node.Next;
+			
+			TestUtility.AnalyzeNode(node, "div", "<p>2</p>", "<div><p>2</p></div>", null, false, true, 1, 0, 0);
+			TestUtility.AnalyzeNode(node.Children[0], "p", "2", "<p>2</p>", node, false, true, 1, 0, 0);
 		}
 	}
 }

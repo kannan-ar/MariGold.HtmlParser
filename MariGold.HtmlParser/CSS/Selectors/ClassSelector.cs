@@ -4,7 +4,7 @@
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 
-	internal sealed class ClassSelector : CSSelector
+	internal sealed class ClassSelector : CSSelector, IAttachedSelector
 	{
 		private const string key = "class";
 
@@ -20,6 +20,8 @@
 				throw new ArgumentNullException("context");
 			}
 
+			context.AddAttachedSelector(this);
+			
 			this.context = context;
 			regex = new Regex(@"^\.[-_]*([a-zA-Z]+[0-9_-]*)+");
 		}
@@ -82,6 +84,21 @@
 		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Class);
+		}
+		
+		bool IAttachedSelector.Prepare(string selector)
+		{
+			return Prepare(selector);
+		}
+		
+		bool IAttachedSelector.IsValidNode(HtmlNode node)
+		{
+			return IsValidNode(node);
+		}
+		
+		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+		{
+			Parse(node, htmlStyles);
 		}
 	}
 }
