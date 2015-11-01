@@ -30,6 +30,7 @@
 				new LastChildSelector(this),
 				new NotSelector(this),
 				new NthChildSelector(this),
+				new NthLastChildSelector(this),
 				new OnlyChildSelector(this),
 				new GlobalSelector()
 			};			

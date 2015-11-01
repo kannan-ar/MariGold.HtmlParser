@@ -29,7 +29,7 @@
                 return false;
             }
 
-            return HtmlStyle.IsNonStyleElement(node.Tag);
+            return !HtmlStyle.IsNonStyleElement(node.Tag);
         }
         
 		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)

@@ -36,10 +36,8 @@
 			bool spanFound = false;
 			int pCount = 0;
 			
-			while (node != null)
-			{
-				if (node.Tag == "div")
-				{
+			while (node != null) {
+				if (node.Tag == "div") {
 					divFound = true;
 					TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
 					TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
@@ -47,14 +45,12 @@
 					TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 0);
 				}
 				
-				if (node.Tag == "span")
-				{
+				if (node.Tag == "span") {
 					spanFound = true;
 					TestUtility.AnalyzeNode(node, "span", "two", "<span>two</span>", null, false, true, 1, 0, 0);
 				}
 				
-				if (node.Tag == "p")
-				{
+				if (node.Tag == "p") {
 					++pCount;
 					
 					Assert.AreEqual(1, node.Styles.Count);
@@ -64,18 +60,15 @@
 				node = node.Next;
 			}
 			
-			if (!divFound)
-			{
+			if (!divFound) {
 				throw new Exception("div tag not found");
 			}
 			
-			if (!spanFound)
-			{
+			if (!spanFound) {
 				throw new Exception("span tag not found");
 			}
 			
-			if (pCount != 2)
-			{
+			if (pCount != 2) {
 				throw new Exception("mismatch in p count");
 			}
 		}
@@ -100,14 +93,13 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div")
-			{
+			while (node.Tag != "div") {
 				node = node.Next;
 			}
 			
 			TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
 			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
-				
+			
 			TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 1);
 			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
 		}
@@ -132,14 +124,13 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div")
-			{
+			while (node.Tag != "div") {
 				node = node.Next;
 			}
 			
 			TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
 			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
-				
+			
 			TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 1);
 			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
 			
@@ -147,6 +138,211 @@
 			
 			TestUtility.AnalyzeNode(node, "div", "<p>2</p>", "<div><p>2</p></div>", null, false, true, 1, 0, 0);
 			TestUtility.AnalyzeNode(node.Children[0], "p", "2", "<p>2</p>", node, false, true, 1, 0, 0);
+		}
+		
+		[Test]
+		public void DivClassAttributeFirstChild()
+		{
+			string html = @"<style>
+                                div[class='cls']:first-child
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <div class='cls'><p>1</p></div><div><p>2</p></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div") {
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			
+			TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
+			
+			node = node.Next;
+			
+			TestUtility.AnalyzeNode(node, "div", "<p>2</p>", "<div><p>2</p></div>", null, false, true, 1, 0, 0);
+			TestUtility.AnalyzeNode(node.Children[0], "p", "2", "<p>2</p>", node, false, true, 1, 0, 0);
+		}
+		
+		[Test]
+		public void CustomAttributeOnly()
+		{
+			string html = @"<style>
+                                [attr]
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <div>one</div>
+                            <div attr></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div") {
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "one", "<div>one</div>", null, false, true, 1, 0, 0);
+			
+			node = node.Next;
+			
+			while (node.Tag != "div") {
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div attr></div>", null, false, false, 0, 1, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
+			
+			Assert.IsNull(node.Next);
+		}
+		
+		[Test]
+		public void CustomAttributeWithValueOnly()
+		{
+			string html = @"<style>
+                                [attr='val']
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <div attr='val'>one</div>
+                            <div attr></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div") {
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "one", "<div attr='val'>one</div>", null, false, true, 1, 1, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "val");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
+			
+			node = node.Next;
+			
+			while (node.Tag != "div") {
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div attr></div>", null, false, false, 0, 1, 0);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
+			
+			Assert.IsNull(node.Next);
+		}
+		
+		[Test]
+		public void DivGlobalStyle()
+		{
+			string html = @"<style>
+								div *
+								{
+									background-color:red;
+								}
+							</style>
+							<div><p>one</p><hr/></div>
+							<p>three</p>
+							<span>four</span>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div") {
+				node = node.Next;
+			}
+				
+			TestUtility.AnalyzeNode(node, "div", "<p>one</p><hr/>", "<div><p>one</p><hr/></div>", null, false,
+				true, 2, 0, 0);
+			
+			TestUtility.AnalyzeNode(node.Children[0], "p", "one", "<p>one</p>", node, false, true, 1, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "background-color", "red");
+			
+			TestUtility.AnalyzeNode(node.Children[1], "hr", "<hr/>", "<hr/>", node, true, false, 0, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children[1].Styles.ElementAt(0), "background-color", "red");
+			
+			while (node.Tag != "p") {
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "p", "three", "<p>three</p>", null, false, true, 1, 0, 0);
+			
+			while (node.Tag != "span") {
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "span", "four", "<span>four</span>", null, false, true, 1, 0, 0);
+		}
+		
+		[Test]
+		public void IdentityLastChildP()
+		{
+			string html = @"<style>
+								#dv:last-child p
+								{
+									background-color:red;
+								}
+							</style>
+							<div id='dv'><div><p>three</p><span>two</span></div></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div") {
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "<div><p>three</p><span>two</span></div>", "<div id='dv'><div><p>three</p><span>two</span></div></div>",
+				null, false, true, 1, 1, 0);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "id", "dv");
+			
+			HtmlNode parent = node;
+			
+			node = node.Children[0];
+			
+			TestUtility.AnalyzeNode(node, "div", "<p>three</p><span>two</span>", "<div><p>three</p><span>two</span></div>", parent, false, true, 2, 0, 0);
+			
+			TestUtility.AnalyzeNode(node.Children[0], "p", "three", "<p>three</p>", node, false, true, 1, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "background-color", "red");
+			
+			TestUtility.AnalyzeNode(node.Children[1], "span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
 		}
 	}
 }
