@@ -36,8 +36,10 @@
 			bool spanFound = false;
 			int pCount = 0;
 			
-			while (node != null) {
-				if (node.Tag == "div") {
+			while (node != null)
+			{
+				if (node.Tag == "div")
+				{
 					divFound = true;
 					TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
 					TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
@@ -45,12 +47,14 @@
 					TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 0);
 				}
 				
-				if (node.Tag == "span") {
+				if (node.Tag == "span")
+				{
 					spanFound = true;
 					TestUtility.AnalyzeNode(node, "span", "two", "<span>two</span>", null, false, true, 1, 0, 0);
 				}
 				
-				if (node.Tag == "p") {
+				if (node.Tag == "p")
+				{
 					++pCount;
 					
 					Assert.AreEqual(1, node.Styles.Count);
@@ -60,15 +64,18 @@
 				node = node.Next;
 			}
 			
-			if (!divFound) {
+			if (!divFound)
+			{
 				throw new Exception("div tag not found");
 			}
 			
-			if (!spanFound) {
+			if (!spanFound)
+			{
 				throw new Exception("span tag not found");
 			}
 			
-			if (pCount != 2) {
+			if (pCount != 2)
+			{
 				throw new Exception("mismatch in p count");
 			}
 		}
@@ -93,7 +100,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -124,7 +132,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -160,7 +169,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -197,7 +207,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -205,7 +216,8 @@
 			
 			node = node.Next;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -237,7 +249,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -247,7 +260,8 @@
 			
 			node = node.Next;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -279,10 +293,11 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
-				
+			
 			TestUtility.AnalyzeNode(node, "div", "<p>one</p><hr/>", "<div><p>one</p><hr/></div>", null, false,
 				true, 2, 0, 0);
 			
@@ -292,13 +307,15 @@
 			TestUtility.AnalyzeNode(node.Children[1], "hr", "<hr/>", "<hr/>", node, true, false, 0, 0, 1);
 			TestUtility.CheckKeyValuePair(node.Children[1].Styles.ElementAt(0), "background-color", "red");
 			
-			while (node.Tag != "p") {
+			while (node.Tag != "p")
+			{
 				node = node.Next;
 			}
 			
 			TestUtility.AnalyzeNode(node, "p", "three", "<p>three</p>", null, false, true, 1, 0, 0);
 			
-			while (node.Tag != "span") {
+			while (node.Tag != "span")
+			{
 				node = node.Next;
 			}
 			
@@ -325,7 +342,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -343,6 +361,43 @@
 			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "background-color", "red");
 			
 			TestUtility.AnalyzeNode(node.Children[1], "span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
+		}
+		
+		[Test]
+		public void AttributeImmediateChildrenClass()
+		{
+			string html = @"<style>
+								[attr] > .cls
+								{
+									background-color:red;
+								}
+							</style>
+							<div attr><div class='cls'>one</div><div>two</div></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "<div class='cls'>one</div><div>two</div>", "<div attr><div class='cls'>one</div><div>two</div></div>",
+				null, false, true, 2, 1, 0);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
+			
+			TestUtility.AnalyzeNode(node.Children[0], "div", "one", "<div class='cls'>one</div>", node, false, true, 1, 1, 1);
+			TestUtility.CheckKeyValuePair(node.Children[0].Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "background-color", "red");
+			
+			TestUtility.AnalyzeNode(node.Children[1], "div", "two", "<div>two</div>", node, false, true, 1, 0, 0);
+			
 		}
 	}
 }

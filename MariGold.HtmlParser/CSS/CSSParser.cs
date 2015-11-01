@@ -58,7 +58,8 @@
 				}
 			}
 
-			return closeBraceIndex;
+			//+1 to advance to next location
+			return closeBraceIndex + 1;
 		}
 
 		private string ExtractStylesFromLink(string url)

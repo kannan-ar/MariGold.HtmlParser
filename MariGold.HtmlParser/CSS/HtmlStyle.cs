@@ -79,9 +79,10 @@
         {
             if (string.Compare(name, htmlStyle.Name, true) == 0)
             {
-                if (htmlStyle.Weight > weight &&
+                if (htmlStyle.Weight >= weight &&
                     ((!important && htmlStyle.Important) ||
-                    important && htmlStyle.Important))
+                    (important && htmlStyle.Important) ||
+                    (!important && !htmlStyle.Important)))
                 {
                     value = htmlStyle.Value;
                     important = htmlStyle.Important;

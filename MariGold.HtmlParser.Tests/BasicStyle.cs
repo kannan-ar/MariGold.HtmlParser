@@ -15,7 +15,8 @@
 
 			HtmlParser parser = new HtmlTextParser(html);
 
-			if (parser.Traverse()) {
+			if (parser.Traverse())
+			{
 				parser.ParseCSS();
 
 				Assert.IsNotNull(parser.Current);
@@ -32,7 +33,8 @@
 
 			HtmlParser parser = new HtmlTextParser(html);
 
-			if (parser.Traverse()) {
+			if (parser.Traverse())
+			{
 				parser.ParseCSS();
 
 				Assert.IsNotNull(parser.Current);
@@ -113,8 +115,10 @@
 			while (node.Tag != "div")
 				node = node.Next;
 
-			foreach (HtmlNode child in node.Children) {
-				if (child.Tag == "p") {
+			foreach (HtmlNode child in node.Children)
+			{
+				if (child.Tag == "p")
+				{
 					Assert.AreEqual(1, child.Styles.Count);
 					TestUtility.CheckKeyValuePair(child.Styles.ElementAt(0), "color", "#fff");
 					break;
@@ -155,19 +159,27 @@
 			bool artTagFound = false;
 			bool innerPTagFound = false;
 
-			foreach (HtmlNode child in node.Children) {
-				if (child.Tag == "a") {
+			foreach (HtmlNode child in node.Children)
+			{
+				if (child.Tag == "a")
+				{
 					aTagFound = true;
 					Assert.AreEqual(0, child.Styles.Count);
-				} else if (child.Tag == "p") {
+				}
+				else if (child.Tag == "p")
+				{
 					pTagFound = true;
 					Assert.AreEqual(1, child.Styles.Count);
 					TestUtility.CheckKeyValuePair(child.Styles.ElementAt(0), "color", "#fff");
-				} else if (child.Tag == "art") {
+				}
+				else if (child.Tag == "art")
+				{
 					artTagFound = true;
 
-					foreach (HtmlNode child1 in child.Children) {
-						if (child1.Tag == "p") {
+					foreach (HtmlNode child1 in child.Children)
+					{
+						if (child1.Tag == "p")
+						{
 							innerPTagFound = true;
 							Assert.AreEqual(1, child1.Styles.Count);
 							TestUtility.CheckKeyValuePair(child1.Styles.ElementAt(0),
@@ -206,8 +218,10 @@
 			HtmlNode temp = parser.Current;
 			bool divFound = false;
 
-			while (temp != null) {
-				if (temp.Tag == "div") {
+			while (temp != null)
+			{
+				if (temp.Tag == "div")
+				{
 					divFound = true;
 
 					TestUtility.AreEqual(temp, "div", "", "<div id='dv'></div>");
@@ -263,8 +277,10 @@
 			HtmlNode temp = parser.Current;
 			bool divFound = false;
 
-			while (temp != null) {
-				if (temp.Tag == "div") {
+			while (temp != null)
+			{
+				if (temp.Tag == "div")
+				{
 					divFound = true;
 
 					TestUtility.AreEqual(temp, "div", "", "<div id='dv'></div>");
@@ -774,22 +790,29 @@
 			
 			HtmlNode body = parser.Current;
 			
-			while (body.Tag != "body") {
+			while (body.Tag != "body")
+			{
 				body = body.Next;
 			}
 			
 			TestUtility.AnalyzeNode(body, "body", "<p>p tag</p><div>div tag</div>", "<body><p>p tag</p><div>div tag</div></body>",
 				null, false, true, 2, 0);
 			
-			foreach (HtmlNode child in body.Children) {
-				if (child.Tag == "p") {
+			foreach (HtmlNode child in body.Children)
+			{
+				if (child.Tag == "p")
+				{
 					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
-				} else if (child.Tag == "div") {
+				}
+				else if (child.Tag == "div")
+				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(1, child.Styles.Count);
 					TestUtility.CheckStyle(child.Styles.ElementAt(0), "color", "#fff");
-				} else {
+				}
+				else
+				{
 					throw new Exception("Invalid child tag found in body node");
 				}
 			}
@@ -815,21 +838,28 @@
 			
 			HtmlNode body = parser.Current;
 			
-			while (body.Tag != "body") {
+			while (body.Tag != "body")
+			{
 				body = body.Next;
 			}
 			
 			TestUtility.AnalyzeNode(body, "body", "<p>p tag</p><div>div tag</div>", "<body><p>p tag</p><div>div tag</div></body>",
 				null, false, true, 2, 0);
 			
-			foreach (HtmlNode child in body.Children) {
-				if (child.Tag == "p") {
+			foreach (HtmlNode child in body.Children)
+			{
+				if (child.Tag == "p")
+				{
 					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
-				} else if (child.Tag == "div") {
+				}
+				else if (child.Tag == "div")
+				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
-				} else {
+				}
+				else
+				{
 					throw new Exception("Invalid child tag found in body node");
 				}
 			}
@@ -855,22 +885,29 @@
 			
 			HtmlNode body = parser.Current;
 			
-			while (body.Tag != "body") {
+			while (body.Tag != "body")
+			{
 				body = body.Next;
 			}
 			
 			TestUtility.AnalyzeNode(body, "body", "<p>p tag</p><div>div tag</div>", "<body><p>p tag</p><div>div tag</div></body>",
 				null, false, true, 2, 0);
 			
-			foreach (HtmlNode child in body.Children) {
-				if (child.Tag == "p") {
+			foreach (HtmlNode child in body.Children)
+			{
+				if (child.Tag == "p")
+				{
 					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
 					Assert.AreEqual(1, child.Styles.Count);
 					TestUtility.CheckStyle(child.Styles.ElementAt(0), "color", "#fff");
-				} else if (child.Tag == "div") {
+				}
+				else if (child.Tag == "div")
+				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
-				} else {
+				}
+				else
+				{
 					throw new Exception("Invalid child tag found in body node");
 				}
 			}
@@ -902,17 +939,23 @@
 			bool divTagFound = false;
 			bool spanTagFound = false;
 			
-			while (node != null) {
-				if (node.Tag == "p") {
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
 					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
 					Assert.AreEqual(0, node.Styles.Count);
 					pTagFound = true;
-				} else if (node.Tag == "div") {
+				}
+				else if (node.Tag == "div")
+				{
 					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
 					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
 					divTagFound = true;
-				} else if (node.Tag == "span") {
+				}
+				else if (node.Tag == "span")
+				{
 					TestUtility.AnalyzeNode(node, "span", "span tag", "<span>span tag</span>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
 					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
@@ -922,15 +965,18 @@
 				node = node.Next;
 			}
 			
-			if (!pTagFound) {
+			if (!pTagFound)
+			{
 				throw new Exception("p tag not found");
 			}
 			
-			if (!divTagFound) {
+			if (!divTagFound)
+			{
 				throw new Exception("div tag not found");
 			}
 			
-			if (!spanTagFound) {
+			if (!spanTagFound)
+			{
 				throw new Exception("span not found");
 			}
 		}
@@ -961,17 +1007,23 @@
 			bool divTagFound = false;
 			bool spanTagFound = false;
 			
-			while (node != null) {
-				if (node.Tag == "p") {
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
 					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
 					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
 					pTagFound = true;
-				} else if (node.Tag == "div") {
+				}
+				else if (node.Tag == "div")
+				{
 					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
 					Assert.AreEqual(0, node.Styles.Count);
 					divTagFound = true;
-				} else if (node.Tag == "span") {
+				}
+				else if (node.Tag == "span")
+				{
 					TestUtility.AnalyzeNode(node, "span", "span tag", "<span>span tag</span>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
 					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
@@ -981,15 +1033,18 @@
 				node = node.Next;
 			}
 			
-			if (!pTagFound) {
+			if (!pTagFound)
+			{
 				throw new Exception("p tag not found");
 			}
 			
-			if (!divTagFound) {
+			if (!divTagFound)
+			{
 				throw new Exception("div tag not found");
 			}
 			
-			if (!spanTagFound) {
+			if (!spanTagFound)
+			{
 				throw new Exception("span not found");
 			}
 		}
@@ -1018,12 +1073,16 @@
 			bool pTagFound = false;
 			bool divTagFound = false;
 			
-			while (node != null) {
-				if (node.Tag == "p") {
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
 					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
 					Assert.AreEqual(0, node.Styles.Count);
 					pTagFound = true;
-				} else if (node.Tag == "div") {
+				}
+				else if (node.Tag == "div")
+				{
 					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
 					Assert.AreEqual(0, node.Styles.Count);
 					divTagFound = true;
@@ -1032,11 +1091,13 @@
 				node = node.Next;
 			}
 			
-			if (!pTagFound) {
+			if (!pTagFound)
+			{
 				throw new Exception("p tag not found");
 			}
 			
-			if (!divTagFound) {
+			if (!divTagFound)
+			{
 				throw new Exception("div tag not found");
 			}
 		}
@@ -1062,8 +1123,10 @@
 			HtmlNode node = parser.Current;
 			bool pTagFound = false;
 			
-			while (node != null) {
-				if (node.Tag == "p") {
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
 					pTagFound = true;
 					
 					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
@@ -1073,7 +1136,8 @@
 				node = node.Next;				
 			}
 			
-			if (!pTagFound) {
+			if (!pTagFound)
+			{
 				throw new Exception("p tag not found");
 			}
 		}
@@ -1099,8 +1163,10 @@
 			HtmlNode node = parser.Current;
 			bool pTagFound = false;
 			
-			while (node != null) {
-				if (node.Tag == "p") {
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
 					pTagFound = true;
 					
 					TestUtility.AnalyzeNode(node, "p", "<span>one</span>", "<p><span>one</span></p>", null, false, true, 1, 0);
@@ -1114,7 +1180,8 @@
 				node = node.Next;				
 			}
 			
-			if (!pTagFound) {
+			if (!pTagFound)
+			{
 				throw new Exception("p tag not found");
 			}
 		}
@@ -1140,8 +1207,10 @@
 			HtmlNode node = parser.Current;
 			bool pTagFound = false;
 			
-			while (node != null) {
-				if (node.Tag == "p") {
+			while (node != null)
+			{
+				if (node.Tag == "p")
+				{
 					pTagFound = true;
 					
 					TestUtility.AnalyzeNode(node, "p", "<span>one</span>this is a test", 
@@ -1157,7 +1226,8 @@
 				node = node.Next;				
 			}
 			
-			if (!pTagFound) {
+			if (!pTagFound)
+			{
 				throw new Exception("p tag not found");
 			}
 		}
@@ -1191,9 +1261,11 @@
 			bool bFound = false;
 			bool hrFound = false;
 			
-			while (node != null) {
+			while (node != null)
+			{
 				
-				if (node.Tag == "#text") {
+				if (node.Tag == "#text")
+				{
 					textFound = true;
 					
 					Assert.AreEqual(2, node.Styles.Count);
@@ -1201,7 +1273,8 @@
 					TestUtility.CheckKeyValuePair(node.Styles.ElementAt(1), "margin", "0 10px 0 10px");
 				}
 				
-				if (node.Tag == "div") {
+				if (node.Tag == "div")
+				{
 					divFound = true;
 					
 					TestUtility.AnalyzeNode(node, "div", "one", "<div>one</div>", null, false, true, 1, 0, 2);
@@ -1209,7 +1282,8 @@
 					TestUtility.CheckKeyValuePair(node.Styles.ElementAt(1), "margin", "0 10px 0 10px");
 				}
 				
-				if (node.Tag == "b") {
+				if (node.Tag == "b")
+				{
 					bFound = true;
 					
 					TestUtility.AnalyzeNode(node, "b", "", "<b></b>", null, false, false, 0, 0, 2);
@@ -1217,7 +1291,8 @@
 					TestUtility.CheckKeyValuePair(node.Styles.ElementAt(1), "margin", "0 10px 0 10px");
 				}
 				
-				if (node.Tag == "hr") {
+				if (node.Tag == "hr")
+				{
 					hrFound = true;
 					
 					TestUtility.AnalyzeNode(node, "hr", "<hr />", "<hr />", null, true, false, 0, 0, 2);
@@ -1228,19 +1303,23 @@
 				node = node.Next;
 			}
 			
-			if (!textFound) {
+			if (!textFound)
+			{
 				throw new Exception("Text node not found");
 			}
 			
-			if (!divFound) {
+			if (!divFound)
+			{
 				throw new Exception("div not found");
 			}
 			
-			if (!bFound) {
+			if (!bFound)
+			{
 				throw new Exception("b not found");
 			}
 			
-			if (!hrFound) {
+			if (!hrFound)
+			{
 				throw new Exception("hr not found");
 			}
 		}
@@ -1265,7 +1344,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -1297,7 +1377,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -1329,7 +1410,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
@@ -1360,7 +1442,8 @@
 			
 			HtmlNode node = parser.Current;
 			
-			while (node.Tag != "div") {
+			while (node.Tag != "div")
+			{
 				node = node.Next;
 			}
 			
