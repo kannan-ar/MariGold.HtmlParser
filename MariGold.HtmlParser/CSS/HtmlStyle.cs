@@ -79,6 +79,16 @@
         {
             if (string.Compare(name, htmlStyle.Name, true) == 0)
             {
+            	if(!important && htmlStyle.Important)
+            	{
+            		value = htmlStyle.Value;
+                    important = htmlStyle.Important;
+            	}
+            	else if(htmlStyle.Weight >= weight)
+            	{
+            		value = htmlStyle.Value;
+            	}
+            	/*
                 if (htmlStyle.Weight >= weight &&
                     ((!important && htmlStyle.Important) ||
                     (important && htmlStyle.Important) ||
@@ -87,6 +97,7 @@
                     value = htmlStyle.Value;
                     important = htmlStyle.Important;
                 }
+                */
             }
         }
 

@@ -36,7 +36,7 @@
 			if (importantIndex > -1)
 			{
 				important = true;
-				value = value.Replace("!important", string.Empty);
+				value = value.Replace("!important", string.Empty).Trim();
 			}
 
 			return new HtmlStyle(styleName, value, important, weight);
