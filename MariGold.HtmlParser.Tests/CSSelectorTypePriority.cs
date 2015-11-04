@@ -332,5 +332,426 @@
 			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "style", "color:red");
 			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
 		}
+		
+		[Test]
+		public void ClassImportantInlineImportant()
+		{
+			string html = @"<style>
+			
+                                .cls
+                                {
+                                	color:blue !important;
+                                }
+                                
+                            </style>
+                            <div class='cls' style='color:red !important'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div class='cls' style='color:red !important'></div>", null, false, false, 0, 2, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "style", "color:red !important");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
+		}
+		
+		[Test]
+		public void ElementImportantClassInline()
+		{
+			string html = @"<style>
+			
+								div
+								{
+									color:black !important;
+								}
+								
+                                .cls
+                                {
+                                	color:blue;
+                                }
+                                
+                            </style>
+                            <div class='cls' style='color:red'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div class='cls' style='color:red'></div>", null, false, false, 0, 2, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "style", "color:red");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "black");
+		}
+		
+		[Test]
+		public void ElementImportantClassInlineImportant()
+		{
+			string html = @"<style>
+			
+								div
+								{
+									color:black !important;
+								}
+								
+                                .cls
+                                {
+                                	color:blue;
+                                }
+                                
+                            </style>
+                            <div class='cls' style='color:red !important'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div class='cls' style='color:red !important'></div>", null, false, false, 0, 2, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "style", "color:red !important");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
+		}
+		
+		[Test]
+		public void ElementImportantClassImportantInline()
+		{
+			string html = @"<style>
+			
+								div
+								{
+									color:black !important;
+								}
+								
+                                .cls
+                                {
+                                	color:blue !important;
+                                }
+                                
+                            </style>
+                            <div class='cls' style='color:red'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div class='cls' style='color:red'></div>", null, false, false, 0, 2, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "style", "color:red");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
+		}
+		
+		[Test]
+		public void ClassElementImportantInline()
+		{
+			string html = @"<style>
+			
+                                .cls
+                                {
+                                	color:blue;
+                                }
+                                
+                                div
+								{
+									color:black !important;
+								}
+								
+                            </style>
+                            <div class='cls' style='color:red'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div class='cls' style='color:red'></div>", null, false, false, 0, 2, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "style", "color:red");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "black");
+		}
+		
+		[Test]
+		public void ClassImportantElementInline()
+		{
+			string html = @"<style>
+			
+                                .cls
+                                {
+                                	color:blue !important;
+                                }
+                                
+                                div
+								{
+									color:black;
+								}
+								
+                            </style>
+                            <div class='cls' style='color:red'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div class='cls' style='color:red'></div>", null, false, false, 0, 2, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "style", "color:red");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
+		}
+		
+		[Test]
+		public void ClassImportantAttribute()
+		{
+			string html = @"<style>
+			
+                                .cls
+                                {
+                                	color:blue !important;
+                                }
+                                
+                                [attr]
+								{
+									color:black;
+								}
+								
+                            </style>
+                            <div attr class='cls'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div attr class='cls'></div>", null, false, false, 0, 2, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
+		}
+		
+		[Test]
+		public void ClassImportantAttributeImportant()
+		{
+			string html = @"<style>
+			
+                                .cls
+                                {
+                                	color:blue !important;
+                                }
+                                
+                                [attr]
+								{
+									color:black !important;
+								}
+								
+                            </style>
+                            <div attr class='cls'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div attr class='cls'></div>", null, false, false, 0, 2, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "black");
+		}
+		
+		[Test]
+		public void ClassAttributeInline()
+		{
+			string html = @"<style>
+			
+                                .cls
+                                {
+                                	color:blue;
+                                }
+                                
+                                [attr]
+								{
+									color:black;
+								}
+								
+                            </style>
+                            <div attr class='cls' style='color:red'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div attr class='cls' style='color:red'></div>", null, false, false, 0, 3, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(2), "style", "color:red");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
+		}
+		
+		[Test]
+		public void ClassImportantAttributeImportantInlineImportant()
+		{
+			string html = @"<style>
+			
+                                .cls
+                                {
+                                	color:blue !important;
+                                }
+                                
+                                [attr]
+								{
+									color:black !important;
+								}
+								
+                            </style>
+                            <div attr class='cls' style='color:red !important'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div attr class='cls' style='color:red !important'></div>", null, false, false, 0, 3, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(2), "style", "color:red !important");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
+		}
+		
+		[Test]
+		public void GlobalImportantClassAttributeInline()
+		{
+			string html = @"<style>
+								
+								*
+								{
+									color:white !important;
+								}
+								
+                                .cls
+                                {
+                                	color:blue;
+                                }
+                                
+                                [attr]
+								{
+									color:black;
+								}
+								
+                            </style>
+                            <div attr class='cls' style='color:red'></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			TestUtility.AnalyzeNode(node, "div", "", "<div attr class='cls' style='color:red'></div>", null, false, false, 0, 3, 1);
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(2), "style", "color:red");
+			TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "white");
+		}
 	}
 }

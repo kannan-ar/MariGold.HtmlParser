@@ -619,7 +619,7 @@
 		public void PFirstChild()
 		{
 			string html = @"<style>
-                                p:first-child
+                                span:first-child
                                 {
                                 	color:#fff;
                                 }
@@ -643,8 +643,7 @@
 				null, false, true, 2, 0);
 			Assert.AreEqual(0, div.Styles.Count);
 			
-			TestUtility.AnalyzeNode(div.Children[0], "span", "dspan1", "<span>dspan1</span>", div, false, true, 1, 0);
-			Assert.AreEqual(0, div.Children[0].Styles.Count);
+			TestUtility.AnalyzeNode(div.Children[0], "span", "dspan1", "<span>dspan1</span>", div, false, true, 1, 0, 1);
 			
 			TestUtility.AnalyzeNode(div.Children[1], "span", "dspan2", "<span>dspan2</span>", div, false, true, 1, 0);
 			Assert.AreEqual(0, div.Children[1].Styles.Count);
@@ -658,8 +657,7 @@
 				null, false, true, 2, 0);
 			Assert.AreEqual(0, p.Styles.Count);
 			
-			TestUtility.AnalyzeNode(p.Children[0], "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0);
-			Assert.AreEqual(1, p.Children[0].Styles.Count);
+			TestUtility.AnalyzeNode(p.Children[0], "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0, 1);
 			TestUtility.CheckStyle(p.Children[0].Styles.ElementAt(0), "color", "#fff");
 			
 			TestUtility.AnalyzeNode(p.Children[1], "span", "pspan2", "<span>pspan2</span>", p, false, true, 1, 0);
@@ -1133,7 +1131,7 @@
 					Assert.AreEqual(0, node.Styles.Count);
 				}
 				
-				node = node.Next;				
+				node = node.Next;
 			}
 			
 			if (!pTagFound)
@@ -1177,7 +1175,7 @@
 					TestUtility.CheckStyle(node.Children[0].Styles.ElementAt(0), "color", "#fff");
 				}
 				
-				node = node.Next;				
+				node = node.Next;
 			}
 			
 			if (!pTagFound)
@@ -1213,7 +1211,7 @@
 				{
 					pTagFound = true;
 					
-					TestUtility.AnalyzeNode(node, "p", "<span>one</span>this is a test", 
+					TestUtility.AnalyzeNode(node, "p", "<span>one</span>this is a test",
 						"<p><span>one</span>this is a test</p>", null, false, true, 2, 0);
 					Assert.AreEqual(0, node.Styles.Count);
 					
@@ -1223,7 +1221,7 @@
 					TestUtility.AnalyzeNode(node.Children[1], "#text", "this is a test", "this is a test", node, false, false, 0, 0, 0);
 				}
 				
-				node = node.Next;				
+				node = node.Next;
 			}
 			
 			if (!pTagFound)

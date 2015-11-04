@@ -43,6 +43,7 @@
     <Compile Include="Comments.cs" />
     <Compile Include="ComplexStyles.cs" />
     <Compile Include="ComplexStylesLevel1.cs" />
+    <Compile Include="ComplextStylesLevel2.cs" />
     <Compile Include="CSSelectorTypePriority.cs" />
     <Compile Include="FindTag.cs" />
     <Compile Include="FromFile.cs" />

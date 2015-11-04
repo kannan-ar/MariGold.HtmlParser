@@ -116,7 +116,7 @@
 		
 		bool IAttachedSelector.IsValidNode(HtmlNode node)
 		{
-			if (node == null)
+			/*if (node == null)
 			{
 				return false;
 			}
@@ -132,19 +132,21 @@
 				}
 			}
 			
-			return isValid;
+			return isValid;*/
+			return IsValidNode(node);
 		}
 		
 		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
-			if (string.IsNullOrEmpty(this.selectorText))
+			/*if (string.IsNullOrEmpty(this.selectorText))
 			{
 				ApplyToFirstChild(node, htmlStyles);
 			}
 			else
 			{
 				context.ParseBehavior(this.selectorText, node, htmlStyles);
-			}
+			}*/
+			Parse(node, htmlStyles);
 		}
 	}
 }

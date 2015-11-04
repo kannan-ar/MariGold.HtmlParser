@@ -121,7 +121,7 @@
                                 	font-weight:bold;
                                 }
                             </style>
-                            <div class='cls'><p>1</p></div><div><p>2</p></div>";
+                            <div><div class='cls'>1</div></div>";
 			
 			HtmlParser parser = new HtmlTextParser(html);
 
@@ -137,16 +137,11 @@
 				node = node.Next;
 			}
 			
-			TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
-			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			TestUtility.AnalyzeNode(node, "div", "<div class='cls'>1</div>", "<div><div class='cls'>1</div></div>", null, false, true, 1, 0, 0);
 			
-			TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 1);
+			TestUtility.AnalyzeNode(node.Children[0], "div", "1", "<div class='cls'>1</div>", node, false, true, 1, 1, 1);
 			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
-			
-			node = node.Next;
-			
-			TestUtility.AnalyzeNode(node, "div", "<p>2</p>", "<div><p>2</p></div>", null, false, true, 1, 0, 0);
-			TestUtility.AnalyzeNode(node.Children[0], "p", "2", "<p>2</p>", node, false, true, 1, 0, 0);
+			TestUtility.CheckKeyValuePair(node.Children[0].Attributes.ElementAt(0), "class", "cls");
 		}
 		
 		[Test]
@@ -158,7 +153,7 @@
                                 	font-weight:bold;
                                 }
                             </style>
-                            <div class='cls'><p>1</p></div><div><p>2</p></div>";
+                            <div><div class='cls'>1</div><div>2</div></div>";
 			
 			HtmlParser parser = new HtmlTextParser(html);
 
@@ -174,16 +169,13 @@
 				node = node.Next;
 			}
 			
-			TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
-			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
+			TestUtility.AnalyzeNode(node, "div", "<div class='cls'>1</div><div>2</div>", "<div><div class='cls'>1</div><div>2</div></div>", null, false, true, 2, 0, 0);
 			
-			TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 1);
+			TestUtility.AnalyzeNode(node.Children[0], "div", "1", "<div class='cls'>1</div>", node, false, true, 1, 1, 1);
+			TestUtility.CheckKeyValuePair(node.Children[0].Attributes.ElementAt(0), "class", "cls");
 			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
 			
-			node = node.Next;
-			
-			TestUtility.AnalyzeNode(node, "div", "<p>2</p>", "<div><p>2</p></div>", null, false, true, 1, 0, 0);
-			TestUtility.AnalyzeNode(node.Children[0], "p", "2", "<p>2</p>", node, false, true, 1, 0, 0);
+			TestUtility.AnalyzeNode(node.Children[1], "div", "2", "<div>2</div>", node, false, true, 1, 0, 0);
 		}
 		
 		[Test]
