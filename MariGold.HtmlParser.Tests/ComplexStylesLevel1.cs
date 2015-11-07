@@ -429,5 +429,284 @@
 			node.AnalyzeNode("span", "3", "<span>3</span>", null, false, true, 1, 0, 1);
 			node.Styles.CheckKeyValuePair(0, "background-color", "red");
 		}
+		
+		[Test]
+		public void PDivWithImmediateChildrenSpan()
+		{
+			string html = @"<style>
+								div > span, p
+								{
+									background-color:red;
+								}
+							</style>
+							<p>1</p><div><span>2</span></div><span>3</span>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "p")
+			{
+				node = node.Next;
+			}
+			
+			node.AnalyzeNode("p", "1", "<p>1</p>", null, false, true, 1, 0, 1);
+			node.Styles.CheckKeyValuePair(0, "background-color", "red");
+			
+			node = node.Next;
+			
+			node.AnalyzeNode("div", "<span>2</span>", "<div><span>2</span></div>", null, false, true, 1, 0, 0);
+			
+			node.Children[0].AnalyzeNode("span", "2", "<span>2</span>", node, false, true, 1, 0, 1);
+			node.Children[0].Styles.CheckKeyValuePair(0, "background-color", "red");
+			
+			node = node.Next;
+			
+			node.AnalyzeNode("span", "3", "<span>3</span>", null, false, true, 1, 0, 0);
+		}
+		
+		[Test]
+		public void StylesFromDivAndSpan()
+		{
+			string html = @"<style>
+								span
+								{
+								  font-family: arial;
+								}
+								
+								div > span
+								{
+								  font-size:15pt;
+								}
+							</style>
+							<div><span>test</span></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			node.AnalyzeNode("div", "<span>test</span>", "<div><span>test</span></div>", null, false, true, 1, 0, 0);
+			
+			node.Children[0].AnalyzeNode("span", "test", "<span>test</span>", node, false, true, 1, 0, 2);
+			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children[0].Styles.CheckKeyValuePair(1, "font-family", "arial");
+		}
+		
+		[Test]
+		public void StylesFromDivAndSpanClass()
+		{
+			string html = @"<style>
+								span
+								{
+								  font-family: arial;
+								}
+								
+								div > span
+								{
+								  font-size:15pt;
+								}
+								
+								.s
+								{
+									font-weight:bold;
+								}
+							</style>
+							<div><span class='s'>test</span></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			node.AnalyzeNode("div", "<span class='s'>test</span>", "<div><span class='s'>test</span></div>", null, false, true, 1, 0, 0);
+			
+			node.Children[0].AnalyzeNode("span", "test", "<span class='s'>test</span>", node, false, true, 1, 1, 3);
+			node.Children[0].Attributes.CheckKeyValuePair(0, "class", "s");
+			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children[0].Styles.CheckKeyValuePair(1, "font-family", "arial");
+			node.Children[0].Styles.CheckKeyValuePair(2, "font-weight", "bold");
+		}
+		
+		[Test]
+		public void StylesFromDivClassAndSpanClass()
+		{
+			string html = @"<style>
+								span
+								{
+								  font-family: arial;
+								}
+								
+								div > span
+								{
+								  font-size:15pt;
+								}
+								
+								.d > span
+								{
+									font-weight:normal !important;
+								}
+								
+								.s
+								{
+									font-weight:bold;
+								}
+							</style>
+							<div class='d'><span class='s'>test</span></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			node.AnalyzeNode("div", "<span class='s'>test</span>", "<div class='d'><span class='s'>test</span></div>", 
+			                 null, false, true, 1, 1, 0);
+			node.Attributes.CheckKeyValuePair(0, "class", "d");
+			
+			node.Children[0].AnalyzeNode("span", "test", "<span class='s'>test</span>", node, false, true, 1, 1, 3);
+			node.Children[0].Attributes.CheckKeyValuePair(0, "class", "s");
+			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children[0].Styles.CheckKeyValuePair(1, "font-weight", "normal");
+			node.Children[0].Styles.CheckKeyValuePair(2, "font-family", "arial");
+			
+		}
+		
+		[Test]
+		public void StylesFromInlineDivClassAndSpanClass()
+		{
+			string html = @"<style>
+								span
+								{
+								  font-family: arial;
+								}
+								
+								div > span
+								{
+								  font-size:15pt;
+								}
+								
+								.d > span
+								{
+									font-weight:normal !important;
+								}
+								
+								.s
+								{
+									font-weight:bold;
+								}
+							</style>
+							<div class='d'><span style='font-family:verdana' class='s'>test</span></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			node.AnalyzeNode("div", "<span style='font-family:verdana' class='s'>test</span>", "<div class='d'><span style='font-family:verdana' class='s'>test</span></div>", 
+			                 null, false, true, 1, 1, 0);
+			node.Attributes.CheckKeyValuePair(0, "class", "d");
+			
+			node.Children[0].AnalyzeNode("span", "test", "<span style='font-family:verdana' class='s'>test</span>", node, false, true, 1, 2, 3);
+			node.Children[0].Attributes.CheckKeyValuePair(0, "style", "font-family:verdana");
+			node.Children[0].Attributes.CheckKeyValuePair(1, "class", "s");
+			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children[0].Styles.CheckKeyValuePair(1, "font-weight", "normal");
+			node.Children[0].Styles.CheckKeyValuePair(2, "font-family", "verdana");
+			
+		}
+		
+		[Test]
+		public void StylesFromInlineDivClassAndSpanInlineClass()
+		{
+			string html = @"<style>
+								span
+								{
+								  font-family: arial !important;
+								}
+								
+								div > span
+								{
+								  font-size:15pt;
+								}
+								
+								.d > span
+								{
+									font-weight:normal !important;
+								}
+								
+								.s
+								{
+									font-weight:bold;
+								}
+							</style>
+							<div class='d'><span style='font-family:verdana' class='s'>test</span></div>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "div")
+			{
+				node = node.Next;
+			}
+			
+			node.AnalyzeNode("div", "<span style='font-family:verdana' class='s'>test</span>", "<div class='d'><span style='font-family:verdana' class='s'>test</span></div>", 
+			                 null, false, true, 1, 1, 0);
+			node.Attributes.CheckKeyValuePair(0, "class", "d");
+			
+			node.Children[0].AnalyzeNode("span", "test", "<span style='font-family:verdana' class='s'>test</span>", node, false, true, 1, 2, 3);
+			node.Children[0].Attributes.CheckKeyValuePair(0, "style", "font-family:verdana");
+			node.Children[0].Attributes.CheckKeyValuePair(1, "class", "s");
+			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children[0].Styles.CheckKeyValuePair(1, "font-weight", "normal");
+			node.Children[0].Styles.CheckKeyValuePair(2, "font-family", "arial");
+			
+		}
 	}
 }
