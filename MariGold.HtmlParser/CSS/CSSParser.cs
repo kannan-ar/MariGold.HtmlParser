@@ -91,7 +91,10 @@
 					//Returning close brace index
 					bracePosition = ParseHtmlStyles(bracePosition, style, out htmlStyles);
 
-					styleSheet.Add(selectorText, htmlStyles);
+					foreach (string selector in selectorText.Split(new char[]{ ',' }, StringSplitOptions.RemoveEmptyEntries))
+					{
+						styleSheet.Add(selector.Trim(), htmlStyles);
+					}
 				}
 
 				if (bracePosition == -1)

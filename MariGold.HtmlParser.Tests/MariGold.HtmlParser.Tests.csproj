@@ -57,6 +57,7 @@
     <Compile Include="SelfClosing.cs" />
     <Compile Include="SpecialTags.cs" />
     <Compile Include="Tables.cs" />
+    <Compile Include="TestExtensions.cs" />
     <Compile Include="TestHtml.cs" />
     <Compile Include="TestUtility.cs" />
     <Compile Include="ThreeElements.cs" />

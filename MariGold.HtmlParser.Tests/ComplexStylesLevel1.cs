@@ -391,5 +391,43 @@
 			TestUtility.AnalyzeNode(node.Children[1], "div", "two", "<div>two</div>", node, false, true, 1, 0, 0);
 			
 		}
+		
+		[Test]
+		public void PDivSpan()
+		{
+			string html = @"<style>
+								p, span
+								{
+									background-color:red;
+								}
+							</style>
+							<p>1</p><div>2</div><span>3</span>";
+			
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.IsTrue(parser.Parse());
+			parser.ParseCSS();
+
+			Assert.IsNotNull(parser.Current);
+			
+			HtmlNode node = parser.Current;
+			
+			while (node.Tag != "p")
+			{
+				node = node.Next;
+			}
+			
+			node.AnalyzeNode("p", "1", "<p>1</p>", null, false, true, 1, 0, 1);
+			node.Styles.CheckKeyValuePair(0, "background-color", "red");
+			
+			node = node.Next;
+			
+			node.AnalyzeNode("div", "2", "<div>2</div>", null, false, true, 1, 0, 0);
+			
+			node = node.Next;
+			
+			node.AnalyzeNode("span", "3", "<span>3</span>", null, false, true, 1, 0, 1);
+			node.Styles.CheckKeyValuePair(0, "background-color", "red");
+		}
 	}
 }
