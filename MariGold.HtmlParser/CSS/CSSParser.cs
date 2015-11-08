@@ -68,6 +68,7 @@
 
 			using (WebClient client = new WebClient())
 			{
+				client.Encoding = System.Text.Encoding.UTF8;
 				styles = client.DownloadString(url);
 			}
 
@@ -183,7 +184,9 @@
 				InterpretStyles(styleSheet, node);
 			}
 			
-			if (htmlNode.Next != null)
+			//This loop only needs when the parent is null. If parent is not null, it will loop through all the 
+			//child elements thus next nodes processed without this loop.
+			if (htmlNode.Parent == null && htmlNode.Next != null)
 			{
 				InterpretStyles(styleSheet, htmlNode.Next);
 			}

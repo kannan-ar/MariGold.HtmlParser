@@ -157,7 +157,7 @@
                 CSS.CSSParser cssParser = new CSS.CSSParser();
 
                 StyleSheet styleSheet = cssParser.ParseStyleSheet(current);
-
+				
                 cssParser.InterpretStyles(styleSheet, current);
             }
         }

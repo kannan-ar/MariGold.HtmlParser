@@ -73,6 +73,10 @@
   <ItemGroup>
     <None Include="Html\basicexternalstyle.htm" />
     <None Include="Html\basicstyle.css" />
+    <None Include="Html\basicstyleimportant.html" />
+    <None Include="Html\basicstylewithtwoelements.html" />
+    <None Include="Html\stylewithimportant.css" />
+    <None Include="Html\stylewithtwoelements.css" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
