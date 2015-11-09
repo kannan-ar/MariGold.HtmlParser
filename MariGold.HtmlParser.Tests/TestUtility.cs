@@ -67,9 +67,9 @@
 			Assert.AreEqual(parent, node.Parent);
 			Assert.AreEqual(selfClosing, node.SelfClosing);
 			Assert.AreEqual(hasChildren, node.HasChildren);
-			Assert.AreEqual(childrenCount, node.Children.Count);
-			Assert.AreEqual(attributeCount, node.Attributes.Count);
-			Assert.AreEqual(styleCount, node.Styles.Count);
+			Assert.AreEqual(childrenCount, node.Children.Count,"Children count is " + node.Children.Count.ToString());
+			Assert.AreEqual(attributeCount, node.Attributes.Count, "Attribute count is " + node.Attributes.Count.ToString());
+			Assert.AreEqual(styleCount, node.Styles.Count, "Style count is " + node.Styles.Count.ToString());
 		}
 		
 		public static void CheckStyle(KeyValuePair<string,string> style, string styleName,string styleValue)

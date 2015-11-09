@@ -97,6 +97,11 @@
 			this.value = value;
 		}
 		
+		internal HtmlStyle Clone()
+		{
+			return new HtmlStyle(name, value, important, weight);
+		}
+		
 		static internal bool IsNonStyleElement(string tag)
 		{
 			tag = tag.ToLower();

@@ -45,6 +45,7 @@
     <Compile Include="ComplexStylesLevel1.cs" />
     <Compile Include="ComplextStylesLevel2.cs" />
     <Compile Include="CSSelectorTypePriority.cs" />
+    <Compile Include="CSSInheritance.cs" />
     <Compile Include="ExternalStyles.cs" />
     <Compile Include="FindTag.cs" />
     <Compile Include="FromFile.cs" />

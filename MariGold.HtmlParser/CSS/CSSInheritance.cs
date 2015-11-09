@@ -3,17 +3,17 @@
 	using System;
 	using System.Collections.Generic;
 	
-	internal class CSSInheritance
+	internal sealed class CSSInheritance
 	{
 		private List<string> tags;
 		
 		internal CSSInheritance()
 		{
-			tags = new List<string>()
-			{
+			tags = new List<string>() {
 				"font-family",
 				"font-size",
-				"color"
+				"color",
+				"font-weight"
 			};
 		}
 		
@@ -41,7 +41,7 @@
 				
 				if (!found)
 				{
-					node.HtmlStyles.Add(style);
+					node.HtmlStyles.Add(style.Clone());
 				}
 			}
 		}
@@ -66,7 +66,7 @@
 					
 					if (!found)
 					{
-						styles.Add(style);
+						styles.Add(style.Clone());
 					}
 				}
 			}
@@ -110,6 +110,18 @@
 			}
 		}
 		
+		private List<HtmlStyle> CloneStyles(List<HtmlStyle> styles)
+		{
+			List<HtmlStyle> newStyles = new List<HtmlStyle>();
+			
+			foreach (HtmlStyle style in styles)
+			{
+				newStyles.Add(style.Clone());
+			}
+			
+			return newStyles;
+		}
+		
 		private void ApplyToChildren(HtmlNode node, List<HtmlStyle> styles)
 		{
 			if (node == null)
@@ -121,11 +133,18 @@
 			
 			InheritFromParent(node);
 			
-			CopyStyles(node, styles);
+			List<HtmlStyle> newStyles = CloneStyles(styles);
+			
+			CopyStyles(node, newStyles);
 			
 			foreach (HtmlNode child in node.Children)
 			{
-				ApplyToChildren(child, styles);
+				ApplyToChildren(child, newStyles);
+			}
+			
+			if (node.Parent == null && node.Next != null)
+			{
+				ApplyToChildren(node.Next, styles);
 			}
 		}
 		
