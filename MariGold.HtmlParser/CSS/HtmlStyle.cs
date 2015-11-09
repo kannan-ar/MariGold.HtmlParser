@@ -92,6 +92,11 @@
 			}
 		}
 
+		internal void ModifyStyle(string value)
+		{
+			this.value = value;
+		}
+		
 		static internal bool IsNonStyleElement(string tag)
 		{
 			tag = tag.ToLower();

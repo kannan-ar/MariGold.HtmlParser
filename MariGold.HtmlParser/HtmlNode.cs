@@ -63,6 +63,14 @@
             }
         }
 
+        internal List<HtmlStyle> HtmlStyles
+        {
+        	get
+        	{
+				return htmlStyles;
+        	}
+        }
+        
         internal void SetBoundary(int textEnd, int htmlEnd)
         {
             if (textEnd != -1 && textEnd < textStart)

@@ -45,6 +45,7 @@
     <Compile Include="CSS\Behaviors\ApplyAllNextElement.cs" />
     <Compile Include="CSS\Behaviors\ApplyImmediateChildren.cs" />
     <Compile Include="CSS\Behaviors\ApplyNextElement.cs" />
+    <Compile Include="CSS\CSSInheritance.cs" />
     <Compile Include="CSS\IAttachedSelector.cs" />
     <Compile Include="CSS\SelectorContext.cs" />
     <Compile Include="CSS\CSSBehavior.cs" />

@@ -159,6 +159,8 @@
                 StyleSheet styleSheet = cssParser.ParseStyleSheet(current);
 				
                 cssParser.InterpretStyles(styleSheet, current);
+                
+				new CSSInheritance().Apply(current);
             }
         }
 
