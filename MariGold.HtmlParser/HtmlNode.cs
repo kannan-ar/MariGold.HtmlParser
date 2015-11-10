@@ -3,11 +3,15 @@
     using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Stores all the information of an HTML element including child elements, attributes and CSS styles
+    /// </summary>
     public sealed class HtmlNode
     {
         private readonly string tag;
         private readonly HtmlNode parent;
         private readonly HtmlContext context;
+        private readonly List<HtmlStyle> htmlStyles;
 
         private int htmlStart;
         private int textStart;
@@ -19,7 +23,6 @@
         private HtmlNode next;
         private Dictionary<string, string> attributes;
         private Dictionary<string, string> styles;
-        private List<HtmlStyle> htmlStyles;
 
         internal HtmlNode(string tag, int htmlStart, int textStart, HtmlContext context, HtmlNode parent)
         {
@@ -129,6 +132,9 @@
             }
         }
 
+        /// <summary>
+        /// Html tag of the node.
+        /// </summary>
         public string Tag
         {
             get
@@ -137,6 +143,9 @@
             }
         }
 
+        /// <summary>
+        /// Inner Html string of the node
+        /// </summary>
         public string InnerHtml
         {
             get
@@ -145,6 +154,9 @@
             }
         }
 
+        /// <summary>
+        /// Html string of the node.
+        /// </summary>
         public string Html
         {
             get
@@ -153,6 +165,9 @@
             }
         }
 
+        /// <summary>
+        /// Parent node.
+        /// </summary>
         public HtmlNode Parent
         {
             get
@@ -161,6 +176,9 @@
             }
         }
 
+        /// <summary>
+        /// List of child nodes
+        /// </summary>
         public List<HtmlNode> Children
         {
             get
@@ -174,6 +192,9 @@
             }
         }
 
+        /// <summary>
+        /// Previous Node
+        /// </summary>
         public HtmlNode Previous
         {
             get
@@ -187,6 +208,9 @@
             }
         }
 
+        /// <summary>
+        /// Next Node
+        /// </summary>
         public HtmlNode Next
         {
             get
@@ -200,6 +224,9 @@
             }
         }
 
+        /// <summary>
+        /// Returns true if the node has any child nodes.
+        /// </summary>
         public bool HasChildren
         {
             get
@@ -208,6 +235,9 @@
             }
         }
 
+        /// <summary>
+        /// Returns true if the html element is self closing
+        /// </summary>
         public bool SelfClosing
         {
             get
@@ -221,6 +251,9 @@
             }
         }
 
+        /// <summary>
+        /// Dictionary of html attributes
+        /// </summary>
         public Dictionary<string, string> Attributes
         {
             get
@@ -234,6 +267,9 @@
             }
         }
 
+        /// <summary>
+        /// Dictionary of CSS styles
+        /// </summary>
         public Dictionary<string, string> Styles
         {
             get

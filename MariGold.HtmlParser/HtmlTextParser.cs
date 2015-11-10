@@ -2,6 +2,9 @@
 {
     using System;
 
+    /// <summary>
+    /// Parses the HTML string given via constructor argument.
+    /// </summary>
     public sealed class HtmlTextParser : HtmlParser
     {
         private readonly IAnalyzerContext context;
