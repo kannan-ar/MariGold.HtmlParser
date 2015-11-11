@@ -3,7 +3,7 @@
     using System;
 
     /// <summary>
-    /// An abstract class to define methods for parse an html document.
+    /// An abstract base class for parse html documents.
     /// </summary>
     public abstract class HtmlParser
     {
@@ -16,12 +16,12 @@
         public abstract HtmlNode Current { get; }
         
         /// <summary>
-        /// Parse and assign all CSS properties of processed HtmlNode(s) and its children
+        /// Parse and assign CSS properties of all processed HtmlNode(s) and its children
         /// </summary>
         public abstract void ParseCSS();
 
         /// <summary>
-        /// A method to travel through an html document. Upon each travel, the method will parse next element along with its children.
+        /// Travel through html document elements. Upon each travel, the method will parse next element along with its children.
         /// </summary>
         /// <returns>Returns true if successfully parsed and html element</returns>
         public abstract bool Traverse();
