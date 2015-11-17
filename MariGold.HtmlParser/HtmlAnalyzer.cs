@@ -1,171 +1,171 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
 
-    internal abstract class HtmlAnalyzer
-    {
-        private Dictionary<string, HtmlAnalyzer> subAnalyzers;
+	internal abstract class HtmlAnalyzer
+	{
+		private Dictionary<string, HtmlAnalyzer> subAnalyzers;
 
-        internal event Action<string> OnTagCreate;
+		internal event Action<string> OnTagCreate;
 
-        protected readonly IAnalyzerContext context;
+		protected readonly IAnalyzerContext context;
 
-        protected bool IsOpenTag(int position, out IOpenTag openTag)
-        {
-            openTag = null;
+		protected bool IsOpenTag(int position, out IOpenTag openTag)
+		{
+			openTag = null;
 
-            foreach (IOpenTag tag in context.OpenTags)
-            {
-                if (tag.IsOpenTag(position, context.Html))
-                {
-                    openTag = tag;
-                    return true;
-                }
-            }
+			foreach (IOpenTag tag in context.OpenTags)
+			{
+				if (tag.IsOpenTag(position, context.Html))
+				{
+					openTag = tag;
+					return true;
+				}
+			}
 
-            return false;
-        }
+			return false;
+		}
 
-        protected bool IsCloseTag(int position, out ICloseTag closeTag)
-        {
-            closeTag = null;
+		protected bool IsCloseTag(int position, out ICloseTag closeTag)
+		{
+			closeTag = null;
 
-            foreach (ICloseTag tag in context.CloseTags)
-            {
-                if (tag.IsCloseTag(position, context.Html))
-                {
-                    closeTag = tag;
-                    return true;
-                }
-            }
+			foreach (ICloseTag tag in context.CloseTags)
+			{
+				if (tag.IsCloseTag(position, context.Html))
+				{
+					closeTag = tag;
+					return true;
+				}
+			}
 
-            return false;
-        }
+			return false;
+		}
 
-        protected bool IsValidHtmlLetter(char letter)
-        {
-            return char.IsLetterOrDigit(letter) || letter == HtmlTag.hypen;
-        }
+		protected bool IsValidHtmlLetter(char letter)
+		{
+			return char.IsLetterOrDigit(letter) || letter == HtmlTag.hypen;
+		}
 
-        protected bool CreateTag(string tag, int htmlStart, int textStart, int textEnd, int htmlEnd,
-           HtmlNode parent, out HtmlNode node)
-        {
-            node = null;
+		protected bool CreateTag(string tag, int htmlStart, int textStart, int textEnd, int htmlEnd,
+			HtmlNode parent, out HtmlNode node)
+		{
+			node = null;
 
-            if (htmlEnd != -1 && htmlEnd <= htmlStart)
-            {
-                return false;
-            }
+			if (htmlEnd != -1 && htmlEnd <= htmlStart)
+			{
+				return false;
+			}
 
-            if (textEnd != -1 && textEnd < textStart)
-            {
-                return false;
-            }
+			if (textEnd != -1 && textEnd < textStart)
+			{
+				return false;
+			}
 
-            node = new HtmlNode(tag, htmlStart, textStart, textEnd, htmlEnd, context.HtmlContext, parent);
+			node = new HtmlNode(tag, htmlStart, textStart, textEnd, htmlEnd, context.HtmlContext, parent);
 
-            if (context.PreviousNode != null)
-            {
-                node.Previous = context.PreviousNode;
-                context.PreviousNode.Next = node;
-            }
+			if (context.PreviousNode != null)
+			{
+				node.Previous = context.PreviousNode;
+				context.PreviousNode.Next = node;
+			}
 
-            context.PreviousNode = node;
+			context.PreviousNode = node;
 
-            return parent == null;
-        }
+			return parent == null;
+		}
 
-        protected bool AssignNextAnalyzer(int position, HtmlNode node)
-        {
-            IOpenTag openTag;
-            ICloseTag closeTag;
-            bool assigned = false;
+		protected bool AssignNextAnalyzer(int position, HtmlNode node)
+		{
+			IOpenTag openTag;
+			ICloseTag closeTag;
+			bool assigned = false;
 
-            if (IsOpenTag(position, out openTag))
-            {
-                context.SetAnalyzer(openTag.GetAnalyzer(position, node));
-                assigned = true;
-            }
-            else if (IsCloseTag(position, out closeTag))
-            {
-                closeTag.Init(position, node);
-                context.SetAnalyzer(closeTag.GetAnalyzer());
-                assigned = true;
-            }
+			if (IsOpenTag(position, out openTag))
+			{
+				context.SetAnalyzer(openTag.GetAnalyzer(position, node));
+				assigned = true;
+			}
+			else if (IsCloseTag(position, out closeTag))
+			{
+				closeTag.Init(position, node);
+				context.SetAnalyzer(closeTag.GetAnalyzer());
+				assigned = true;
+			}
 
-            return assigned;
-        }
+			return assigned;
+		}
 
-        public HtmlAnalyzer(IAnalyzerContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+		protected HtmlAnalyzer(IAnalyzerContext context)
+		{
+			if (context == null)
+			{
+				throw new ArgumentNullException("context");
+			}
 
-            this.context = context;
-        }
+			this.context = context;
+		}
 
-        protected abstract bool ProcessHtml(int position, ref HtmlNode node);
-        protected abstract void Finalize(int position, ref HtmlNode node);
+		protected abstract bool ProcessHtml(int position, ref HtmlNode node);
+		protected abstract void Finalize(int position, ref HtmlNode node);
 
-        protected void AddAnalyzer(string name, HtmlAnalyzer analyzer)
-        {
-            if (subAnalyzers == null)
-            {
-                subAnalyzers = new Dictionary<string, HtmlAnalyzer>();
-            }
+		protected void AddAnalyzer(string name, HtmlAnalyzer analyzer)
+		{
+			if (subAnalyzers == null)
+			{
+				subAnalyzers = new Dictionary<string, HtmlAnalyzer>();
+			}
 
-            subAnalyzers.Add(name, analyzer);
-        }
+			subAnalyzers.Add(name, analyzer);
+		}
 
-        protected void FinalizeSubAnalyzers(int position, ref HtmlNode node)
-        {
-            if (subAnalyzers != null)
-            {
-                foreach (var subAnalyzer in subAnalyzers)
-                {
-                    subAnalyzer.Value.Finalize(position, ref node);
-                }
+		protected void FinalizeSubAnalyzers(int position, ref HtmlNode node)
+		{
+			if (subAnalyzers != null)
+			{
+				foreach (var subAnalyzer in subAnalyzers)
+				{
+					subAnalyzer.Value.Finalize(position, ref node);
+				}
 
-                subAnalyzers = null;
-            }
-        }
+				subAnalyzers = null;
+			}
+		}
 
-        protected void TagCreated(string tag)
-        {
-            if (OnTagCreate != null)
-            {
-                OnTagCreate(tag);
-            }
-        }
+		protected void TagCreated(string tag)
+		{
+			if (OnTagCreate != null)
+			{
+				OnTagCreate(tag);
+			}
+		}
 
-        protected void InnerTagOpened(HtmlNode parentNode)
-        {
-            //New inner rows opened. So clearing the previous node.
-            context.PreviousNode = null;
-        }
+		protected void InnerTagOpened(HtmlNode parentNode)
+		{
+			//New inner rows opened. So clearing the previous node.
+			context.PreviousNode = null;
+		}
 
-        protected void InnerTagClosed(HtmlNode currentNode)
-        {
-            //Closed a row of nodes. So current node assigned as previous node.
-            context.PreviousNode = currentNode;
-        }
+		protected void InnerTagClosed(HtmlNode currentNode)
+		{
+			//Closed a row of nodes. So current node assigned as previous node.
+			context.PreviousNode = currentNode;
+		}
 
-        public bool Process(int position, ref HtmlNode node)
-        {
-            bool tagCreated = ProcessHtml(position, ref node);
+		public bool Process(int position, ref HtmlNode node)
+		{
+			bool tagCreated = ProcessHtml(position, ref node);
 
-            if (subAnalyzers != null)
-            {
-                foreach (var subAnalyzer in subAnalyzers)
-                {
-                    subAnalyzer.Value.Process(position, ref node);
-                }
-            }
+			if (subAnalyzers != null)
+			{
+				foreach (var subAnalyzer in subAnalyzers)
+				{
+					subAnalyzer.Value.Process(position, ref node);
+				}
+			}
 
-            return tagCreated;
-        }
-    }
+			return tagCreated;
+		}
+	}
 }
