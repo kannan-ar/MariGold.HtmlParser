@@ -8,11 +8,11 @@
 	public static class TestExtensions
 	{
 		public static void AnalyzeNode(
-			this HtmlNode node,
+			this IHtmlNode node,
 			string tag,
 			string text,
 			string html,
-			HtmlNode parent,
+			IHtmlNode parent,
 			bool selfClosing,
 			bool hasChildren,
 			int childrenCount,

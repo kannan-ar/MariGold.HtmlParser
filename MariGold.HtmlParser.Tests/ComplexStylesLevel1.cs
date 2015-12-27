@@ -30,7 +30,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			bool divFound = false;
 			bool spanFound = false;
@@ -44,7 +44,7 @@
 					TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
 					TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
 					
-					TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 0);
+					TestUtility.AnalyzeNode(node.Children.ElementAt(0), "p", "1", "<p>1</p>", node, false, true, 1, 0, 0);
 				}
 				
 				if (node.Tag == "span")
@@ -98,7 +98,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -108,8 +108,8 @@
 			TestUtility.AnalyzeNode(node, "div", "<p>1</p>", "<div class='cls'><p>1</p></div>", null, false, true, 1, 1, 0);
 			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls");
 			
-			TestUtility.AnalyzeNode(node.Children[0], "p", "1", "<p>1</p>", node, false, true, 1, 0, 1);
-			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
+			TestUtility.AnalyzeNode(node.Children.ElementAt(0), "p", "1", "<p>1</p>", node, false, true, 1, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Styles.ElementAt(0), "font-weight", "bold");
 		}
 		
 		[Test]
@@ -130,7 +130,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -139,9 +139,9 @@
 			
 			TestUtility.AnalyzeNode(node, "div", "<div class='cls'>1</div>", "<div><div class='cls'>1</div></div>", null, false, true, 1, 0, 0);
 			
-			TestUtility.AnalyzeNode(node.Children[0], "div", "1", "<div class='cls'>1</div>", node, false, true, 1, 1, 1);
-			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
-			TestUtility.CheckKeyValuePair(node.Children[0].Attributes.ElementAt(0), "class", "cls");
+			TestUtility.AnalyzeNode(node.Children.ElementAt(0), "div", "1", "<div class='cls'>1</div>", node, false, true, 1, 1, 1);
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Styles.ElementAt(0), "font-weight", "bold");
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Attributes.ElementAt(0), "class", "cls");
 		}
 		
 		[Test]
@@ -162,7 +162,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -171,11 +171,11 @@
 			
 			TestUtility.AnalyzeNode(node, "div", "<div class='cls'>1</div><div>2</div>", "<div><div class='cls'>1</div><div>2</div></div>", null, false, true, 2, 0, 0);
 			
-			TestUtility.AnalyzeNode(node.Children[0], "div", "1", "<div class='cls'>1</div>", node, false, true, 1, 1, 1);
-			TestUtility.CheckKeyValuePair(node.Children[0].Attributes.ElementAt(0), "class", "cls");
-			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "font-weight", "bold");
+			TestUtility.AnalyzeNode(node.Children.ElementAt(0), "div", "1", "<div class='cls'>1</div>", node, false, true, 1, 1, 1);
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Styles.ElementAt(0), "font-weight", "bold");
 			
-			TestUtility.AnalyzeNode(node.Children[1], "div", "2", "<div>2</div>", node, false, true, 1, 0, 0);
+			TestUtility.AnalyzeNode(node.Children.ElementAt(1), "div", "2", "<div>2</div>", node, false, true, 1, 0, 0);
 		}
 		
 		[Test]
@@ -197,7 +197,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -239,7 +239,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -283,7 +283,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -293,11 +293,11 @@
 			TestUtility.AnalyzeNode(node, "div", "<p>one</p><hr/>", "<div><p>one</p><hr/></div>", null, false,
 				true, 2, 0, 0);
 			
-			TestUtility.AnalyzeNode(node.Children[0], "p", "one", "<p>one</p>", node, false, true, 1, 0, 1);
-			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "background-color", "red");
+			TestUtility.AnalyzeNode(node.Children.ElementAt(0), "p", "one", "<p>one</p>", node, false, true, 1, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Styles.ElementAt(0), "background-color", "red");
 			
-			TestUtility.AnalyzeNode(node.Children[1], "hr", "<hr/>", "<hr/>", node, true, false, 0, 0, 1);
-			TestUtility.CheckKeyValuePair(node.Children[1].Styles.ElementAt(0), "background-color", "red");
+			TestUtility.AnalyzeNode(node.Children.ElementAt(1), "hr", "<hr/>", "<hr/>", node, true, false, 0, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(1).Styles.ElementAt(0), "background-color", "red");
 			
 			while (node.Tag != "p")
 			{
@@ -332,7 +332,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -343,16 +343,16 @@
 				null, false, true, 1, 1, 0);
 			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "id", "dv");
 			
-			HtmlNode parent = node;
+			IHtmlNode parent = node;
 			
-			node = node.Children[0];
+			node = node.Children.ElementAt(0);
 			
 			TestUtility.AnalyzeNode(node, "div", "<p>three</p><span>two</span>", "<div><p>three</p><span>two</span></div>", parent, false, true, 2, 0, 0);
 			
-			TestUtility.AnalyzeNode(node.Children[0], "p", "three", "<p>three</p>", node, false, true, 1, 0, 1);
-			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "background-color", "red");
+			TestUtility.AnalyzeNode(node.Children.ElementAt(0), "p", "three", "<p>three</p>", node, false, true, 1, 0, 1);
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Styles.ElementAt(0), "background-color", "red");
 			
-			TestUtility.AnalyzeNode(node.Children[1], "span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
+			TestUtility.AnalyzeNode(node.Children.ElementAt(1), "span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
 		}
 		
 		[Test]
@@ -373,7 +373,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -384,11 +384,11 @@
 				null, false, true, 2, 1, 0);
 			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
 			
-			TestUtility.AnalyzeNode(node.Children[0], "div", "one", "<div class='cls'>one</div>", node, false, true, 1, 1, 1);
-			TestUtility.CheckKeyValuePair(node.Children[0].Attributes.ElementAt(0), "class", "cls");
-			TestUtility.CheckKeyValuePair(node.Children[0].Styles.ElementAt(0), "background-color", "red");
+			TestUtility.AnalyzeNode(node.Children.ElementAt(0), "div", "one", "<div class='cls'>one</div>", node, false, true, 1, 1, 1);
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Attributes.ElementAt(0), "class", "cls");
+			TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Styles.ElementAt(0), "background-color", "red");
 			
-			TestUtility.AnalyzeNode(node.Children[1], "div", "two", "<div>two</div>", node, false, true, 1, 0, 0);
+			TestUtility.AnalyzeNode(node.Children.ElementAt(1), "div", "two", "<div>two</div>", node, false, true, 1, 0, 0);
 			
 		}
 		
@@ -410,7 +410,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "p")
 			{
@@ -448,7 +448,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "p")
 			{
@@ -462,8 +462,8 @@
 			
 			node.AnalyzeNode("div", "<span>2</span>", "<div><span>2</span></div>", null, false, true, 1, 0, 0);
 			
-			node.Children[0].AnalyzeNode("span", "2", "<span>2</span>", node, false, true, 1, 0, 1);
-			node.Children[0].Styles.CheckKeyValuePair(0, "background-color", "red");
+			node.Children.ElementAt(0).AnalyzeNode("span", "2", "<span>2</span>", node, false, true, 1, 0, 1);
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "background-color", "red");
 			
 			node = node.Next;
 			
@@ -493,7 +493,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -502,9 +502,9 @@
 			
 			node.AnalyzeNode("div", "<span>test</span>", "<div><span>test</span></div>", null, false, true, 1, 0, 0);
 			
-			node.Children[0].AnalyzeNode("span", "test", "<span>test</span>", node, false, true, 1, 0, 2);
-			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
-			node.Children[0].Styles.CheckKeyValuePair(1, "font-family", "arial");
+			node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node, false, true, 1, 0, 2);
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-family", "arial");
 		}
 		
 		[Test]
@@ -535,7 +535,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -544,11 +544,11 @@
 			
 			node.AnalyzeNode("div", "<span class='s'>test</span>", "<div><span class='s'>test</span></div>", null, false, true, 1, 0, 0);
 			
-			node.Children[0].AnalyzeNode("span", "test", "<span class='s'>test</span>", node, false, true, 1, 1, 3);
-			node.Children[0].Attributes.CheckKeyValuePair(0, "class", "s");
-			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
-			node.Children[0].Styles.CheckKeyValuePair(1, "font-family", "arial");
-			node.Children[0].Styles.CheckKeyValuePair(2, "font-weight", "bold");
+			node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span class='s'>test</span>", node, false, true, 1, 1, 3);
+			node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "class", "s");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-family", "arial");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-weight", "bold");
 		}
 		
 		[Test]
@@ -584,7 +584,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -595,11 +595,11 @@
 			                 null, false, true, 1, 1, 0);
 			node.Attributes.CheckKeyValuePair(0, "class", "d");
 			
-			node.Children[0].AnalyzeNode("span", "test", "<span class='s'>test</span>", node, false, true, 1, 1, 3);
-			node.Children[0].Attributes.CheckKeyValuePair(0, "class", "s");
-			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
-			node.Children[0].Styles.CheckKeyValuePair(1, "font-weight", "normal");
-			node.Children[0].Styles.CheckKeyValuePair(2, "font-family", "arial");
+			node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span class='s'>test</span>", node, false, true, 1, 1, 3);
+			node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "class", "s");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-weight", "normal");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-family", "arial");
 			
 		}
 		
@@ -636,7 +636,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -647,12 +647,12 @@
 			                 null, false, true, 1, 1, 0);
 			node.Attributes.CheckKeyValuePair(0, "class", "d");
 			
-			node.Children[0].AnalyzeNode("span", "test", "<span style='font-family:verdana' class='s'>test</span>", node, false, true, 1, 2, 3);
-			node.Children[0].Attributes.CheckKeyValuePair(0, "style", "font-family:verdana");
-			node.Children[0].Attributes.CheckKeyValuePair(1, "class", "s");
-			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
-			node.Children[0].Styles.CheckKeyValuePair(1, "font-weight", "normal");
-			node.Children[0].Styles.CheckKeyValuePair(2, "font-family", "verdana");
+			node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span style='font-family:verdana' class='s'>test</span>", node, false, true, 1, 2, 3);
+			node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "font-family:verdana");
+			node.Children.ElementAt(0).Attributes.CheckKeyValuePair(1, "class", "s");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-weight", "normal");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-family", "verdana");
 			
 		}
 		
@@ -689,7 +689,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -700,12 +700,12 @@
 			                 null, false, true, 1, 1, 0);
 			node.Attributes.CheckKeyValuePair(0, "class", "d");
 			
-			node.Children[0].AnalyzeNode("span", "test", "<span style='font-family:verdana' class='s'>test</span>", node, false, true, 1, 2, 3);
-			node.Children[0].Attributes.CheckKeyValuePair(0, "style", "font-family:verdana");
-			node.Children[0].Attributes.CheckKeyValuePair(1, "class", "s");
-			node.Children[0].Styles.CheckKeyValuePair(0, "font-size", "15pt");
-			node.Children[0].Styles.CheckKeyValuePair(1, "font-weight", "normal");
-			node.Children[0].Styles.CheckKeyValuePair(2, "font-family", "arial");
+			node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span style='font-family:verdana' class='s'>test</span>", node, false, true, 1, 2, 3);
+			node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "font-family:verdana");
+			node.Children.ElementAt(0).Attributes.CheckKeyValuePair(1, "class", "s");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-weight", "normal");
+			node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-family", "arial");
 			
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
     using System;
+	using System.Linq;
     using NUnit.Framework;
     using MariGold.HtmlParser;
 
@@ -19,7 +20,7 @@
             TestUtility.AreEqual(parser.Current, "#comment", "<!---->", "<!---->");
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count);
+            Assert.AreEqual(0, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
             Assert.AreEqual(false, parser.Traverse());
@@ -38,7 +39,7 @@
             TestUtility.AreEqual(parser.Current, "#comment", "<!--test-->", "<!--test-->");
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count);
+            Assert.AreEqual(0, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
             Assert.AreEqual(false, parser.Traverse());
@@ -57,7 +58,7 @@
             TestUtility.AreEqual(parser.Current, "#comment", html, html);
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count);
+            Assert.AreEqual(0, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
             Assert.AreEqual(false, parser.Traverse());

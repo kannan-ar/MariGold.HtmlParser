@@ -38,7 +38,7 @@
             tagCreated = CreateTag(tag, startPosition, startPosition, position + 2, position + 2,
                     parent, out node);
 
-            node.SelfClosing = true;
+			node.SetSelfClosing(true);
             //+ 2 is to find next position of />
             if (!AssignNextAnalyzer(position + 2, parent))
             {
@@ -112,7 +112,7 @@
                     tagCreated = CreateTag(tag, startPosition, startPosition, position + 1,
                         position + 1, parent, out node);
 
-                    node.SelfClosing = true;
+					node.SetSelfClosing(true);
 
                     if (!AssignNextAnalyzer(position + 1, parent))
                     {

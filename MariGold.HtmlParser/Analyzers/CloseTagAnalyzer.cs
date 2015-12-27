@@ -28,7 +28,7 @@
                     return true;
                 }
 
-                tagFound = CloseOpenedChilds(current.Parent, closeTag, textEnd, htmlEnd);
+                tagFound = CloseOpenedChilds(current.GetParent(), closeTag, textEnd, htmlEnd);
 
                 if (tagFound)
                 {
@@ -110,7 +110,7 @@
 
                 if (!ignoreTag && current != null)
                 {
-                    nextNode = current.Parent;
+                	nextNode = current.GetParent();
                     tagCreated = current.Parent == null;
                 }
 

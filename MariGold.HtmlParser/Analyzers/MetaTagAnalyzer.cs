@@ -50,7 +50,7 @@
 
                 if (node != null)
                 {
-                    node.SelfClosing = true;
+					node.SetSelfClosing(true);
                 }
 
                 this.FinalizeSubAnalyzers(position, ref node);

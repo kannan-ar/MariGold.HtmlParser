@@ -27,12 +27,12 @@
 			if (node.HasChildren)
 			{
 				//Finds the last child
-				HtmlNode child = node.Children[node.Children.Count - 1];
+				HtmlNode child = node.GetChild(node.GetChildren().Count - 1);
 				
 				//Loop to skip empty text children
 				while (child != null && child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
 				{
-					child = child.Previous;
+					child = child.GetPrevious();
 				}
 				
 				if (child != null)
@@ -112,7 +112,7 @@
 			
 			bool isValid = false;
 			
-			foreach (HtmlNode  child in node.Children)
+			foreach (HtmlNode  child in node.GetChildren())
 			{
 				if (child.Tag != HtmlTag.TEXT)
 				{

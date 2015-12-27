@@ -1,6 +1,7 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
     using System;
+	using System.Linq;
     using NUnit.Framework;
     using MariGold.HtmlParser;
 
@@ -24,11 +25,11 @@
 
                 Assert.IsNotNull(parser.Current.Children);
 
-                Assert.AreEqual(parser.Current.Children.Count, 1);
+                Assert.AreEqual(parser.Current.Children.Count(), 1);
 
-                Assert.IsNotNull(parser.Current.Children[0]);
+                Assert.IsNotNull(parser.Current.Children.ElementAt(0));
 
-                HtmlNode node = parser.Current.Children[0];
+                IHtmlNode node = parser.Current.Children.ElementAt(0);
 
                 Assert.IsNotNull(node.Parent);
 
@@ -59,13 +60,13 @@
 
             Assert.IsNotNull(parser.Current.Children);
 
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
 
-            Assert.IsNotNull(parser.Current.Children[0]);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
 
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
 
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "t1", "<p>t1</p>");
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "t1", "<p>t1</p>");
 
 
 
@@ -79,13 +80,13 @@
 
             Assert.IsNotNull(parser.Current.Children);
 
-            Assert.AreEqual(parser.Current.Children.Count, 1);
+            Assert.AreEqual(parser.Current.Children.Count(), 1);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
 
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
 
-            TestUtility.AreEqual(parser.Current.Children[0], "span", "t2", "<span>t2</span>");
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "span", "t2", "<span>t2</span>");
 
             Assert.AreEqual(parser.Traverse(), false);
 
@@ -109,13 +110,13 @@
 
             Assert.IsNotNull(parser.Current.Children);
 
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
 
-            Assert.IsNotNull(parser.Current.Children[0]);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
 
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
 
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "", "<p></p>");
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "", "<p></p>");
 
 
 
@@ -129,13 +130,13 @@
 
             Assert.IsNotNull(parser.Current.Children);
 
-            Assert.AreEqual(parser.Current.Children.Count, 1);
+            Assert.AreEqual(parser.Current.Children.Count(), 1);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
 
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
 
-            TestUtility.AreEqual(parser.Current.Children[0], "span", "", "<span></span>");
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "span", "", "<span></span>");
 
             Assert.AreEqual(parser.Traverse(), false);
 

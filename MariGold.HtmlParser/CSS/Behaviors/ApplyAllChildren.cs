@@ -33,7 +33,7 @@
 				nextSelector.Parse(node, htmlStyles);
 			}
 
-			foreach (HtmlNode child in node.Children)
+			foreach (HtmlNode child in node.GetChildren())
 			{
 				ApplyStyle(nextSelector, child, htmlStyles);
 			}
@@ -64,7 +64,7 @@
 			{
 				if (nextSelector != null)
 				{
-					foreach (HtmlNode child in node.Children)
+					foreach (HtmlNode child in node.GetChildren())
 					{
 						ApplyStyle(nextSelector, child, htmlStyles);
 					}

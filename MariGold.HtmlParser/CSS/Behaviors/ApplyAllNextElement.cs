@@ -26,12 +26,12 @@
         {
             if (node.Next != null)
             {
-                if (nextSelector.IsValidNode(node.Next))
+            	if (nextSelector.IsValidNode(node.GetNext()))
                 {
-                    nextSelector.Parse(node.Next, htmlStyles);
+            		nextSelector.Parse(node.GetNext(), htmlStyles);
                 }
 
-                ApplyStyle(nextSelector, node.Next, htmlStyles);
+            	ApplyStyle(nextSelector, node.GetNext(), htmlStyles);
             }
         }
 

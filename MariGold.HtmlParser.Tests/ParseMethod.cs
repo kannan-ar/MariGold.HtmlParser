@@ -1,6 +1,7 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
     using System;
+	using System.Linq;
     using NUnit.Framework;
     using MariGold.HtmlParser;
 
@@ -69,11 +70,11 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<p>one</p>", "<div><p>one</p></div>");
             Assert.IsTrue(parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count);
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "one", "<p>one</p>");
-            Assert.IsNull(parser.Current.Children[0].Previous);
-            Assert.IsNull(parser.Current.Children[0].Next);
+            Assert.AreEqual(1, parser.Current.Children.Count());
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "one", "<p>one</p>");
+            Assert.IsNull(parser.Current.Children.ElementAt(0).Previous);
+            Assert.IsNull(parser.Current.Children.ElementAt(0).Next);
             Assert.IsNull(parser.Current.Previous);
             Assert.IsNotNull(parser.Current.Next);
             TestUtility.AreEqual(parser.Current.Next, "b", "", "<b></b>");

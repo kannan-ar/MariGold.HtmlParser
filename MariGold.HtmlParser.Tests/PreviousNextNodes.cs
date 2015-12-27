@@ -1,6 +1,7 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
 	using System;
+	using System.Linq;
 	using NUnit.Framework;
 	using MariGold.HtmlParser;
 
@@ -59,8 +60,8 @@
 			Assert.IsNull(parser.Current.Previous);
 			Assert.IsNull(parser.Current.Next);
 
-			Assert.IsNotNull(parser.Current.Children[0]);
-			TestUtility.AreEqual(parser.Current.Children[0], "a", "ano", "<a>ano</a>");
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "a", "ano", "<a>ano</a>");
 			Assert.IsNull(parser.Current.Previous);
 			Assert.IsNull(parser.Current.Next);
 		}
@@ -77,19 +78,19 @@
 			TestUtility.AreEqual(parser.Current, "div", "test<a>ano</a>", "<div>test<a>ano</a></div>");
 			Assert.IsNull(parser.Current.Previous);
 			Assert.IsNull(parser.Current.Next);
-			Assert.AreEqual(2, parser.Current.Children.Count);
+			Assert.AreEqual(2, parser.Current.Children.Count());
 
-			Assert.IsNotNull(parser.Current.Children[0]);
-			TestUtility.AreEqual(parser.Current.Children[0], "#text", "test", "test");
-			Assert.IsNull(parser.Current.Children[0].Previous);
-			Assert.IsNotNull(parser.Current.Children[0].Next);
-			Assert.AreEqual(parser.Current.Children[0].Next, parser.Current.Children[1]);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Previous);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Next);
+			Assert.AreEqual(parser.Current.Children.ElementAt(0).Next, parser.Current.Children.ElementAt(1));
 
-			Assert.IsNotNull(parser.Current.Children[1]);
-			TestUtility.AreEqual(parser.Current.Children[1], "a", "ano", "<a>ano</a>");
-			Assert.IsNull(parser.Current.Children[1].Next);
-			Assert.IsNotNull(parser.Current.Children[1].Previous);
-			Assert.AreEqual(parser.Current.Children[1].Previous, parser.Current.Children[0]);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(1), "a", "ano", "<a>ano</a>");
+			Assert.IsNull(parser.Current.Children.ElementAt(1).Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1).Previous);
+			Assert.AreEqual(parser.Current.Children.ElementAt(1).Previous, parser.Current.Children.ElementAt(0));
 		}
 
 		[Test]
@@ -104,28 +105,28 @@
 			TestUtility.AreEqual(parser.Current, "div", "test<a>ano</a>", "<div>test<a>ano</a></div>");
 			Assert.IsNull(parser.Current.Previous);
 			Assert.IsNull(parser.Current.Next);
-			Assert.AreEqual(2, parser.Current.Children.Count);
+			Assert.AreEqual(2, parser.Current.Children.Count());
 
-			Assert.IsNotNull(parser.Current.Children[0]);
-			TestUtility.AreEqual(parser.Current.Children[0], "#text", "test", "test");
-			Assert.IsNull(parser.Current.Children[0].Previous);
-			Assert.IsNotNull(parser.Current.Children[0].Next);
-			Assert.AreEqual(parser.Current.Children[0].Next, parser.Current.Children[1]);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Previous);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Next);
+			Assert.AreEqual(parser.Current.Children.ElementAt(0).Next, parser.Current.Children.ElementAt(1));
 
-			Assert.IsNotNull(parser.Current.Children[1]);
-			TestUtility.AreEqual(parser.Current.Children[1], "a", "ano", "<a>ano</a>");
-			Assert.IsNull(parser.Current.Children[1].Next);
-			Assert.IsNotNull(parser.Current.Children[1].Previous);
-			Assert.AreEqual(parser.Current.Children[1].Previous, parser.Current.Children[0]);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(1), "a", "ano", "<a>ano</a>");
+			Assert.IsNull(parser.Current.Children.ElementAt(1).Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1).Previous);
+			Assert.AreEqual(parser.Current.Children.ElementAt(1).Previous, parser.Current.Children.ElementAt(0));
 
 			Assert.IsTrue(parser.Traverse());
 			Assert.IsNotNull(parser.Current);
 			TestUtility.AreEqual(parser.Current, "p", "tt", "<p>tt</p>");
-			Assert.AreEqual(1, parser.Current.Children.Count);
-			Assert.IsNotNull(parser.Current.Children[0]);
-			TestUtility.AreEqual(parser.Current.Children[0], "#text", "tt", "tt");
-			Assert.IsNull(parser.Current.Children[0].Previous);
-			Assert.IsNull(parser.Current.Children[0].Next);
+			Assert.AreEqual(1, parser.Current.Children.Count());
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "tt", "tt");
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Previous);
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Next);
 
 			Assert.IsNotNull(parser.Current.Previous);
 			Assert.IsNull(parser.Current.Next);
@@ -226,31 +227,31 @@
 			Assert.IsNull(parser.Current.Next);
 			Assert.IsNull(parser.Current.Previous);
             
-			Assert.AreEqual(1, parser.Current.Children.Count);
-			Assert.IsNotNull(parser.Current.Children[0]);
-			TestUtility.AreEqual(parser.Current.Children[0], "tr", "<td>one</td><td>two</td>", 
+			Assert.AreEqual(1, parser.Current.Children.Count());
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "tr", "<td>one</td><td>two</td>", 
 				"<tr><td>one</td><td>two</td></tr>");
-			Assert.IsNull(parser.Current.Children[0].Next);
-			Assert.IsNull(parser.Current.Children[0].Previous);
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Next);
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Previous);
 
-			Assert.AreEqual(2, parser.Current.Children[0].Children.Count);
+			Assert.AreEqual(2, parser.Current.Children.ElementAt(0).Children.Count());
 
-			Assert.IsNotNull(parser.Current.Children[0].Children[0]);
-			TestUtility.AreEqual(parser.Current.Children[0].Children[0], "td", "one", "<td>one</td>");
-			Assert.IsNull(parser.Current.Children[0].Children[0].Previous);
-			Assert.IsNotNull(parser.Current.Children[0].Children[0].Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), "td", "one", "<td>one</td>");
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Previous);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Next);
 
-			Assert.IsNotNull(parser.Current.Children[0].Children[1]);
-			TestUtility.AreEqual(parser.Current.Children[0].Children[1], "td", "two", "<td>two</td>");
-			Assert.IsNotNull(parser.Current.Children[0].Children[1].Previous);
-			Assert.IsNull(parser.Current.Children[0].Children[1].Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(1));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(1), "td", "two", "<td>two</td>");
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(1).Previous);
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Children.ElementAt(1).Next);
 
-			TestUtility.AreEqual(parser.Current.Children[0].Children[0].Next, "td", "two", "<td>two</td>");
-			TestUtility.AreEqual(parser.Current.Children[0].Children[1].Previous, "td", "one", "<td>one</td>");
-			Assert.AreEqual(parser.Current.Children[0].Children[0].Next,
-				parser.Current.Children[0].Children[1]);
-			Assert.AreEqual(parser.Current.Children[0].Children[1].Previous,
-				parser.Current.Children[0].Children[0]);
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Next, "td", "two", "<td>two</td>");
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(1).Previous, "td", "one", "<td>one</td>");
+			Assert.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Next,
+				parser.Current.Children.ElementAt(0).Children.ElementAt(1));
+			Assert.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(1).Previous,
+				parser.Current.Children.ElementAt(0).Children.ElementAt(0));
 		}
 
 		[Test]
@@ -265,22 +266,22 @@
 			TestUtility.AreEqual(parser.Current, "div", "<p>1</p><a>2</a>", html);
 			Assert.IsNull(parser.Current.Previous);
 			Assert.IsNull(parser.Current.Next);
-			Assert.AreEqual(2, parser.Current.Children.Count);
+			Assert.AreEqual(2, parser.Current.Children.Count());
 
-			Assert.IsNotNull(parser.Current.Children[0]);
-			TestUtility.AreEqual(parser.Current.Children[0], "p", "1", "<p>1</p>");
-			Assert.IsNull(parser.Current.Children[0].Previous);
-			Assert.IsNotNull(parser.Current.Children[0].Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "1", "<p>1</p>");
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Previous);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Next);
 
-			Assert.IsNotNull(parser.Current.Children[1]);
-			TestUtility.AreEqual(parser.Current.Children[1], "a", "2", "<a>2</a>");
-			Assert.IsNotNull(parser.Current.Children[1].Previous);
-			Assert.IsNull(parser.Current.Children[1].Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(1), "a", "2", "<a>2</a>");
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1).Previous);
+			Assert.IsNull(parser.Current.Children.ElementAt(1).Next);
 
-			TestUtility.AreEqual(parser.Current.Children[1].Previous, "p", "1", "<p>1</p>");
-			TestUtility.AreEqual(parser.Current.Children[0].Next, "a", "2", "<a>2</a>");
-			Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[1].Previous);
-			Assert.AreEqual(parser.Current.Children[1], parser.Current.Children[0].Next);
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(1).Previous, "p", "1", "<p>1</p>");
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Next, "a", "2", "<a>2</a>");
+			Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(1).Previous);
+			Assert.AreEqual(parser.Current.Children.ElementAt(1), parser.Current.Children.ElementAt(0).Next);
 		}
 
 		[Test]
@@ -295,23 +296,23 @@
 			TestUtility.AreEqual(parser.Current, "div", "<p>1</p><br />", html);
 			Assert.IsNull(parser.Current.Previous);
 			Assert.IsNull(parser.Current.Next);
-			Assert.AreEqual(2, parser.Current.Children.Count);
+			Assert.AreEqual(2, parser.Current.Children.Count());
 
-			Assert.IsNotNull(parser.Current.Children[0]);
-			TestUtility.AreEqual(parser.Current.Children[0], "p", "1", "<p>1</p>");
-			Assert.IsNull(parser.Current.Children[0].Previous);
-			Assert.IsNotNull(parser.Current.Children[0].Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "1", "<p>1</p>");
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Previous);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Next);
 
-			Assert.IsNotNull(parser.Current.Children[1]);
-			TestUtility.AreEqual(parser.Current.Children[1], "br", "<br />", "<br />");
-			Assert.IsTrue(parser.Current.Children[1].SelfClosing);
-			Assert.IsNotNull(parser.Current.Children[1].Previous);
-			Assert.IsNull(parser.Current.Children[1].Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(1), "br", "<br />", "<br />");
+			Assert.IsTrue(parser.Current.Children.ElementAt(1).SelfClosing);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1).Previous);
+			Assert.IsNull(parser.Current.Children.ElementAt(1).Next);
 
-			TestUtility.AreEqual(parser.Current.Children[1].Previous, "p", "1", "<p>1</p>");
-			TestUtility.AreEqual(parser.Current.Children[0].Next, "br", "<br />", "<br />");
-			Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[1].Previous);
-			Assert.AreEqual(parser.Current.Children[1], parser.Current.Children[0].Next);
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(1).Previous, "p", "1", "<p>1</p>");
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Next, "br", "<br />", "<br />");
+			Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(1).Previous);
+			Assert.AreEqual(parser.Current.Children.ElementAt(1), parser.Current.Children.ElementAt(0).Next);
 		}
 
 		[Test]
@@ -326,23 +327,23 @@
 			TestUtility.AreEqual(parser.Current, "div", "<br /><p>1</p>", html);
 			Assert.IsNull(parser.Current.Previous);
 			Assert.IsNull(parser.Current.Next);
-			Assert.AreEqual(2, parser.Current.Children.Count);
+			Assert.AreEqual(2, parser.Current.Children.Count());
 
-			Assert.IsNotNull(parser.Current.Children[0]);
-			TestUtility.AreEqual(parser.Current.Children[0], "br", "<br />", "<br />");
-			Assert.IsTrue(parser.Current.Children[0].SelfClosing);
-			Assert.IsNull(parser.Current.Children[0].Previous);
-			Assert.IsNotNull(parser.Current.Children[0].Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "br", "<br />", "<br />");
+			Assert.IsTrue(parser.Current.Children.ElementAt(0).SelfClosing);
+			Assert.IsNull(parser.Current.Children.ElementAt(0).Previous);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Next);
 
-			Assert.IsNotNull(parser.Current.Children[1]);
-			TestUtility.AreEqual(parser.Current.Children[1], "p", "1", "<p>1</p>");
-			Assert.IsNotNull(parser.Current.Children[1].Previous);
-			Assert.IsNull(parser.Current.Children[1].Next);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(1), "p", "1", "<p>1</p>");
+			Assert.IsNotNull(parser.Current.Children.ElementAt(1).Previous);
+			Assert.IsNull(parser.Current.Children.ElementAt(1).Next);
 
-			TestUtility.AreEqual(parser.Current.Children[1].Previous, "br", "<br />", "<br />");
-			TestUtility.AreEqual(parser.Current.Children[0].Next, "p", "1", "<p>1</p>");
-			Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[1].Previous);
-			Assert.AreEqual(parser.Current.Children[1], parser.Current.Children[0].Next);
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(1).Previous, "br", "<br />", "<br />");
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Next, "p", "1", "<p>1</p>");
+			Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(1).Previous);
+			Assert.AreEqual(parser.Current.Children.ElementAt(1), parser.Current.Children.ElementAt(0).Next);
 		}
         
 		[Test]
@@ -354,15 +355,15 @@
 
 			parser.Parse();
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			node.AnalyzeNode("html", "<head></head><body></body>", "<html><head></head><body></body></html>", null, false, true, 2, 0, 0);
 			Assert.IsNull(node.Previous);
 			Assert.IsNull(node.Next);
 			
-			HtmlNode hnode = node;
+			IHtmlNode hnode = node;
 			
-			node = node.Children[0];
+			node = node.Children.ElementAt(0);
 			
 			node.AnalyzeNode("head", "", "<head></head>", hnode, false, false, 0, 0, 0);
 			Assert.IsNull(node.Previous);

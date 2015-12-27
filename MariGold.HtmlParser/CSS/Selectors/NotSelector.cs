@@ -32,7 +32,7 @@
 			{
 				ApplyStyle(node, htmlStyles);
 				
-				foreach (HtmlNode child in node.Children)
+				foreach (HtmlNode child in node.GetChildren())
 				{
 					ApplyToChildren(child, htmlStyles);
 				}
@@ -108,14 +108,14 @@
 				return false;
 			}
 			
-			return node.Children.Count > 0;
+			return node.GetChildren().Count > 0;
 		}
 		
 		void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			if (string.IsNullOrEmpty(this.selectorText))
 			{
-				foreach (HtmlNode child in node.Children)
+				foreach (HtmlNode child in node.GetChildren())
 				{
 					ApplyToChildren(child, htmlStyles);
 				}

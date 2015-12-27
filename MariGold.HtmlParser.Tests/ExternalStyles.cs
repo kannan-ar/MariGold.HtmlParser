@@ -27,14 +27,14 @@
 			
 			Assert.IsNotNull(parser.Current);
             
-			HtmlNode node = parser.Current.Children[0];
+			IHtmlNode node = parser.Current.Children.ElementAt(0);
 			
 			while (node.Tag != "body")
 				node = node.Next;
 			
-			HtmlNode body = node;
+			IHtmlNode body = node;
 			
-			node = node.Children[0];
+			node = node.Children.ElementAt(0);
 			
 			while (node.Tag != "p")
 				node = node.Next;
@@ -61,14 +61,14 @@
 			
 			Assert.IsNotNull(parser.Current);
             
-			HtmlNode node = parser.Current.Children[0];
+			IHtmlNode node = parser.Current.Children.ElementAt(0);
 			
 			while (node.Tag != "body")
 				node = node.Next;
 			
-			HtmlNode body = node;
+			IHtmlNode body = node;
 			
-			node = node.Children[0];
+			node = node.Children.ElementAt(0);
 			
 			while (node.Tag != "div")
 				node = node.Next;
@@ -96,14 +96,14 @@
 			
 			Assert.IsNotNull(parser.Current);
             
-			HtmlNode node = parser.Current.Children[0];
+			IHtmlNode node = parser.Current.Children.ElementAt(0);
 			
 			while (node.Tag != "body")
 				node = node.Next;
 			
-			HtmlNode body = node;
+			IHtmlNode body = node;
 			
-			node = node.Children[0];
+			node = node.Children.ElementAt(0);
 			
 			while (node.Tag != "div")
 				node = node.Next;

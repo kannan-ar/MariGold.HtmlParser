@@ -22,7 +22,7 @@
 
                 while (current.Parent != null)
                 {
-                    current = current.Parent;
+                	current = current.GetParent();
                     current.Finilize(position);
                 }
             }

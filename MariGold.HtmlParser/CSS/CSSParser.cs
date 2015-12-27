@@ -150,7 +150,7 @@
 				ParseCSS(style, styleSheet);
 			}
 
-			foreach (HtmlNode n in node.Children)
+			foreach (HtmlNode n in node.GetChildren())
 			{
 				TravelParseHtmlNodes(n, styleSheet);
 			}
@@ -179,7 +179,7 @@
 				styleSheet.Parse(htmlNode);
 			}
 
-			foreach (HtmlNode node in htmlNode.Children)
+			foreach (HtmlNode node in htmlNode.GetChildren())
 			{
 				InterpretStyles(styleSheet, node);
 			}
@@ -188,7 +188,7 @@
 			//child elements thus next nodes processed without this loop.
 			if (htmlNode.Parent == null && htmlNode.Next != null)
 			{
-				InterpretStyles(styleSheet, htmlNode.Next);
+				InterpretStyles(styleSheet, htmlNode.GetNext());
 			}
 		}
 	}

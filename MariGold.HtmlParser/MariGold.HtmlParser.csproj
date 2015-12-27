@@ -74,6 +74,7 @@
     <Compile Include="HtmlTextParser.cs" />
     <Compile Include="IAnalyzerContext.cs" />
     <Compile Include="ICloseTag.cs" />
+    <Compile Include="IHtmlNode.cs" />
     <Compile Include="IOpenTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchAnalyzerContext.cs" />

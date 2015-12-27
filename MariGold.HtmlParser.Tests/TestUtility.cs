@@ -1,13 +1,14 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
 	using System;
+	using System.Linq;
 	using NUnit.Framework;
 	using MariGold.HtmlParser;
 	using System.Collections.Generic;
 
 	public static class TestUtility
 	{
-		public static void AreEqual(HtmlNode node, string tag, string text, string html)
+		public static void AreEqual(IHtmlNode node, string tag, string text, string html)
 		{
 			Assert.AreEqual(tag, node.Tag);
 			Assert.AreEqual(text, node.InnerHtml);
@@ -31,11 +32,11 @@
 		}
 
 		public static void AnalyzeNode(
-			HtmlNode node,
+			IHtmlNode node,
 			string tag,
 			string text,
 			string html,
-			HtmlNode parent,
+			IHtmlNode parent,
 			bool selfClosing,
 			bool hasChildren,
 			int childrenCount,
@@ -46,16 +47,16 @@
 			Assert.AreEqual(parent, node.Parent);
 			Assert.AreEqual(selfClosing, node.SelfClosing);
 			Assert.AreEqual(hasChildren, node.HasChildren);
-			Assert.AreEqual(childrenCount, node.Children.Count);
+			Assert.AreEqual(childrenCount, node.Children.Count());
 			Assert.AreEqual(attributeCount, node.Attributes.Count);
 		}
 
 		public static void AnalyzeNode(
-			HtmlNode node,
+			IHtmlNode node,
 			string tag,
 			string text,
 			string html,
-			HtmlNode parent,
+			IHtmlNode parent,
 			bool selfClosing,
 			bool hasChildren,
 			int childrenCount,
@@ -67,7 +68,7 @@
 			Assert.AreEqual(parent, node.Parent);
 			Assert.AreEqual(selfClosing, node.SelfClosing);
 			Assert.AreEqual(hasChildren, node.HasChildren);
-			Assert.AreEqual(childrenCount, node.Children.Count,"Children count is " + node.Children.Count.ToString());
+			Assert.AreEqual(childrenCount, node.Children.Count(),"Children count is " + node.Children.Count().ToString());
 			Assert.AreEqual(attributeCount, node.Attributes.Count, "Attribute count is " + node.Attributes.Count.ToString());
 			Assert.AreEqual(styleCount, node.Styles.Count, "Style count is " + node.Styles.Count.ToString());
 		}

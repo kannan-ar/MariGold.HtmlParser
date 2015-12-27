@@ -39,12 +39,12 @@
         {
             if (node.Next != null)
             {
-                HtmlNode temp = node.Next;
+            	HtmlNode temp = node.GetNext();
 
                 //Empty text nodes can be avoid. This loop will skip those.
                 while (temp != null && temp.Tag == HtmlTag.TEXT)
                 {
-                    temp = temp.Next;
+                	temp = temp.GetNext();
                 }
 
                 if (temp != null)

@@ -6,7 +6,7 @@
 	/// <summary>
 	/// Stores all the information of an HTML element including child elements, attributes and CSS styles
 	/// </summary>
-	public sealed class HtmlNode
+	public sealed class HtmlNode : IHtmlNode
 	{
 		private readonly string tag;
 		private readonly HtmlNode parent;
@@ -49,7 +49,7 @@
 
 			if (parent != null)
 			{
-				parent.Children.Add(this);
+				parent.AddChild(this);
 			}
 		}
 
@@ -133,7 +133,67 @@
 				}
 			}
 		}
+		
+		internal void SetPreviousNode(HtmlNode node)
+		{
+			previous = node;
+		}
 
+		internal void SetNextNode(HtmlNode node)
+		{
+			next = node;
+		}
+		
+		internal void SetSelfClosing(bool isClosing)
+		{
+			selfClosing = isClosing;
+		}
+		
+		internal HtmlNode GetParent()
+		{
+			return parent;
+		}
+		
+		internal HtmlNode GetNext()
+		{
+			return next;
+		}
+		
+		internal HtmlNode GetPrevious()
+		{
+			return previous;
+		}
+		
+		internal List<HtmlNode> GetChildren()
+		{
+			if (children == null)
+			{
+				children = new List<HtmlNode>();
+			}
+
+			return children;
+		}
+		
+		internal HtmlNode GetChild(int index)
+		{
+			if (children == null)
+			{
+				children = new List<HtmlNode>();
+			}
+
+			return children[index];
+		}
+		
+		internal void AddChild(HtmlNode child)
+		{
+			if (children == null)
+			{
+				children = new List<HtmlNode>();
+			}
+			
+			children.Add(child);
+		}
+		
 		/// <summary>
 		/// Html tag of the node.
 		/// </summary>
@@ -170,7 +230,7 @@
 		/// <summary>
 		/// Parent node.
 		/// </summary>
-		public HtmlNode Parent
+		public IHtmlNode Parent
 		{
 			get
 			{
@@ -181,48 +241,39 @@
 		/// <summary>
 		/// List of child nodes
 		/// </summary>
-		public List<HtmlNode> Children
+		public IEnumerable<IHtmlNode> Children
 		{
 			get
 			{
-				if (children == null)
+				if (children != null)
 				{
-					children = new List<HtmlNode>();
+					foreach (var child in children)
+					{
+						yield return child;
+					}
 				}
-
-				return children;
 			}
 		}
 
 		/// <summary>
 		/// Previous Node
 		/// </summary>
-		public HtmlNode Previous
+		public IHtmlNode Previous
 		{
 			get
 			{
 				return previous;
-			}
-
-			internal set
-			{
-				previous = value;
 			}
 		}
 
 		/// <summary>
 		/// Next Node
 		/// </summary>
-		public HtmlNode Next
+		public IHtmlNode Next
 		{
 			get
 			{
 				return next;
-			}
-
-			internal set
-			{
-				next = value;
 			}
 		}
 
@@ -246,13 +297,11 @@
 			{
 				return selfClosing;
 			}
-
-			internal set
-			{
-				selfClosing = value;
-			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public bool IsText
 		{
 			get

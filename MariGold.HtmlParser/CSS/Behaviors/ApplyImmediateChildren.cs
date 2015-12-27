@@ -46,7 +46,7 @@
 				{
 					if (nextSelector != null)
 					{
-						foreach (HtmlNode child in node.Children)
+						foreach (HtmlNode child in node.GetChildren())
 						{
 							if (nextSelector.IsValidNode(child))
 							{

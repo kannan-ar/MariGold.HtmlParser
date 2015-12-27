@@ -63,12 +63,16 @@
 				return false;
 			}
 			
-			if (node.Parent.Children.Count < this.position)
+			HtmlNode parent = node.GetParent();
+			int childrenCount = parent.GetChildren().Count;
+			
+			if (childrenCount < this.position)
 			{
 				return false;
 			}
 			
-			return node.Parent.Children[node.Parent.Children.Count - this.position] == node;
+			
+			return node.GetParent().GetChild(childrenCount - this.position) == node;
 		}
 		
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)

@@ -88,7 +88,7 @@
 			
 			if (!found && node.Parent != null)
 			{
-				value = FindParentStyle(node.Parent, styleName);
+				value = FindParentStyle(node.GetParent(), styleName);
 			}
 			
 			return value;
@@ -100,7 +100,7 @@
 			{
 				if (string.Compare(style.Value, "inherit", true) == 0 && node.Parent != null)
 				{
-					string value = FindParentStyle(node.Parent, style.Name);
+					string value = FindParentStyle(node.GetParent(), style.Name);
 					
 					if (value != string.Empty)
 					{
@@ -137,14 +137,14 @@
 			
 			CopyStyles(node, newStyles);
 			
-			foreach (HtmlNode child in node.Children)
+			foreach (HtmlNode child in node.GetChildren())
 			{
 				ApplyToChildren(child, newStyles);
 			}
 			
 			if (node.Parent == null && node.Next != null)
 			{
-				ApplyToChildren(node.Next, styles);
+				ApplyToChildren(node.GetNext(), styles);
 			}
 		}
 		

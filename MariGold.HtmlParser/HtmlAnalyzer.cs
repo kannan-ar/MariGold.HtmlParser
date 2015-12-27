@@ -67,8 +67,8 @@
 
 			if (context.PreviousNode != null)
 			{
-				node.Previous = context.PreviousNode;
-				context.PreviousNode.Next = node;
+				node.SetPreviousNode(context.PreviousNode);
+				context.PreviousNode.SetNextNode(node);
 			}
 
 			context.PreviousNode = node;

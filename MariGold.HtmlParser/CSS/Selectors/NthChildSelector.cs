@@ -1,6 +1,7 @@
 ﻿namespace MariGold.HtmlParser
 {
 	using System;
+	using System.Linq;
 	using System.Collections.Generic;
 	using System.Text.RegularExpressions;
 	
@@ -36,12 +37,12 @@
 				return;
 			}
 			
-			if (node.Children.Count < this.position)
+			if (node.GetChildren().Count < this.position)
 			{
 				return;
 			}
 			
-			ApplyStyle(node.Children[this.position - 1], htmlStyles);
+			ApplyStyle(node.GetChild(this.position - 1), htmlStyles);
 		}
 		
 		internal override bool Prepare(string selector)
@@ -83,12 +84,12 @@
 				return false;
 			}
 			
-			if (node.Parent.Children.Count < this.position)
+			if (node.Parent.Children.Count() < this.position)
 			{
 				return false;
 			}
 			
-			return node.Parent.Children[this.position - 1] == node;
+			return node.Parent.Children.ElementAt(this.position - 1) == node;
 		}
 		
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)

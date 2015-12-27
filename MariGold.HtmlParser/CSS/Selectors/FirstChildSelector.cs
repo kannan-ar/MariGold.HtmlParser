@@ -27,12 +27,12 @@
 		{
 			if (node.HasChildren)
 			{
-				HtmlNode child = node.Children[0];
+				HtmlNode child = node.GetChild(0);
 				
 				//Loop to skip empty text children
 				while (child != null && child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
 				{
-					child = child.Next;
+					child = child.GetNext();
 				}
 				
 				if (child != null)

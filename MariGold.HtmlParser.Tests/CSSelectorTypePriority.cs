@@ -26,7 +26,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -62,7 +62,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -100,7 +100,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -138,7 +138,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -175,7 +175,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -212,7 +212,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -250,7 +250,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -288,7 +288,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -320,7 +320,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -353,7 +353,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -391,7 +391,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -429,7 +429,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -467,7 +467,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -505,7 +505,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -543,7 +543,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -581,7 +581,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -619,7 +619,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -657,7 +657,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -696,7 +696,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{
@@ -740,7 +740,7 @@
 
 			Assert.IsNotNull(parser.Current);
 			
-			HtmlNode node = parser.Current;
+			IHtmlNode node = parser.Current;
 			
 			while (node.Tag != "div")
 			{

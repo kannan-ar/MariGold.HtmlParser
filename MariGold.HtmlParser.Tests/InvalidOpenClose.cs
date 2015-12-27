@@ -1,6 +1,7 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
     using System;
+	using System.Linq;
     using NUnit.Framework;
     using MariGold.HtmlParser;
 
@@ -18,17 +19,17 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<p>", "<div><p></div>");
             Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(true, parser.Current.HasChildren);
             Assert.AreEqual(false, parser.Current.SelfClosing);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "", "<p>");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(false, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "", "<p>");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -45,48 +46,48 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<p><span>test<span></p>", html);
             Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(true, parser.Current.HasChildren);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "<span>test<span>", "<p><span>test<span></p>");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(1, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(true, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "<span>test<span>", "<p><span>test<span></p>");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0], "span", "test<span>", "<span>test<span>");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(2, parser.Current.Children[0].Children[0].Children.Count);
-            Assert.AreEqual(true, parser.Current.Children[0].Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), "span", "test<span>", "<span>test<span>");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(2, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0].Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Children[0].Parent);
-            Assert.AreEqual(parser.Current.Children[0].Children[0],
-                parser.Current.Children[0].Children[0].Children[0].Parent);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0),
+                parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Children[1]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0].Children[1], "span", "", "<span>");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Children[1].Parent);
-            Assert.AreEqual(parser.Current.Children[0].Children[0],
-                parser.Current.Children[0].Children[0].Children[1].Parent);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children[1].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].Children[1].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].Children[1].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children[1].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(1));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(1), "span", "", "<span>");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(1).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0),
+                parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(1).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(1).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(1).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(1).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(1).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -103,19 +104,19 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "test</span>", html);
             Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(true, parser.Current.HasChildren);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -132,19 +133,19 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "test</span></span>", html);
             Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(true, parser.Current.HasChildren);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -161,28 +162,28 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "test</span>ano</span>", html);
             Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(2, parser.Current.Children.Count);
+            Assert.AreEqual(2, parser.Current.Children.Count());
             Assert.AreEqual(true, parser.Current.HasChildren);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[1]);
-            TestUtility.AreEqual(parser.Current.Children[1], "#text", "ano", "ano");
-            Assert.IsNotNull(parser.Current.Children[1].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[1].Parent);
-            Assert.AreEqual(0, parser.Current.Children[1].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[1].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[1].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[1].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(1));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(1), "#text", "ano", "ano");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(1).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(1).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(1).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(1).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(1).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(1).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -199,37 +200,37 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<p>test</span>ano</span></p>", html);
             Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(true, parser.Current.HasChildren);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "test</span>ano</span>", "<p>test</span>ano</span></p>");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(2, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(true, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "test</span>ano</span>", "<p>test</span>ano</span></p>");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(2, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[1]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[1], "#text", "ano", "ano");
-            Assert.IsNotNull(parser.Current.Children[0].Children[1].Parent);
-            Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[0].Children[1].Parent);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[1].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[1].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[1].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[1].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(1));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(1), "#text", "ano", "ano");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(1).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(1).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(1).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(1).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(1).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(1).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -247,39 +248,39 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<p><span>test</span></span>", html);
             Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(true, parser.Current.HasChildren);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "<span>test</span></span>", 
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "<span>test</span></span>", 
                 "<p><span>test</span></span>");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(1, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(true, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0], "span", "test", "<span>test</span>");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(1, parser.Current.Children[0].Children[0].Children.Count);
-            Assert.AreEqual(true, parser.Current.Children[0].Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), "span", "test", "<span>test</span>");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0].Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Children[0].Parent);
-            Assert.AreEqual(parser.Current.Children[0].Children[0], 
-                parser.Current.Children[0].Children[0].Children[0].Parent);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), 
+                parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -296,28 +297,28 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<p>d</p>", html);
             Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(true, parser.Current.HasChildren);
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "d", "<p>d</p>");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(1, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(true, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "d", "<p>d</p>");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0], "#text", "d", "d");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].HasChildren);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), "#text", "d", "d");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -336,18 +337,18 @@
             TestUtility.AreEqual(parser.Current, "p", "d", "<p>d</p>");
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "#text", "d", "d");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(false, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "d", "d");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -366,25 +367,25 @@
             TestUtility.AreEqual(parser.Current, "p", "d", "<p>d</p>");
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "#text", "d", "d");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(false, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "d", "d");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
             Assert.AreEqual(true, parser.Traverse());
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "#text", "test", "test");
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count);
+            Assert.AreEqual(0, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
@@ -405,27 +406,27 @@
             TestUtility.AreEqual(parser.Current, "div", "<p>test", html);
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "test", "<p>test");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(true, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(1, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "test", "<p>test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -444,27 +445,27 @@
             TestUtility.AreEqual(parser.Current, "div", "<p>test</a>", html);
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "test</a>", "<p>test</a>");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(true, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(1, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "test</a>", "<p>test</a>");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -483,36 +484,36 @@
             TestUtility.AreEqual(parser.Current, "div", "<p>test</a>ad", html);
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "p", "test</a>ad", "<p>test</a>ad");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(true, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(2, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "test</a>ad", "<p>test</a>ad");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(2, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[0].Children[0].Parent);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0].Children[1]);
-            TestUtility.AreEqual(parser.Current.Children[0].Children[1], "#text", "ad", "ad");
-            Assert.IsNotNull(parser.Current.Children[0].Children[1].Parent);
-            Assert.AreEqual(parser.Current.Children[0], parser.Current.Children[0].Children[1].Parent);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[1].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[1].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].Children[1].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Children[1].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(1));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(1), "#text", "ad", "ad");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(1).Parent);
+            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(1).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(1).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(1).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(1).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(1).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -530,7 +531,7 @@
             TestUtility.AreEqual(parser.Current, "#text", "a", "a");
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count);
+            Assert.AreEqual(0, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
@@ -539,27 +540,27 @@
             TestUtility.AreEqual(parser.Current, "span", "test<span>", "<span>test<span>");
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(2, parser.Current.Children.Count);
+            Assert.AreEqual(2, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(false, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[1]);
-            TestUtility.AreEqual(parser.Current.Children[1], "span", "", "<span>");
-            Assert.IsNotNull(parser.Current.Children[1].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[1].Parent);
-            Assert.AreEqual(false, parser.Current.Children[1].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[1].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[1].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[1].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(1));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(1), "span", "", "<span>");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(1).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(1).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(1).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(1).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(1).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(1).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
@@ -577,7 +578,7 @@
             TestUtility.AreEqual(parser.Current, "#text", "a", "a");
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count);
+            Assert.AreEqual(0, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
@@ -586,18 +587,18 @@
             TestUtility.AreEqual(parser.Current, "span", "test", "<span>test</span>");
             Assert.IsNull(parser.Current.Parent);
             Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count);
+            Assert.AreEqual(1, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
-            Assert.IsNotNull(parser.Current.Children[0]);
-            TestUtility.AreEqual(parser.Current.Children[0], "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children[0].Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children[0].Parent);
-            Assert.AreEqual(false, parser.Current.Children[0].HasChildren);
-            Assert.AreEqual(0, parser.Current.Children[0].Children.Count);
-            Assert.AreEqual(false, parser.Current.Children[0].SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children[0].Attributes.Count);
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
+            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
 
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
