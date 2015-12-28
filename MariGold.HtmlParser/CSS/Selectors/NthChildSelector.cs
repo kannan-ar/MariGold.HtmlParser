@@ -84,12 +84,14 @@
 				return false;
 			}
 			
-			if (node.Parent.Children.Count() < this.position)
+			var parent = node.GetParent();
+			
+			if (parent.GetChildren().Count() < this.position)
 			{
 				return false;
 			}
 			
-			return node.Parent.Children.ElementAt(this.position - 1) == node;
+			return parent.GetChild(this.position - 1) == node;
 		}
 		
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)

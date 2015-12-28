@@ -51,7 +51,7 @@
 			
 			bool isValid = true;
 			
-			foreach (HtmlNode child in node.Parent.Children)
+			foreach (HtmlNode child in node.GetParent().GetChildren())
 			{
 				//There is a non text node other than current node. So the selector is not valid
 				if (child != node && child.Tag != HtmlTag.TEXT)

@@ -70,7 +70,7 @@
 			
 			bool isValid = false;
 			
-			foreach (HtmlNode child in node.Parent.Children)
+			foreach (HtmlNode child in node.GetParent().GetChildren())
 			{
 				if (child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
 				{

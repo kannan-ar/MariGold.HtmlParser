@@ -64,7 +64,7 @@
 			{
 				HtmlNode lastChild = null;
 				
-				foreach (HtmlNode child in node.Parent.Children)
+				foreach (HtmlNode child in node.GetParent().GetChildren())
 				{
 					if (string.Compare(node.Tag, child.Tag, true) == 0)
 					{
