@@ -13,7 +13,7 @@
         /// <summary>
         /// Last parsed HtmlNode.
         /// </summary>
-        public abstract HtmlNode Current { get; }
+        public abstract IHtmlNode Current { get; }
         
         /// <summary>
         /// Parse and assign CSS properties of all processed HtmlNode(s) and its children
