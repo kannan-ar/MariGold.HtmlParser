@@ -73,7 +73,7 @@
 				return false;
 			}
 			
-			return string.Compare(node.Tag, currentSelector, true) != 0;
+			return string.Compare(node.Tag, currentSelector, StringComparison.InvariantCultureIgnoreCase) != 0;
 		}
 		
 		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)

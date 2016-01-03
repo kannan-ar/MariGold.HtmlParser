@@ -131,11 +131,11 @@
 		{
 			string style = string.Empty;
 
-			if (string.Compare(node.Tag, HtmlTag.STYLE, true) == 0)
+			if (string.Compare(node.Tag, HtmlTag.STYLE, StringComparison.InvariantCultureIgnoreCase) == 0)
 			{
 				style = node.InnerHtml == null ? string.Empty : node.InnerHtml.Trim();
 			}
-			else if (string.Compare(node.Tag, HtmlTag.LINK, true) == 0)
+			else if (string.Compare(node.Tag, HtmlTag.LINK, StringComparison.InvariantCultureIgnoreCase) == 0)
 			{
 				string url;
 

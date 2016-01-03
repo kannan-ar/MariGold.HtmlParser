@@ -77,7 +77,7 @@
 
 		internal void OverWrite(HtmlStyle htmlStyle)
 		{
-			if (string.Compare(name, htmlStyle.Name, true) == 0)
+			if (string.Compare(name, htmlStyle.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
 			{
 				if (!important && htmlStyle.Important)
 				{

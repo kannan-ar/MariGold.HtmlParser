@@ -121,7 +121,7 @@
 							invalidTag = false;
 							searchAnalyzer.OnTagCreate += (t) =>
 							{
-								if (string.Compare(t, tag, true) != 0)
+								if (string.Compare(t, tag, StringComparison.InvariantCultureIgnoreCase) != 0)
 								{
 									invalidTag = true;
 								}

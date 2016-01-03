@@ -40,7 +40,7 @@
 
 		private bool EqualTo(string selectorValue, string attributeValue)
 		{
-			return string.Compare(selectorValue, attributeValue, true) == 0;
+			return string.Compare(selectorValue, attributeValue, StringComparison.InvariantCultureIgnoreCase) == 0;
 		}
 
 		private bool StartsWith(string selectorValue, string attributeValue)

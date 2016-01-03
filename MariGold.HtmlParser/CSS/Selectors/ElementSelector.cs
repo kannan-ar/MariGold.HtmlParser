@@ -61,10 +61,10 @@
             {
                 return false;
             }
-
+			
             bool isValid = false;
 
-            if (string.Compare(node.Tag, currentSelector, true) == 0)
+            if (string.Compare(node.Tag, currentSelector, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
                 isValid = true;
             }

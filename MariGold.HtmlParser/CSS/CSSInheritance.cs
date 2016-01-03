@@ -32,7 +32,7 @@
 				{
 					HtmlStyle htmlStyle = node.HtmlStyles[i];
 					
-					if (string.Compare(style.Name, htmlStyle.Name, true) == 0)
+					if (string.Compare(style.Name, htmlStyle.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
 					{
 						found = true;
 						break;
@@ -56,7 +56,7 @@
 					
 					for (int i = 0; styles.Count > i; i++)
 					{
-						if (string.Compare(style.Name, styles[i].Name, true) == 0)
+						if (string.Compare(style.Name, styles[i].Name, StringComparison.InvariantCultureIgnoreCase) == 0)
 						{
 							found = true;
 							styles[i].ModifyStyle(style.Value);
@@ -79,7 +79,7 @@
 			
 			foreach (HtmlStyle style in node.HtmlStyles)
 			{
-				if (string.Compare(styleName, style.Name, true) == 0)
+				if (string.Compare(styleName, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					found = true;
 					value = style.Value;
@@ -98,7 +98,7 @@
 		{
 			foreach (HtmlStyle style in node.HtmlStyles)
 			{
-				if (string.Compare(style.Value, "inherit", true) == 0 && node.Parent != null)
+				if (string.Compare(style.Value, "inherit", StringComparison.InvariantCultureIgnoreCase) == 0 && node.Parent != null)
 				{
 					string value = FindParentStyle(node.GetParent(), style.Name);
 					

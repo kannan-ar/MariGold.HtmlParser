@@ -120,7 +120,7 @@
 
 				foreach (HtmlStyle style in htmlStyles)
 				{
-					if (string.Compare(newStyle.Name, style.Name, true) == 0)
+					if (string.Compare(newStyle.Name, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
 					{
 						found = true;
 						style.OverWrite(newStyle);

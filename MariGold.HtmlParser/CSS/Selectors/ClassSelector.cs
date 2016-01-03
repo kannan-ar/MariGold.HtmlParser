@@ -72,7 +72,7 @@
 
 			if (node.Attributes.TryGetValue(key, out className))
 			{
-				if (string.Compare(currentSelector, className, true) == 0)
+				if (string.Compare(currentSelector, className, StringComparison.InvariantCultureIgnoreCase) == 0)
 				{
 					isValid = true;
 				}

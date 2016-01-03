@@ -79,7 +79,7 @@
 				
 				//Find first child tag which matches the node's tag. The break statement will discard the loop after finding the first matching node.
 				//If the node is the first child, it will apply the styles.
-				isValid = string.Compare(node.Tag, child.Tag, true) == 0 && node == child;
+				isValid = string.Compare(node.Tag, child.Tag, StringComparison.InvariantCultureIgnoreCase) == 0 && node == child;
 				
 				//The loop only needs to check the first child element except the empty text element. So we can skip here.
 				break;

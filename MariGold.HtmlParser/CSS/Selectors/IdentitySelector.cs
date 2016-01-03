@@ -57,7 +57,7 @@
 
             if (node.Attributes.TryGetValue(key, out id))
             {
-                if (string.Compare(currentSelector, id, true) == 0)
+                if (string.Compare(currentSelector, id, StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
                     isValid = true;
                 }
@@ -84,7 +84,7 @@
 
             if (node.Attributes.TryGetValue(key, out id))
             {
-                if (string.Compare(currentSelector, id, true) == 0)
+                if (string.Compare(currentSelector, id, StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
 					node.CopyHtmlStyles(htmlStyles, SelectorWeight.Identity);
                 }
