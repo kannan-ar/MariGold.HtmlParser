@@ -13,7 +13,8 @@
 				"font-family",
 				"font-size",
 				"color",
-				"font-weight"
+				"font-weight",
+				"text-decoration"
 			};
 		}
 		
