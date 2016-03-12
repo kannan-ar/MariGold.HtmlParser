@@ -14,7 +14,8 @@
 				"font-size",
 				"color",
 				"font-weight",
-				"text-decoration"
+				"text-decoration",
+				"font-style"
 			};
 		}
 		
