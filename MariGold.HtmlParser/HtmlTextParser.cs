@@ -99,13 +99,11 @@
 			bool invalidTag = false;
 			SearchAnalyzerContext searchContext = new SearchAnalyzerContext(this.context.Html);
 
-			searchContext.OnAnalyzerChange += (a) =>
-			{
+			searchContext.OnAnalyzerChange += (a) => {
 				searchAnalyzer = a;
 			};
 
-			searchContext.OnPositionChange += (p) =>
-			{
+			searchContext.OnPositionChange += (p) => {
 				index = p;
 			};
 
@@ -119,8 +117,7 @@
 						{
 							searchAnalyzer = openTag.GetAnalyzer(index, null);
 							invalidTag = false;
-							searchAnalyzer.OnTagCreate += (t) =>
-							{
+							searchAnalyzer.OnTagCreate += (t) => {
 								if (string.Compare(t, tag, StringComparison.InvariantCultureIgnoreCase) != 0)
 								{
 									invalidTag = true;
@@ -176,8 +173,7 @@
 			{
 				temp = current;
 
-				while (Traverse())
-					;
+				while (Traverse());
 			}
 
 			current = temp;

@@ -112,5 +112,47 @@
 			node.Attributes.CheckKeyValuePair(0, "class", "cls");
 			node.Styles.CheckKeyValuePair(0, "font-size", "10px");
 		}
+		
+		[Test]
+		public void ATagWithStyle()
+		{
+			string path = TestUtility.GetFolderPath("Html\\atagwithstyle.htm");
+			string html = string.Empty;
+
+			using (StreamReader sr = new StreamReader(path))
+			{
+				html = sr.ReadToEnd();
+			}
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.AreEqual(true, parser.Parse());
+			parser.ParseCSS();
+			
+			Assert.IsNotNull(parser.Current);
+            
+			IHtmlNode node = parser.Current;
+			
+			while (node.Tag != "html")
+				node = node.Next;
+			
+			node = node.Children.ElementAt(0);
+			
+			while (node.Tag != "body")
+				node = node.Next;
+			
+			IHtmlNode body = node;
+			
+			node = node.Children.ElementAt(0);
+			
+			while (node.Tag != "a")
+				node = node.Next;
+			
+			node.AnalyzeNode("a", "google", "<a href=\"http://google.com\">google</a>", body, false, true, 1, 1, 2);
+			node.Attributes.CheckKeyValuePair(0, "href", "http://google.com");
+			node.Styles.CheckKeyValuePair(0, "color", "#a21f1f");
+			node.Styles.CheckKeyValuePair(1, "text-decoration", "none");
+			
+		}
 	}
 }

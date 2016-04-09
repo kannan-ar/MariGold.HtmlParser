@@ -135,7 +135,8 @@
 			{
 				style = node.InnerHtml == null ? string.Empty : node.InnerHtml.Trim();
 			}
-			else if (string.Compare(node.Tag, HtmlTag.LINK, StringComparison.InvariantCultureIgnoreCase) == 0)
+			else
+			if (string.Compare(node.Tag, HtmlTag.LINK, StringComparison.InvariantCultureIgnoreCase) == 0)
 			{
 				string url;
 
@@ -162,6 +163,14 @@
 
 			TravelParseHtmlNodes(node, styleSheet);
 
+			HtmlNode nextNode = node.GetNext();
+			
+			while (nextNode != null)
+			{
+				TravelParseHtmlNodes(nextNode, styleSheet);
+				nextNode = nextNode.GetNext();
+			} 
+			
 			return styleSheet;
 		}
 
