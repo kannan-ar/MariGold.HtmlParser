@@ -25,6 +25,68 @@
 		private Dictionary<string, string> attributes;
 		private Dictionary<string, string> styles;
 
+		private HtmlNode(
+			string tag,
+			HtmlNode parent,
+			HtmlContext context,
+			List<HtmlStyle> htmlStyles,
+			bool isText,
+			int htmlStart,
+			int textStart,
+			int textEnd,
+			int htmlEnd,
+			bool selfClosing,
+			List<HtmlNode> children,
+			HtmlNode previous,
+			HtmlNode next,
+			Dictionary<string,string> attributes,
+			Dictionary<string,string> styles)
+		{
+			this.tag = tag;
+			this.parent = parent;
+			this.context = context;
+			this.htmlStyles = htmlStyles;
+			this.isText = isText;
+			this.htmlStart = htmlStart;
+			this.textStart = textStart;
+			this.textEnd = textEnd;
+			this.htmlEnd = htmlEnd;
+			this.selfClosing = selfClosing;
+			
+			if (children != null)
+			{
+				this.children = new List<HtmlNode>();
+			
+				foreach (var child in children)
+				{
+					this.children.Add(child);
+				}
+			}
+			
+			this.previous = previous;
+			this.next = next;
+			
+			if (attributes != null)
+			{
+				this.attributes = new Dictionary<string, string>();
+			
+				foreach (var attribute in attributes)
+				{
+					this.attributes.Add(attribute.Key, attribute.Value);
+				}
+			}
+			
+			if (styles != null)
+			{
+				this.styles = new Dictionary<string, string>();
+			
+				foreach (var style in styles)
+				{
+					this.styles.Add(style.Key, style.Value);
+				}
+			}
+		}
+		
 		internal HtmlNode(string tag, int htmlStart, int textStart, HtmlContext context, HtmlNode parent)
 		{
 			if (string.IsNullOrEmpty(tag))
@@ -345,6 +407,26 @@
 
 				return styles;
 			}
+		}
+		
+		public IHtmlNode Clone()
+		{
+			return new HtmlNode(
+				this.tag,
+				this.parent,
+				this.context,
+				this.htmlStyles,
+				this.isText,
+				this.htmlStart,
+				this.textStart,
+				this.textEnd,
+				this.htmlEnd,
+				this.selfClosing,
+				this.children,
+				previous,
+				next,
+				attributes,
+				styles);
 		}
 	}
 }

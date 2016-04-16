@@ -14,8 +14,7 @@
 		{
 			string html = string.Empty;
 
-			Assert.Throws<ArgumentNullException>(() =>
-			{
+			Assert.Throws<ArgumentNullException>(() => {
 				new HtmlTextParser(html);
 			}, "html");
 		}
@@ -282,6 +281,72 @@
 			Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
 			Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
 			Assert.AreEqual(false, parser.Traverse());
+		}
+		
+		[Test]
+		public void CloneNode()
+		{
+			string html = "<div id='dv' style='color:#fff'>this is a test</div>";
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.AreEqual(true, parser.Traverse());
+			parser.ParseCSS();
+			Assert.IsNotNull(parser.Current);
+			TestUtility.AreEqual(parser.Current, "div", "this is a test", html);
+			Assert.AreEqual(false, parser.Current.IsText);
+			Assert.IsNull(parser.Current.Parent);
+			Assert.AreEqual(false, parser.Current.SelfClosing);
+			Assert.AreEqual(true, parser.Current.HasChildren);
+			Assert.AreEqual(1, parser.Current.Children.Count());
+			Assert.AreEqual(1, parser.Current.Styles.Count);
+			Assert.AreEqual(2, parser.Current.Attributes.Count);
+			
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "this is a test", "this is a test");
+			Assert.AreEqual(true, parser.Current.Children.ElementAt(0).IsText);
+			Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+			Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+			Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
+			Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+			Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
+			
+			IHtmlNode clone = parser.Current.Clone();
+			Assert.IsNotNull(clone);
+			Assert.AreEqual(parser.Current.Tag, clone.Tag);
+			Assert.AreEqual(parser.Current.InnerHtml, clone.InnerHtml);
+			Assert.AreEqual(parser.Current.Html, clone.Html);
+			Assert.AreEqual(parser.Current.Parent, clone.Parent);
+			Assert.AreEqual(parser.Current.Children.Count(), clone.Children.Count());
+			
+			for (int i = 0; parser.Current.Children.Count() > i; i++)
+			{
+				Assert.AreEqual(parser.Current.Children.ElementAt(i), clone.Children.ElementAt(i));
+			}
+			
+			Assert.AreEqual(parser.Current.Previous, clone.Previous);
+			Assert.AreEqual(parser.Current.Next, clone.Next);
+			Assert.AreEqual(parser.Current.HasChildren, clone.HasChildren);
+			Assert.AreEqual(parser.Current.SelfClosing, clone.SelfClosing);
+			Assert.AreEqual(parser.Current.IsText, clone.IsText);
+			
+			Assert.AreEqual(parser.Current.Attributes.Count, clone.Attributes.Count);
+			
+			for (int i = 0; parser.Current.Attributes.Count() > i; i++)
+			{
+				Assert.AreEqual(parser.Current.Attributes.ElementAt(i).Key, clone.Attributes.ElementAt(i).Key);
+				Assert.AreEqual(parser.Current.Attributes.ElementAt(i).Value, clone.Attributes.ElementAt(i).Value);
+			}
+			
+			Assert.AreEqual(parser.Current.Styles.Count, clone.Styles.Count);
+			
+			for (int i = 0; parser.Current.Styles.Count() > i; i++)
+			{
+				Assert.AreEqual(parser.Current.Styles.ElementAt(i).Key, clone.Styles.ElementAt(i).Key);
+				Assert.AreEqual(parser.Current.Styles.ElementAt(i).Value, clone.Styles.ElementAt(i).Value);
+			}
+			
+			Assert.AreEqual(parser.Traverse(), false);
 		}
 	}
 }
