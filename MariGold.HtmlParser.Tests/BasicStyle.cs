@@ -1505,20 +1505,11 @@
 			
 			foreach (IHtmlNode  tr in node.Children)
 			{
-				if (tr.Tag != "tr")
+				if (tr.Tag == "tr")
 				{
-					continue;
-				}
-				
-				foreach (IHtmlNode td in tr.Children)
-				{
-					if (td.Tag != "td")
-					{
-						continue;
-					}
-					
-					Assert.AreEqual(1, td.Styles.Count);
-					td.Styles.CheckKeyValuePair(0, "color", "red");
+                    Assert.AreEqual(1, tr.Styles.Count);
+                    tr.Styles.CheckKeyValuePair(0, "color", "red");
+					break;
 				}
 			}
 		}

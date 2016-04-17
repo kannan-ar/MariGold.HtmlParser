@@ -428,5 +428,10 @@
 				attributes,
 				styles);
 		}
+
+        public override string ToString()
+        {
+            return Html;
+        }
 	}
 }
