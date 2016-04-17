@@ -4,7 +4,8 @@
 	using NUnit.Framework;
 	using MariGold.HtmlParser;
 	using System.Linq;
-
+	using System.IO;
+	
 	[TestFixture]
 	public class BasicStyle
 	{
@@ -166,13 +167,15 @@
 					aTagFound = true;
 					Assert.AreEqual(0, child.Styles.Count);
 				}
-				else if (child.Tag == "p")
+				else
+				if (child.Tag == "p")
 				{
 					pTagFound = true;
 					Assert.AreEqual(1, child.Styles.Count);
 					TestUtility.CheckKeyValuePair(child.Styles.ElementAt(0), "color", "#fff");
 				}
-				else if (child.Tag == "art")
+				else
+				if (child.Tag == "art")
 				{
 					artTagFound = true;
 
@@ -803,7 +806,8 @@
 					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
 				}
-				else if (child.Tag == "div")
+				else
+				if (child.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(1, child.Styles.Count);
@@ -851,7 +855,8 @@
 					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
 				}
-				else if (child.Tag == "div")
+				else
+				if (child.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
@@ -899,7 +904,8 @@
 					Assert.AreEqual(1, child.Styles.Count);
 					TestUtility.CheckStyle(child.Styles.ElementAt(0), "color", "#fff");
 				}
-				else if (child.Tag == "div")
+				else
+				if (child.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(0, child.Styles.Count);
@@ -945,14 +951,16 @@
 					Assert.AreEqual(0, node.Styles.Count);
 					pTagFound = true;
 				}
-				else if (node.Tag == "div")
+				else
+				if (node.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
 					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
 					divTagFound = true;
 				}
-				else if (node.Tag == "span")
+				else
+				if (node.Tag == "span")
 				{
 					TestUtility.AnalyzeNode(node, "span", "span tag", "<span>span tag</span>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
@@ -1014,13 +1022,15 @@
 					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
 					pTagFound = true;
 				}
-				else if (node.Tag == "div")
+				else
+				if (node.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
 					Assert.AreEqual(0, node.Styles.Count);
 					divTagFound = true;
 				}
-				else if (node.Tag == "span")
+				else
+				if (node.Tag == "span")
 				{
 					TestUtility.AnalyzeNode(node, "span", "span tag", "<span>span tag</span>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
@@ -1079,7 +1089,8 @@
 					Assert.AreEqual(0, node.Styles.Count);
 					pTagFound = true;
 				}
-				else if (node.Tag == "div")
+				else
+				if (node.Tag == "div")
 				{
 					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
 					Assert.AreEqual(0, node.Styles.Count);
@@ -1451,6 +1462,65 @@
 			
 			TestUtility.AnalyzeNode(node.Children.ElementAt(1), "span", "two", "<span>two</span>", node, false, true, 1, 0, 1);
 			TestUtility.CheckKeyValuePair(node.Children.ElementAt(1).Styles.ElementAt(0), "color", "#fff");
+		}
+		
+		[Test]
+		public void TrNthChild()
+		{
+			string path = TestUtility.GetFolderPath("Html\\trnthchild.htm");
+			string html = string.Empty;
+
+			using (StreamReader sr = new StreamReader(path))
+			{
+				html = sr.ReadToEnd();
+			}
+
+			HtmlParser parser = new HtmlTextParser(html);
+
+			Assert.AreEqual(true, parser.Parse());
+			parser.ParseCSS();
+			
+            
+			IHtmlNode node = parser.Current;
+			
+			Assert.IsNotNull(node);
+			Assert.AreEqual(true, node.HasChildren);
+			
+			node = node.Children.ElementAt(0);
+			
+			while (node.Tag != "body")
+			{
+				node = node.Next;
+			}
+			
+			node = node.Children.ElementAt(0);
+			
+			while (node.Tag != "table")
+			{
+				node = node.Next;
+			}
+			
+			Assert.IsNotNull(node);
+			Assert.AreEqual("table", node.Tag);
+			
+			foreach (IHtmlNode  tr in node.Children)
+			{
+				if (tr.Tag != "tr")
+				{
+					continue;
+				}
+				
+				foreach (IHtmlNode td in tr.Children)
+				{
+					if (td.Tag != "td")
+					{
+						continue;
+					}
+					
+					Assert.AreEqual(1, td.Styles.Count);
+					td.Styles.CheckKeyValuePair(0, "color", "red");
+				}
+			}
 		}
 	}
 }

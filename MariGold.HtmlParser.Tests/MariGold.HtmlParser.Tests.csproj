@@ -79,6 +79,7 @@
     <None Include="Html\basicstylewithtwoelements.html" />
     <None Include="Html\stylewithimportant.css" />
     <None Include="Html\stylewithtwoelements.css" />
+    <None Include="Html\trnthchild.htm" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
