@@ -114,7 +114,6 @@
 						found = true;
 					
 						selector.Parse(node, htmlStyles);
-					
 					}
 					
 					break;

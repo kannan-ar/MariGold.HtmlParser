@@ -676,8 +676,10 @@
                                 	color:#fff;
                                 }
                             </style>
+                            <div>
                             <div><span>dspan1</span><span>dspan2</span></div>
-							<p><span>pspan1</span><span>pspan2</span></p>";
+							<p><span>pspan1</span><span>pspan2</span></p>
+                            </div>";
 
 			HtmlParser parser = new HtmlTextParser(html);
 
@@ -690,9 +692,16 @@
 			
 			while (div.Tag != "div")
 				div = div.Next;
+
+            IHtmlNode parent = div;
+
+            div = div.Children.ElementAt(0);
+
+            while (div.Tag != "div")
+                div = div.Next;
 			
 			TestUtility.AnalyzeNode(div, "div", "<span>dspan1</span><span>dspan2</span>", "<div><span>dspan1</span><span>dspan2</span></div>",
-				null, false, true, 2, 0);
+                parent, false, true, 2, 0);
 			Assert.AreEqual(0, div.Styles.Count);
 			
 			TestUtility.AnalyzeNode(div.Children.ElementAt(0), "span", "dspan1", "<span>dspan1</span>", div, false, true, 1, 0);
@@ -707,15 +716,17 @@
 				p = p.Next;
 			
 			TestUtility.AnalyzeNode(p, "p", "<span>pspan1</span><span>pspan2</span>", "<p><span>pspan1</span><span>pspan2</span></p>",
-				null, false, true, 2, 0);
-			Assert.AreEqual(0, p.Styles.Count);
-			
+                parent, false, true, 2, 0);
+			Assert.AreEqual(1, p.Styles.Count);
+            TestUtility.CheckStyle(p.Styles.ElementAt(0), "color", "#fff");
+
 			TestUtility.AnalyzeNode(p.Children.ElementAt(0), "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0);
-			Assert.AreEqual(0, p.Children.ElementAt(0).Styles.Count);
-			
+			Assert.AreEqual(1, p.Children.ElementAt(0).Styles.Count);
+            TestUtility.CheckStyle(p.Children.ElementAt(0).Styles.ElementAt(0), "color", "#fff");
+
 			TestUtility.AnalyzeNode(p.Children.ElementAt(1), "span", "pspan2", "<span>pspan2</span>", p, false, true, 1, 0);
 			Assert.AreEqual(1, p.Children.ElementAt(1).Styles.Count);
-			TestUtility.CheckStyle(p.Children.ElementAt(1).Styles.ElementAt(0), "color", "#fff");
+            TestUtility.CheckStyle(p.Children.ElementAt(1).Styles.ElementAt(0), "color", "#fff");
 		}
 		
 		[Test]

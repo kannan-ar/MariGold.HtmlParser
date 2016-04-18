@@ -323,7 +323,7 @@
 									background-color:red;
 								}
 							</style>
-							<div id='dv'><div><p>three</p><span>two</span></div></div>";
+							<body><div id='dv'><div><p>three</p><span>two</span></div></div></body>";
 			
 			HtmlParser parser = new HtmlTextParser(html);
 
@@ -333,14 +333,23 @@
 			Assert.IsNotNull(parser.Current);
 			
 			IHtmlNode node = parser.Current;
-			
+
+            while (node.Tag != "body")
+            {
+                node = node.Next;
+            }
+
+            IHtmlNode body = node;
+
+            node = node.Children.ElementAt(0);
+
 			while (node.Tag != "div")
 			{
 				node = node.Next;
 			}
 			
 			TestUtility.AnalyzeNode(node, "div", "<div><p>three</p><span>two</span></div>", "<div id='dv'><div><p>three</p><span>two</span></div></div>",
-				null, false, true, 1, 1, 0);
+                body, false, true, 1, 1, 0);
 			TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "id", "dv");
 			
 			IHtmlNode parent = node;
