@@ -960,6 +960,7 @@
 				{
 					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
 					Assert.AreEqual(0, node.Styles.Count);
+                    TestUtility.AnalyzeNode(node.Children.ElementAt(0), "#text", "p tag", "p tag", node, false, false, 0, 0, 0);
 					pTagFound = true;
 				}
 				else
