@@ -11,15 +11,15 @@
         {
             if (selector == globalSelector)
             {
-				return true;
+                return true;
             }
-            
-			return false;
+
+            return false;
         }
 
         internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-			ApplyStyle(node, htmlStyles);
+            ApplyStyle(node, htmlStyles);
         }
 
         internal override bool IsValidNode(HtmlNode node)
@@ -29,15 +29,20 @@
                 return false;
             }
 
+            if (node.Tag == HtmlTag.TEXT)
+            {
+                return false;
+            }
+
             return !HtmlStyle.IsNonStyleElement(node.Tag);
         }
-        
-		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
-		{
-			if (IsValidNode(node))
-			{
-				node.CopyHtmlStyles(htmlStyles, SelectorWeight.Global);
-			}
-		}
+
+        internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+        {
+            if (IsValidNode(node))
+            {
+                node.CopyHtmlStyles(htmlStyles, SelectorWeight.Global);
+            }
+        }
     }
 }
