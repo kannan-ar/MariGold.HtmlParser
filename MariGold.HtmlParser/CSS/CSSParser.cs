@@ -1,204 +1,235 @@
 ﻿namespace MariGold.HtmlParser.CSS
 {
-	using System;
-	using System.Net;
-	using System.Collections.Generic;
-	using System.Linq;
+    using System;
+    using System.Net;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	internal sealed class CSSParser
-	{
-		private const char openBrace = '{';
-		private const char closeBrace = '}';
+    internal sealed class CSSParser
+    {
+        private const char openBrace = '{';
+        private const char closeBrace = '}';
+        private const string rel = "stylesheet";
 
-		private int ParseSelector(int position, string style, out string selectorText)
-		{
-			selectorText = string.Empty;
+        private string uriSchema;
 
-			int openBraceIndex = style.IndexOf(openBrace, position);
+        internal string UriSchema
+        {
+            get
+            {
+                return uriSchema;
+            }
 
-			if (openBraceIndex > position)
-			{
-				selectorText = style.Substring(position, openBraceIndex - position).Trim();
-			}
+            set
+            {
+                uriSchema = value;
+            }
+        }
+        private int ParseSelector(int position, string style, out string selectorText)
+        {
+            selectorText = string.Empty;
 
-			return openBraceIndex;
-		}
+            int openBraceIndex = style.IndexOf(openBrace, position);
 
-		private HtmlStyle CreateHtmlStyleFromRule(string styleName, string value, SelectorWeight weight)
-		{
-			styleName = styleName.Trim().Replace("\"", string.Empty).Replace("'", string.Empty);
-			value = value.Trim();
-			bool important = false;
+            if (openBraceIndex > position)
+            {
+                selectorText = style.Substring(position, openBraceIndex - position).Trim();
+            }
 
-			//Replace this with regular expression
-			int importantIndex = value.IndexOf("!important");
+            return openBraceIndex;
+        }
 
-			if (importantIndex > -1)
-			{
-				important = true;
-				value = value.Replace("!important", string.Empty).Trim();
-			}
+        private HtmlStyle CreateHtmlStyleFromRule(string styleName, string value, SelectorWeight weight)
+        {
+            styleName = styleName.Trim().Replace("\"", string.Empty).Replace("'", string.Empty);
+            value = value.Trim();
+            bool important = false;
 
-			return new HtmlStyle(styleName, value, important, weight);
-		}
+            //Replace this with regular expression
+            int importantIndex = value.IndexOf("!important");
 
-		private int ParseHtmlStyles(int position, string styleText, out List<HtmlStyle> htmlStyles)
-		{
-			htmlStyles = new List<HtmlStyle>();
+            if (importantIndex > -1)
+            {
+                important = true;
+                value = value.Replace("!important", string.Empty).Trim();
+            }
 
-			int closeBraceIndex = styleText.IndexOf(closeBrace, position);
+            return new HtmlStyle(styleName, value, important, weight);
+        }
 
-			if (closeBraceIndex > position)
-			{
-				string styles = styleText.Substring(position + 1, closeBraceIndex - position - 1);
+        private int ParseHtmlStyles(int position, string styleText, out List<HtmlStyle> htmlStyles)
+        {
+            htmlStyles = new List<HtmlStyle>();
 
-				if (!string.IsNullOrEmpty(styles))
-				{
-					htmlStyles = ParseRules(styles, SelectorWeight.None).ToList();
-				}
-			}
+            int closeBraceIndex = styleText.IndexOf(closeBrace, position);
 
-			//+1 to advance to next location
-			return closeBraceIndex + 1;
-		}
+            if (closeBraceIndex > position)
+            {
+                string styles = styleText.Substring(position + 1, closeBraceIndex - position - 1);
 
-		private string ExtractStylesFromLink(string url)
-		{
-			string styles = string.Empty;
+                if (!string.IsNullOrEmpty(styles))
+                {
+                    htmlStyles = ParseRules(styles, SelectorWeight.None).ToList();
+                }
+            }
 
-			using (WebClient client = new WebClient())
-			{
-				client.Encoding = System.Text.Encoding.UTF8;
-				styles = client.DownloadString(url);
-			}
+            //+1 to advance to next location
+            return closeBraceIndex + 1;
+        }
 
-			return styles;
-		}
+        private string CleanUrl(string url)
+        {
+            if (url.StartsWith("//") && !string.IsNullOrEmpty(uriSchema))
+            {
+                url = string.Concat(uriSchema, ":" + url);
+            }
 
-		private void ParseCSS(string style, StyleSheet styleSheet)
-		{
-			int eof = style.Length;
-			int position = 0;
+            return url;
+        }
 
-			while (position < eof)
-			{
-				string selectorText;
+        private string ExtractStylesFromLink(string url)
+        {
+            string styles = string.Empty;
 
-				int bracePosition = ParseSelector(position, style, out selectorText);
+            url = CleanUrl(url);
 
-				if (bracePosition > position && selectorText != string.Empty)
-				{
-					List<HtmlStyle> htmlStyles;
-					//Returning close brace index
-					bracePosition = ParseHtmlStyles(bracePosition, style, out htmlStyles);
+            using (WebClient client = new WebClient())
+            {
+                client.Encoding = System.Text.Encoding.UTF8;
+                styles = client.DownloadString(url);
+            }
 
-					foreach (string selector in selectorText.Split(new char[]{ ',' }, StringSplitOptions.RemoveEmptyEntries))
-					{
-						styleSheet.Add(selector.Trim(), htmlStyles);
-					}
-				}
+            return styles;
+        }
 
-				if (bracePosition == -1)
-				{
-					break;
-				}
+        private void ParseCSS(string style, StyleSheet styleSheet)
+        {
+            int eof = style.Length;
+            int position = 0;
 
-				position = bracePosition;
-			}
-		}
+            while (position < eof)
+            {
+                string selectorText;
 
-		private IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorWeight weight)
-		{
-			string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                int bracePosition = ParseSelector(position, style, out selectorText);
 
-			foreach (string style in styleSet)
-			{
-				string styleNode = style.Trim();
+                if (bracePosition > position && selectorText != string.Empty)
+                {
+                    List<HtmlStyle> htmlStyles;
+                    //Returning close brace index
+                    bracePosition = ParseHtmlStyles(bracePosition, style, out htmlStyles);
 
-				if (!string.IsNullOrEmpty(styleNode))
-				{
-					string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string selector in selectorText.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        styleSheet.Add(selector.Trim(), htmlStyles);
+                    }
+                }
 
-					if (nodeSet != null && nodeSet.Length > 1)
-					{
-						yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], weight);
-					}
-				}
-			}
-		}
+                if (bracePosition == -1)
+                {
+                    break;
+                }
 
-		private void TravelParseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
-		{
-			string style = string.Empty;
+                position = bracePosition;
+            }
+        }
 
-			if (string.Compare(node.Tag, HtmlTag.STYLE, StringComparison.InvariantCultureIgnoreCase) == 0)
-			{
-				style = node.InnerHtml == null ? string.Empty : node.InnerHtml.Trim();
-			}
-			else
-			if (string.Compare(node.Tag, HtmlTag.LINK, StringComparison.InvariantCultureIgnoreCase) == 0)
-			{
-				string url;
+        private IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorWeight weight)
+        {
+            string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-				if (node.Attributes.TryGetValue("href", out url))
-				{
-					style = ExtractStylesFromLink(url);
-				}
-			}
+            foreach (string style in styleSet)
+            {
+                string styleNode = style.Trim();
 
-			if (!string.IsNullOrEmpty(style))
-			{
-				ParseCSS(style, styleSheet);
-			}
+                if (!string.IsNullOrEmpty(styleNode))
+                {
+                    string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
-			foreach (HtmlNode n in node.GetChildren())
-			{
-				TravelParseHtmlNodes(n, styleSheet);
-			}
-		}
+                    if (nodeSet != null && nodeSet.Length > 1)
+                    {
+                        yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], weight);
+                    }
+                }
+            }
+        }
 
-		internal StyleSheet ParseStyleSheet(HtmlNode node)
-		{
-			StyleSheet styleSheet = new StyleSheet(new SelectorContext());
+        private void TravelParseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
+        {
+            string style = string.Empty;
 
-			TravelParseHtmlNodes(node, styleSheet);
+            if (string.Compare(node.Tag, HtmlTag.STYLE, StringComparison.InvariantCultureIgnoreCase) == 0)
+            {
+                style = node.InnerHtml == null ? string.Empty : node.InnerHtml.Trim();
+            }
+            else if (string.Compare(node.Tag, HtmlTag.LINK, StringComparison.InvariantCultureIgnoreCase) == 0)
+            {
+                string relValue = node.ExtractAttributeValue("rel");
 
-			HtmlNode nextNode = node.GetNext();
-			
-			while (nextNode != null)
-			{
-				TravelParseHtmlNodes(nextNode, styleSheet);
-				nextNode = nextNode.GetNext();
-			} 
-			
-			return styleSheet;
-		}
+                if (string.Compare(rel, relValue, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    string url = node.ExtractAttributeValue("href");
 
-		internal void InterpretStyles(StyleSheet styleSheet, HtmlNode htmlNode)
-		{
-			string style;
+                    if (!string.IsNullOrEmpty(url))
+                    {
+                        style = ExtractStylesFromLink(url);
+                    }
+                }
+            }
 
-			if (!HtmlStyle.IsNonStyleElement(htmlNode.Tag))
-			{
-				if (htmlNode.Attributes.TryGetValue("style", out style))
-				{
-					htmlNode.AddStyles(ParseRules(style, SelectorWeight.Inline));
-				}
+            if (!string.IsNullOrEmpty(style))
+            {
+                ParseCSS(style, styleSheet);
+            }
 
-				styleSheet.Parse(htmlNode);
-			}
+            foreach (HtmlNode n in node.GetChildren())
+            {
+                TravelParseHtmlNodes(n, styleSheet);
+            }
+        }
 
-			foreach (HtmlNode node in htmlNode.GetChildren())
-			{
-				InterpretStyles(styleSheet, node);
-			}
-			
-			//This loop only needs when the parent is null. If parent is not null, it will loop through all the 
-			//child elements thus next nodes processed without this loop.
-			if (htmlNode.Parent == null && htmlNode.Next != null)
-			{
-				InterpretStyles(styleSheet, htmlNode.GetNext());
-			}
-		}
-	}
+        internal StyleSheet ParseStyleSheet(HtmlNode node)
+        {
+            StyleSheet styleSheet = new StyleSheet(new SelectorContext());
+
+            TravelParseHtmlNodes(node, styleSheet);
+
+            HtmlNode nextNode = node.GetNext();
+
+            while (nextNode != null)
+            {
+                TravelParseHtmlNodes(nextNode, styleSheet);
+                nextNode = nextNode.GetNext();
+            }
+
+            return styleSheet;
+        }
+
+        internal void InterpretStyles(StyleSheet styleSheet, HtmlNode htmlNode)
+        {
+            string style;
+
+            if (!HtmlStyle.IsNonStyleElement(htmlNode.Tag))
+            {
+                if (htmlNode.Attributes.TryGetValue("style", out style))
+                {
+                    htmlNode.AddStyles(ParseRules(style, SelectorWeight.Inline));
+                }
+
+                styleSheet.Parse(htmlNode);
+            }
+
+            foreach (HtmlNode node in htmlNode.GetChildren())
+            {
+                InterpretStyles(styleSheet, node);
+            }
+
+            //This loop only needs when the parent is null. If parent is not null, it will loop through all the 
+            //child elements thus next nodes processed without this loop.
+            if (htmlNode.Parent == null && htmlNode.Next != null)
+            {
+                InterpretStyles(styleSheet, htmlNode.GetNext());
+            }
+        }
+    }
 }

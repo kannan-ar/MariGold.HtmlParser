@@ -7,8 +7,23 @@
     /// </summary>
     public abstract class HtmlParser
     {
+        protected string uriSchema;
+
         internal abstract void SetAnalyzer(HtmlAnalyzer analyzer);
         internal abstract void SetPosition(int position);
+
+        public string UriSchema
+        {
+            get
+            {
+                return uriSchema;
+            }
+
+            set
+            {
+                uriSchema = value;
+            }
+        }
 
         /// <summary>
         /// Last parsed HtmlNode.

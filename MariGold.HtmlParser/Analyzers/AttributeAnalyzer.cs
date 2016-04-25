@@ -60,7 +60,7 @@
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(key))
+                    if (!string.IsNullOrEmpty(key) && !attributes.ContainsKey(key))
                     {
                         attributes.Add(key, string.Empty);
                         Clear();
@@ -84,7 +84,7 @@
             }
             else if (IsValidHtmlLetter(letter) || isQuote)
             {
-                if (!string.IsNullOrEmpty(key))
+                if (!string.IsNullOrEmpty(key) && !attributes.ContainsKey(key))
                 {
                     attributes.Add(key, string.Empty);
                     Clear();
@@ -130,7 +130,7 @@
                     analyze = null;
                 }
 
-                if (!string.IsNullOrEmpty(key))
+                if (!string.IsNullOrEmpty(key) && !attributes.ContainsKey(key))
                 {
                     string value = context.Html.Substring(start, position - start);
                     attributes.Add(key, value);
@@ -152,7 +152,7 @@
                 start = -1;
             }
 
-            if (!string.IsNullOrEmpty(key))
+            if (!string.IsNullOrEmpty(key) && !node.Attributes.ContainsKey(key))
             {
                 string value = string.Empty;
 

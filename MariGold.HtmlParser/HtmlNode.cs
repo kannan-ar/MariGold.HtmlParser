@@ -255,7 +255,20 @@
 			
 			children.Add(child);
 		}
-		
+
+        internal string ExtractAttributeValue(string attributeName)
+        {
+            foreach (KeyValuePair<string, string> attribute in attributes)
+            {
+                if (string.Compare(attributeName, attribute.Key, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    return attribute.Value;
+                }
+            }
+
+            return string.Empty;
+        }
+
 		/// <summary>
 		/// Html tag of the node.
 		/// </summary>

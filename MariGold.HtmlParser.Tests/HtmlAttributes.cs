@@ -435,5 +435,55 @@
             Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
 
         }
+
+        [Test]
+        public void DuplicateAttributes()
+        {
+            string html = "<div id='abc' id='abc'></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Traverse());
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AreEqual(parser.Current, "div", "", html);
+            Assert.IsNull(parser.Current.Parent);
+            Assert.AreEqual(false, parser.Current.SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.Count());
+            Assert.AreEqual(false, parser.Current.HasChildren);
+
+            Assert.IsNotNull(parser.Current.Attributes);
+            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
+
+            Assert.AreEqual(false, parser.Traverse());
+            Assert.IsNull(parser.Current);
+        }
+
+        [Test]
+        public void DuplicateAttributesWithZeroAttributeDiv()
+        {
+            string html = "<div id='abc' id='abc'></div><div>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Traverse());
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AreEqual(parser.Current, "div", "", "<div id='abc' id='abc'></div>");
+            Assert.IsNull(parser.Current.Parent);
+            Assert.AreEqual(false, parser.Current.SelfClosing);
+            Assert.AreEqual(0, parser.Current.Children.Count());
+            Assert.AreEqual(false, parser.Current.HasChildren);
+
+            Assert.IsNotNull(parser.Current.Attributes);
+            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
+
+            Assert.AreEqual(true, parser.Traverse());
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "div", "test", "<div>test</div>", null, false, true, 1, 0);
+
+            Assert.AreEqual(false, parser.Traverse());
+            Assert.IsNull(parser.Current);
+        }
     }
 }

@@ -33,6 +33,11 @@
                 tagCreated = CreateTag(HtmlTag.COMMENT, startPosition, startPosition, position + 3,
                     position + 3, parent, out node);
 
+                if (!AssignNextAnalyzer(position + 3, parent))
+                {
+                    context.SetAnalyzer(context.GetTextAnalyzer(position + 3, parent));
+                }
+
                 context.SetPosition(position + 3);
             }
 

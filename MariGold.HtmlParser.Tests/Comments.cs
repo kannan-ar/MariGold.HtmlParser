@@ -1,7 +1,7 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
     using System;
-	using System.Linq;
+    using System.Linq;
     using NUnit.Framework;
     using MariGold.HtmlParser;
 
@@ -61,6 +61,30 @@
             Assert.AreEqual(0, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
             Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.AreEqual(false, parser.Traverse());
+            Assert.IsNull(parser.Current);
+        }
+
+        [Test]
+        public void CommentNextDiv()
+        {
+            string html = "<!--test--><div>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Traverse());
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AreEqual(parser.Current, "#comment", "<!--test-->", "<!--test-->");
+            Assert.IsNull(parser.Current.Parent);
+            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.AreEqual(0, parser.Current.Children.Count());
+            Assert.AreEqual(false, parser.Current.SelfClosing);
+            Assert.AreEqual(0, parser.Current.Attributes.Count);
+
+            Assert.AreEqual(true, parser.Traverse());
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "div", "test", "<div>test</div>", null, false, true, 1, 0);
+
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
         }
