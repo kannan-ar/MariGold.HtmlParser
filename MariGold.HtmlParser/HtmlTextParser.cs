@@ -155,7 +155,9 @@
 			if (current != null)
 			{
 				CSS.CSSParser cssParser = new CSS.CSSParser();
+
                 cssParser.UriSchema = uriSchema;
+                cssParser.BaseURL = baseUrl;
 
 				StyleSheet styleSheet = cssParser.ParseStyleSheet(current);
 

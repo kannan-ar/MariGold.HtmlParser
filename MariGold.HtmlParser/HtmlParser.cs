@@ -8,6 +8,7 @@
     public abstract class HtmlParser
     {
         protected string uriSchema;
+        protected string baseUrl;
 
         internal abstract void SetAnalyzer(HtmlAnalyzer analyzer);
         internal abstract void SetPosition(int position);
@@ -22,6 +23,19 @@
             set
             {
                 uriSchema = value;
+            }
+        }
+
+        public string BaseURL
+        {
+            get
+            {
+                return baseUrl;
+            }
+
+            set
+            {
+                baseUrl = value;
             }
         }
 

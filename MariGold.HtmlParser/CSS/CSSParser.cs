@@ -12,6 +12,7 @@
         private const string rel = "stylesheet";
 
         private string uriSchema;
+        private string baseUrl;
 
         internal string UriSchema
         {
@@ -25,6 +26,20 @@
                 uriSchema = value;
             }
         }
+
+        internal string BaseURL
+        {
+            get
+            {
+                return baseUrl;
+            }
+
+            set
+            {
+                baseUrl = value;
+            }
+        }
+
         private int ParseSelector(int position, string style, out string selectorText)
         {
             selectorText = string.Empty;
@@ -84,6 +99,11 @@
                 url = string.Concat(uriSchema, ":" + url);
             }
 
+            if (Uri.IsWellFormedUriString(url, UriKind.Relative) && !string.IsNullOrEmpty(baseUrl))
+            {
+                url = string.Concat(baseUrl, url);
+            }
+
             return url;
         }
 
@@ -93,10 +113,13 @@
 
             url = CleanUrl(url);
 
-            using (WebClient client = new WebClient())
+            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
-                client.Encoding = System.Text.Encoding.UTF8;
-                styles = client.DownloadString(url);
+                using (WebClient client = new WebClient())
+                {
+                    client.Encoding = System.Text.Encoding.UTF8;
+                    styles = client.DownloadString(url);
+                }
             }
 
             return styles;
