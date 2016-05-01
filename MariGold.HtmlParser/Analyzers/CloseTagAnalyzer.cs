@@ -16,6 +16,7 @@
             tagStart = -1;
         }
 
+        /*
         private bool CloseOpenedChilds(HtmlNode current, string closeTag, int textEnd, int htmlEnd)
         {
             bool tagFound = false;
@@ -29,6 +30,31 @@
                 }
 
                 tagFound = CloseOpenedChilds(current.GetParent(), closeTag, textEnd, htmlEnd);
+
+                if (tagFound)
+                {
+                    current.Finilize(textEnd);
+                }
+            }
+
+            return tagFound;
+        }
+        */
+
+        private bool CloseOpenedChilds(HtmlNode current, string closeTag, int textEnd, int htmlEnd, ref HtmlNode newNode)
+        {
+            bool tagFound = false;
+
+            if (current != null)
+            {
+                if (string.Compare(current.Tag, closeTag, StringComparison.InvariantCultureIgnoreCase) == 0 && current.IsOpened)
+                {
+                    current.SetBoundary(textEnd, htmlEnd);
+                    newNode = current;
+                    return true;
+                }
+
+                tagFound = CloseOpenedChilds(current.GetParent(), closeTag, textEnd, htmlEnd, ref newNode);
 
                 if (tagFound)
                 {
@@ -100,26 +126,48 @@
             if (letter == HtmlTag.closeAngle)
             {
                 HtmlNode nextNode = current;
+                HtmlNode newNode = null;
 
                 if (current != null)
                 {
-                    CloseOpenedChilds(current, tag, startPosition, position + 1);
+                    //CloseOpenedChilds(current, tag, startPosition, position + 1);
+                    CloseOpenedChilds(current, tag, startPosition, position + 1, ref newNode);
+
+                    if (newNode != null)
+                    {
+                        nextNode = newNode;
+                    }
                 }
 
                 node = current;
-
+                /*
                 if (!ignoreTag && current != null)
                 {
-                	nextNode = current.GetParent();
+                    nextNode = current.GetParent();
                     tagCreated = current.Parent == null;
                 }
+                */
 
+                if (newNode != null)
+                {
+                    nextNode = newNode.GetParent();
+                    tagCreated = newNode.Parent == null;
+                }
+
+                //The nextNode is the parent node for next element
                 if (!AssignNextAnalyzer(position + 1, nextNode))
                 {
                     context.SetAnalyzer(context.GetTextAnalyzer(position + 1, nextNode));
                 }
 
-                InnerTagClosed(current);
+                //InnerTagClosed(newNode);
+                //Sometimes invalid close tags may have in the html. In that case the newNode will be null because the 
+                //CloseTagAnalyzer can't find an appropriate open tag. Setting null to previous node will disconnect the
+                //Node chain. 
+                if (newNode != null)
+                {
+                    InnerTagClosed(newNode);
+                }
             }
 
             return tagCreated;

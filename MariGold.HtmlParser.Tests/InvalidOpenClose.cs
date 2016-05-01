@@ -603,5 +603,133 @@
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
         }
+
+        [Test]
+        public void InvalidOpenCloseWithNextTag()
+        {
+            string html = "<div><span></div></span><div>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "div", "<span>", "<div><span></div>", null, false, true, 1, 0);
+            Assert.IsNotNull(parser.Current.Next);
+            TestUtility.AnalyzeNode(parser.Current.Next, "div", "test", "<div>test</div>", null, false, true, 1, 0);
+            Assert.IsNotNull(parser.Current.Next.Previous);
+            Assert.AreEqual(parser.Current, parser.Current.Next.Previous);
+        }
+
+        [Test]
+        public void InvalidOpenWithNextTag()
+        {
+            string html = "<a><b></a><c>c1</c>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            
+            parser.Parse();
+
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "a", "<b>", "<a><b></a>", null, false, true, 1, 0);
+
+            Assert.IsNotNull(parser.Current.Next);
+            TestUtility.AnalyzeNode(parser.Current.Next, "c", "c1", "<c>c1</c>", null, false, true, 1, 0);
+            Assert.IsNotNull(parser.Current.Next.Previous);
+            Assert.AreEqual(parser.Current, parser.Current.Next.Previous);
+        }
+
+        [Test]
+        public void InvalidOpenWithNextTagAndText()
+        {
+            string html = "<a><b>test</a><c>c1</c>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            parser.Parse();
+
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "a", "<b>test", "<a><b>test</a>", null, false, true, 1, 0);
+            TestUtility.AnalyzeNode(parser.Current.Children.ElementAt(0), "b", "test", "<b>test", parser.Current, false, true, 1, 0);
+
+            Assert.IsNotNull(parser.Current.Next);
+            TestUtility.AnalyzeNode(parser.Current.Next, "c", "c1", "<c>c1</c>", null, false, true, 1, 0);
+            Assert.IsNotNull(parser.Current.Next.Previous);
+            Assert.AreEqual(parser.Current, parser.Current.Next.Previous);
+        }
+
+        [Test]
+        public void InvalidCloseWithNextTag()
+        {
+            string html = "<a></a></b><c></c>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            parser.Parse();
+
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "a", "", "<a></a>", null, false, false, 0, 0);
+
+            Assert.IsNotNull(parser.Current.Next);
+            TestUtility.AnalyzeNode(parser.Current.Next, "c", "", "<c></c>", null, false, false, 0, 0);
+            Assert.IsNotNull(parser.Current.Next.Previous);
+            Assert.AreEqual(parser.Current, parser.Current.Next.Previous);
+        }
+
+        [Test]
+        public void InvalidCloseWithNextTagInvalidOpen()
+        {
+            string html = "<a></a></b><c><d></c>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            parser.Parse();
+
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "a", "", "<a></a>", null, false, false, 0, 0);
+
+            Assert.IsNotNull(parser.Current.Next);
+            TestUtility.AnalyzeNode(parser.Current.Next, "c", "<d>", "<c><d></c>", null, false, true, 1, 0);
+            Assert.IsNotNull(parser.Current.Next.Previous);
+            Assert.AreEqual(parser.Current, parser.Current.Next.Previous);
+        }
+
+        [Test]
+        public void InvalidCloseWithNextTagInvalidClose()
+        {
+            string html = "<a></a></b><c></d></c>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            parser.Parse();
+
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "a", "", "<a></a>", null, false, false, 0, 0);
+
+            Assert.IsNotNull(parser.Current.Next);
+            TestUtility.AnalyzeNode(parser.Current.Next, "c", "</d>", "<c></d></c>", null, false, false, 0, 0);
+            Assert.IsNotNull(parser.Current.Next.Previous);
+            Assert.AreEqual(parser.Current, parser.Current.Next.Previous);
+        }
+
+        [Test]
+        public void InvalidOpenCloseWithNextTagHavingParent()
+        {
+            string html = "<p><div><span></div></span><div>test</div></p>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "p", "<div><span></div></span><div>test</div>", html, null, false, true, 2, 0);
+
+            IHtmlNode node = parser.Current.Children.ElementAt(0);
+
+            Assert.IsNotNull(node);
+            TestUtility.AnalyzeNode(node, "div", "<span>", "<div><span></div>", parser.Current, false, true, 1, 0);
+            Assert.IsNotNull(node.Next);
+            TestUtility.AnalyzeNode(node.Next, "div", "test", "<div>test</div>", parser.Current, false, true, 1, 0);
+            Assert.IsNotNull(node.Next.Previous);
+            Assert.AreEqual(node, node.Next.Previous);
+        }
     }
 }
