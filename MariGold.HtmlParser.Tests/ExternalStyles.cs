@@ -40,7 +40,7 @@
 				node = node.Next;
 			
 			node.AnalyzeNode("p", "test", "<p>test</p>", body, false, true, 1, 0, 1);
-			node.Styles.CheckKeyValuePair(0, "font-size", "50px");
+			node.Styles.CheckKeyValuePair(0, "font-size", "20px");
 		}
 		
 		[Test]
@@ -75,7 +75,7 @@
 			
 			node.AnalyzeNode("div", "test", "<div class=\"cls\">test</div>", body, false, true, 1, 1, 1);
 			node.Attributes.CheckKeyValuePair(0, "class", "cls");
-			node.Styles.CheckKeyValuePair(0, "font-size", "20px");
+			node.Styles.CheckKeyValuePair(0, "font-size", "10px");
 		}
 		
 		[Test]

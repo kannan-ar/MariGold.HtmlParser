@@ -72,10 +72,15 @@
 
 			if (node.Attributes.TryGetValue(key, out className))
 			{
-				if (string.Compare(currentSelector, className, StringComparison.InvariantCultureIgnoreCase) == 0)
-				{
-					isValid = true;
-				}
+                string[] names = className.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string name in names)
+                {
+                    if (string.Compare(currentSelector, name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    {
+                        isValid = true;
+                    }
+                }
 			}
 
 			return isValid;
