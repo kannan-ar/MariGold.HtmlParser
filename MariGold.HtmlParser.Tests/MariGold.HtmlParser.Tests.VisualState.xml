@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
-  <TopNode>[0-1266]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\bin\Debug\MariGold.HtmlParser.Tests.dll</TopNode>
-  <SelectedNode>[0-1266]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\bin\Debug\MariGold.HtmlParser.Tests.dll</SelectedNode>
+  <TopNode>[0-1037]MariGold.HtmlParser.Tests.BasicStyle.NotP</TopNode>
+  <SelectedNode>[0-1000]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\MariGold.HtmlParser.Tests.nunit</SelectedNode>
   <ExcludeCategories>false</ExcludeCategories>
   <Nodes>
     <Node UniqueName="[0-1000]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\MariGold.HtmlParser.Tests.nunit" Expanded="true" />
-    <Node UniqueName="[0-1266]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\bin\Debug\MariGold.HtmlParser.Tests.dll" Expanded="true" />
-    <Node UniqueName="[0-1267]MariGold" Expanded="true" />
-    <Node UniqueName="[0-1268]MariGold.HtmlParser" Expanded="true" />
-    <Node UniqueName="[0-1269]MariGold.HtmlParser.Tests" Expanded="true" />
+    <Node UniqueName="[0-1267]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\bin\Debug\MariGold.HtmlParser.Tests.dll" Expanded="true" />
+    <Node UniqueName="[0-1268]MariGold" Expanded="true" />
+    <Node UniqueName="[0-1269]MariGold.HtmlParser" Expanded="true" />
+    <Node UniqueName="[0-1270]MariGold.HtmlParser.Tests" Expanded="true" />
     <Node UniqueName="[0-1001]MariGold.HtmlParser.Tests.BasicHtml" Expanded="true" />
     <Node UniqueName="[0-1016]MariGold.HtmlParser.Tests.BasicStyle" Expanded="true" />
     <Node UniqueName="[0-1053]MariGold.HtmlParser.Tests.Comments" Expanded="true" />
-    <Node UniqueName="[0-1146]MariGold.HtmlParser.Tests.HtmlAttributes" Expanded="true" />
-    <Node UniqueName="[0-1170]MariGold.HtmlParser.Tests.InvalidOpenClose" Expanded="true" />
+    <Node UniqueName="[0-1058]MariGold.HtmlParser.Tests.ComplexStyles" Expanded="true" />
   </Nodes>
 </VisualState>

@@ -614,5 +614,111 @@
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls ano");
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
         }
+
+        [Test]
+        public void CheckMultipleClassesApplied()
+        {
+            string html = @"<style>
+                                .ano
+                                {
+                                    font-size:10px;
+                                }
+
+                                .cls
+                                {
+                                	font-weight:bold;
+                                }
+                            </style>
+                            <div class='cls ano'>one</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseCSS();
+
+            Assert.IsNotNull(parser.Current);
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+            {
+                node = node.Next;
+            }
+
+            TestUtility.AnalyzeNode(node, "div", "one", "<div class='cls ano'>one</div>", null, false, true, 1, 1, 2);
+            TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls ano");
+            TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-size", "10px");
+            TestUtility.CheckKeyValuePair(node.Styles.ElementAt(1), "font-weight", "bold");
+        }
+
+        [Test]
+        public void CheckMultipleClassesCSSPriority()
+        {
+            string html = @"<style>
+                                .ano
+                                {
+                                    font-size:10px !important;
+                                }
+
+                                .cls
+                                {
+                                	font-size:20px;
+                                }
+                            </style>
+                            <div class='cls ano'>one</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseCSS();
+
+            Assert.IsNotNull(parser.Current);
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+            {
+                node = node.Next;
+            }
+
+            TestUtility.AnalyzeNode(node, "div", "one", "<div class='cls ano'>one</div>", null, false, true, 1, 1, 1);
+            TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls ano");
+            TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-size", "10px");
+        }
+
+        [Test]
+        public void CheckMultipleClassesCSSOverride()
+        {
+            string html = @"<style>
+                                .ano
+                                {
+                                    font-size:10px;
+                                }
+
+                                .cls
+                                {
+                                	font-size:20px;
+                                }
+                            </style>
+                            <div class='cls ano'>one</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseCSS();
+
+            Assert.IsNotNull(parser.Current);
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+            {
+                node = node.Next;
+            }
+
+            TestUtility.AnalyzeNode(node, "div", "one", "<div class='cls ano'>one</div>", null, false, true, 1, 1, 1);
+            TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls ano");
+            TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-size", "20px");
+        }
 	}
 }
