@@ -731,5 +731,65 @@
             Assert.IsNotNull(node.Next.Previous);
             Assert.AreEqual(node, node.Next.Previous);
         }
+
+        [Test]
+        public void UnClosedLi()
+        {
+            string html = "<ul><li>1<li>2</li></ul>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+
+            Assert.IsNotNull(parser.Current);
+            parser.Current.AnalyzeNode("ul", "<li>1<li>2</li>", html, null, false, true, 2, 0, 0);
+            
+            IHtmlNode node = parser.Current.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("li", "1", "<li>1", parser.Current, false, true, 1, 0, 0);
+
+            node = parser.Current.Children.ElementAt(1);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("li", "2", "<li>2</li>", parser.Current, false, true, 1, 0, 0);
+        }
+
+        [Test]
+        public void UnClosedTd()
+        {
+            string html = "<table><tr><td>1</td><td>2</td></tr><tr><td>3<td>4</td></tr></table>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            Assert.IsTrue(parser.Traverse());
+            Assert.IsNotNull(parser.Current);
+
+            parser.Current.AnalyzeNode("table", "<tr><td>1</td><td>2</td></tr><tr><td>3<td>4</td></tr>", html, null, false, true, 2, 0, 0);
+
+            IHtmlNode tr = parser.Current.Children.ElementAt(0);
+            Assert.IsNotNull(tr);
+            tr.AnalyzeNode("tr", "<td>1</td><td>2</td>", "<tr><td>1</td><td>2</td></tr>", parser.Current, false, true, 2, 0, 0);
+
+            IHtmlNode td = tr.Children.ElementAt(0);
+            Assert.IsNotNull(td);
+            td.AnalyzeNode("td", "1", "<td>1</td>", tr, false, true, 1, 0, 0);
+            td.Children.ElementAt(0).AnalyzeNode("#text", "1", "1", td, false, false, 0, 0, 0);
+
+            td = tr.Children.ElementAt(1);
+            Assert.IsNotNull(td);
+            td.AnalyzeNode("td", "2", "<td>2</td>", tr, false, true, 1, 0, 0);
+            td.Children.ElementAt(0).AnalyzeNode("#text", "2", "2", td, false, false, 0, 0, 0);
+
+            tr = parser.Current.Children.ElementAt(1);
+            Assert.IsNotNull(tr);
+            tr.AnalyzeNode("tr", "<td>3<td>4</td>", "<tr><td>3<td>4</td></tr>", parser.Current, false, true, 2, 0, 0);
+
+            td = tr.Children.ElementAt(0);
+            Assert.IsNotNull(td);
+            td.AnalyzeNode("td", "3", "<td>3", tr, false, true, 1, 0, 0);
+            td.Children.ElementAt(0).AnalyzeNode("#text", "3", "3", td, false, false, 0, 0, 0);
+
+            td = tr.Children.ElementAt(1);
+            Assert.IsNotNull(td);
+            td.AnalyzeNode("td", "4", "<td>4</td>", tr, false, true, 1, 0, 0);
+            td.Children.ElementAt(0).AnalyzeNode("#text", "4", "4", td, false, false, 0, 0, 0);
+        }
     }
 }

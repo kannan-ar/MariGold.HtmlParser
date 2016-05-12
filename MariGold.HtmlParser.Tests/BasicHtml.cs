@@ -348,5 +348,25 @@
 			
 			Assert.AreEqual(parser.Traverse(), false);
 		}
+
+        [Test]
+        public void TwoLi()
+        {
+            string html = "<ul><li>1</li><li>2</li></ul>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            Assert.IsTrue(parser.Traverse());
+
+            Assert.IsNotNull(parser.Current);
+            parser.Current.AnalyzeNode("ul", "<li>1</li><li>2</li>", html, null, false, true, 2, 0, 0);
+
+            IHtmlNode node = parser.Current.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("li", "1", "<li>1</li>", parser.Current, false, true, 1, 0, 0);
+
+            node = parser.Current.Children.ElementAt(1);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("li", "2", "<li>2</li>", parser.Current, false, true, 1, 0, 0);
+        }
 	}
 }

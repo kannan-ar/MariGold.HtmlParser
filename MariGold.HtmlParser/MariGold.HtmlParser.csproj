@@ -65,6 +65,7 @@
     <Compile Include="CSS\Selectors\OnlyChildSelector.cs" />
     <Compile Include="CSS\SelectorWeight.cs" />
     <Compile Include="CSS\StyleSheet.cs" />
+    <Compile Include="HandleInvalidTags.cs" />
     <Compile Include="HtmlAnalyzer.cs" />
     <Compile Include="HtmlContext.cs" />
     <Compile Include="HtmlNode.cs" />

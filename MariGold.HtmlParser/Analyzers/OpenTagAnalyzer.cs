@@ -93,6 +93,9 @@
             if (string.IsNullOrEmpty(tag) && tagStart > -1 && !IsValidHtmlLetter(letter))
             {
                 ExtractTag(position - 1);
+                
+                HandleInvalidTags invalidTag = new HandleInvalidTags();
+                invalidTag.CloseNonNestedParents(startPosition, tag, context, ref parent);
 
                 this.AddAnalyzer("attributeAnalyzer", new AttributeAnalyzer(context));
             }
