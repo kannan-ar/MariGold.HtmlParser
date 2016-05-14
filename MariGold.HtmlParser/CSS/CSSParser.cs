@@ -92,39 +92,6 @@
             return closeBraceIndex + 1;
         }
 
-        private string CleanUrl(string url)
-        {
-            if (url.StartsWith("//") && !string.IsNullOrEmpty(uriSchema))
-            {
-                url = string.Concat(uriSchema, ":" + url);
-            }
-
-            if (Uri.IsWellFormedUriString(url, UriKind.Relative) && !string.IsNullOrEmpty(baseUrl))
-            {
-                url = string.Concat(baseUrl, url);
-            }
-
-            return url;
-        }
-
-        private string ExtractStylesFromLink(string url)
-        {
-            string styles = string.Empty;
-
-            url = CleanUrl(url);
-
-            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                using (WebClient client = new WebClient())
-                {
-                    client.Encoding = System.Text.Encoding.UTF8;
-                    styles = client.DownloadString(url);
-                }
-            }
-
-            return styles;
-        }
-
         private void ParseCSS(string style, StyleSheet styleSheet)
         {
             int eof = style.Length;
@@ -154,7 +121,7 @@
             }
         }
 
-        private void TravelParseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
+        private void TraverseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
         {
             string style = string.Empty;
 
@@ -165,14 +132,17 @@
             else if (string.Compare(node.Tag, HtmlTag.LINK, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
                 string relValue = node.ExtractAttributeValue("rel");
+                string media = node.ExtractAttributeValue("media");
 
-                if (string.Compare(rel, relValue, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Compare(rel, relValue, StringComparison.InvariantCultureIgnoreCase) == 0 &&
+                    (string.IsNullOrEmpty(media) || media.CompareStringInvariantCultureIgnoreCase("screen")))
                 {
                     string url = node.ExtractAttributeValue("href");
 
                     if (!string.IsNullOrEmpty(url))
                     {
-                        style = ExtractStylesFromLink(url);
+                        WebManager web = new WebManager(uriSchema, baseUrl);
+                        style = web.ExtractStylesFromLink(url);
                     }
                 }
             }
@@ -184,7 +154,7 @@
 
             foreach (HtmlNode n in node.GetChildren())
             {
-                TravelParseHtmlNodes(n, styleSheet);
+                TraverseHtmlNodes(n, styleSheet);
             }
         }
 
@@ -212,13 +182,13 @@
         {
             StyleSheet styleSheet = new StyleSheet(new SelectorContext());
 
-            TravelParseHtmlNodes(node, styleSheet);
+            TraverseHtmlNodes(node, styleSheet);
 
             HtmlNode nextNode = node.GetNext();
 
             while (nextNode != null)
             {
-                TravelParseHtmlNodes(nextNode, styleSheet);
+                TraverseHtmlNodes(nextNode, styleSheet);
                 nextNode = nextNode.GetNext();
             }
 

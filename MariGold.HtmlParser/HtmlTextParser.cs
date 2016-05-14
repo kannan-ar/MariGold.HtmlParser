@@ -161,7 +161,6 @@
 
 				StyleSheet styleSheet = cssParser.ParseStyleSheet(current);
                 styleSheet.ApplyStyles(current);
-				//cssParser.InterpretStyles(styleSheet, current);
 
                 CSSInheritance cssInheritance = new CSSInheritance();
                 cssInheritance.Apply(current);

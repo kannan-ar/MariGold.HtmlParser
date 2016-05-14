@@ -23,7 +23,7 @@
         private void InterpretStyles(HtmlNode htmlNode)
         {
             string style;
-
+            
             if (!HtmlStyle.IsNonStyleElement(htmlNode.Tag))
             {
                 if (htmlNode.Attributes.TryGetValue("style", out style))
