@@ -1526,5 +1526,30 @@
 				}
 			}
 		}
+
+        
+        public void ExcludePrintMediaCSS()
+        {
+            string path = TestUtility.GetFolderPath("Html\\mediaprintstyle.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            Assert.AreEqual("#f90", node.Styles["color"]);
+        }
 	}
 }

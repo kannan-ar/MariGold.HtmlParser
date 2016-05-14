@@ -142,10 +142,7 @@
                     //Returning close brace index
                     bracePosition = ParseHtmlStyles(bracePosition, style, out htmlStyles);
 
-                    foreach (string selector in selectorText.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        styleSheet.Add(selector.Trim(), htmlStyles);
-                    }
+                    styleSheet.AddRange(selectorText, htmlStyles);
                 }
 
                 if (bracePosition == -1)
@@ -154,26 +151,6 @@
                 }
 
                 position = bracePosition;
-            }
-        }
-
-        private IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorWeight weight)
-        {
-            string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (string style in styleSet)
-            {
-                string styleNode = style.Trim();
-
-                if (!string.IsNullOrEmpty(styleNode))
-                {
-                    string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (nodeSet != null && nodeSet.Length > 1)
-                    {
-                        yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], weight);
-                    }
-                }
             }
         }
 
@@ -211,6 +188,26 @@
             }
         }
 
+        internal IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorWeight weight)
+        {
+            string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string style in styleSet)
+            {
+                string styleNode = style.Trim();
+
+                if (!string.IsNullOrEmpty(styleNode))
+                {
+                    string[] nodeSet = styleNode.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (nodeSet != null && nodeSet.Length > 1)
+                    {
+                        yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], weight);
+                    }
+                }
+            }
+        }
+
         internal StyleSheet ParseStyleSheet(HtmlNode node)
         {
             StyleSheet styleSheet = new StyleSheet(new SelectorContext());
@@ -226,33 +223,6 @@
             }
 
             return styleSheet;
-        }
-
-        internal void InterpretStyles(StyleSheet styleSheet, HtmlNode htmlNode)
-        {
-            string style;
-
-            if (!HtmlStyle.IsNonStyleElement(htmlNode.Tag))
-            {
-                if (htmlNode.Attributes.TryGetValue("style", out style))
-                {
-                    htmlNode.AddStyles(ParseRules(style, SelectorWeight.Inline));
-                }
-
-                styleSheet.Parse(htmlNode);
-            }
-
-            foreach (HtmlNode node in htmlNode.GetChildren())
-            {
-                InterpretStyles(styleSheet, node);
-            }
-
-            //This loop only needs when the parent is null. If parent is not null, it will loop through all the 
-            //child elements thus next nodes processed without this loop.
-            if (htmlNode.Parent == null && htmlNode.Next != null)
-            {
-                InterpretStyles(styleSheet, htmlNode.GetNext());
-            }
         }
     }
 }

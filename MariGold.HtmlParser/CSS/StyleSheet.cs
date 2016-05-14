@@ -20,10 +20,46 @@
             return clonedStyles;
         }
 
+        private void InterpretStyles(HtmlNode htmlNode)
+        {
+            string style;
+
+            if (!HtmlStyle.IsNonStyleElement(htmlNode.Tag))
+            {
+                if (htmlNode.Attributes.TryGetValue("style", out style))
+                {
+                    CSS.CSSParser cssParser = new CSS.CSSParser();
+                    htmlNode.AddStyles(cssParser.ParseRules(style, SelectorWeight.Inline));
+                }
+
+                Parse(htmlNode);
+            }
+
+            foreach (HtmlNode node in htmlNode.GetChildren())
+            {
+                InterpretStyles(node);
+            }
+
+            //This loop only needs when the parent is null. If parent is not null, it will loop through all the 
+            //child elements thus next nodes processed without this loop.
+            if (htmlNode.Parent == null && htmlNode.Next != null)
+            {
+                InterpretStyles(htmlNode.GetNext());
+            }
+        }
+
         internal StyleSheet(ISelectorContext context)
         {
             this.context = context;
             styles = new List<KeyValuePair<string, List<HtmlStyle>>>();
+        }
+
+        internal void AddRange(string selectorText, List<HtmlStyle> htmlStyles)
+        {
+            foreach (string selector in selectorText.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector.Trim(), htmlStyles));
+            }
         }
 
         internal void Add(string selector, List<HtmlStyle> htmlStyles)
@@ -49,6 +85,11 @@
                 }
 
             }
+        }
+
+        internal void ApplyStyles(HtmlNode htmlNode)
+        {
+            InterpretStyles(htmlNode);
         }
     }
 }
