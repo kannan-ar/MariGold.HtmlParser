@@ -46,7 +46,11 @@
     <Compile Include="CSS\Behaviors\ApplyImmediateChildren.cs" />
     <Compile Include="CSS\Behaviors\ApplyNextElement.cs" />
     <Compile Include="CSS\CSSInheritance.cs" />
+    <Compile Include="CSS\CSSTokenizer.cs" />
     <Compile Include="CSS\IAttachedSelector.cs" />
+    <Compile Include="CSS\MediaQuery.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CSS\SelectorContext.cs" />
     <Compile Include="CSS\CSSBehavior.cs" />
     <Compile Include="CSS\ISelectorContext.cs" />

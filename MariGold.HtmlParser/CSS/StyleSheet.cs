@@ -7,6 +7,7 @@
     {
         private ISelectorContext context;
         private List<KeyValuePair<string, List<HtmlStyle>>> styles;
+        private List<KeyValuePair<string, List<KeyValuePair<string, List<HtmlStyle>>>>> mediaQueries;
 
         private List<HtmlStyle> CloneStyles(List<HtmlStyle> styles)
         {
@@ -23,7 +24,7 @@
         private void InterpretStyles(HtmlNode htmlNode)
         {
             string style;
-            
+
             if (!HtmlStyle.IsNonStyleElement(htmlNode.Tag))
             {
                 if (htmlNode.Attributes.TryGetValue("style", out style))
@@ -52,6 +53,7 @@
         {
             this.context = context;
             styles = new List<KeyValuePair<string, List<HtmlStyle>>>();
+            mediaQueries = new List<KeyValuePair<string, List<KeyValuePair<string, List<HtmlStyle>>>>>();
         }
 
         internal void AddRange(string selectorText, List<HtmlStyle> htmlStyles)
@@ -60,6 +62,12 @@
             {
                 styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector.Trim(), htmlStyles));
             }
+        }
+
+        internal void AddMediaQuery(string mediaQuery, List<KeyValuePair<string, List<HtmlStyle>>> styles)
+        {
+            mediaQueries.Add(new KeyValuePair<string,
+                List<KeyValuePair<string, List<HtmlStyle>>>>(mediaQuery, styles));
         }
 
         internal void Add(string selector, List<HtmlStyle> htmlStyles)
