@@ -6,7 +6,7 @@
     internal sealed class StyleSheet
     {
         private ISelectorContext context;
-        private List<KeyValuePair<string, List<HtmlStyle>>> styles;
+        private List<CSSElement> styles;
         private List<KeyValuePair<string, List<KeyValuePair<string, List<HtmlStyle>>>>> mediaQueries;
 
         private List<HtmlStyle> CloneStyles(List<HtmlStyle> styles)
@@ -29,7 +29,7 @@
             {
                 if (htmlNode.Attributes.TryGetValue("style", out style))
                 {
-                    CSS.CSSParser cssParser = new CSS.CSSParser();
+                    CSSParser cssParser = new CSSParser();
                     htmlNode.AddStyles(cssParser.ParseRules(style, SelectorWeight.Inline));
                 }
 
@@ -52,7 +52,8 @@
         internal StyleSheet(ISelectorContext context)
         {
             this.context = context;
-            styles = new List<KeyValuePair<string, List<HtmlStyle>>>();
+            //styles = new List<KeyValuePair<string, List<HtmlStyle>>>();
+            styles = new List<CSSElement>();
             mediaQueries = new List<KeyValuePair<string, List<KeyValuePair<string, List<HtmlStyle>>>>>();
         }
 
@@ -60,7 +61,8 @@
         {
             foreach (string selector in selectorText.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector.Trim(), htmlStyles));
+                //styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector.Trim(), htmlStyles));
+                styles.Add(new CSSElement(selector.Trim(), htmlStyles));
             }
         }
 
@@ -72,7 +74,8 @@
 
         internal void Add(string selector, List<HtmlStyle> htmlStyles)
         {
-            styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector, htmlStyles));
+            //styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector, htmlStyles));
+            styles.Add(new CSSElement(selector, htmlStyles));
         }
 
         internal void Parse(HtmlNode node)
@@ -81,11 +84,11 @@
             {
                 foreach (CSSelector selector in context.Selectors)
                 {
-                    if (selector.Prepare(style.Key))
+                    if (selector.Prepare(style.Selector))
                     {
                         if (selector.IsValidNode(node))
                         {
-                            selector.Parse(node, CloneStyles(style.Value));
+                            selector.Parse(node, CloneStyles(style.HtmlStyles));
                         }
 
                         break;

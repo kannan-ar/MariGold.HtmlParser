@@ -1,4 +1,4 @@
-﻿namespace MariGold.HtmlParser.CSS
+﻿namespace MariGold.HtmlParser
 {
     using System;
     using System.Net;

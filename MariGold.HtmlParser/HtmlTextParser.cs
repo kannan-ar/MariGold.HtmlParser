@@ -154,7 +154,7 @@
 		{
 			if (current != null)
 			{
-				CSS.CSSParser cssParser = new CSS.CSSParser();
+				CSSParser cssParser = new CSSParser();
 
                 cssParser.UriSchema = uriSchema;
                 cssParser.BaseURL = baseUrl;
