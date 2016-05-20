@@ -7,7 +7,7 @@
     {
         private ISelectorContext context;
         private List<CSSElement> styles;
-        private List<KeyValuePair<string, List<KeyValuePair<string, List<HtmlStyle>>>>> mediaQueries;
+        private List<MediaQuery> mediaQueries;
 
         private List<HtmlStyle> CloneStyles(List<HtmlStyle> styles)
         {
@@ -52,29 +52,32 @@
         internal StyleSheet(ISelectorContext context)
         {
             this.context = context;
-            //styles = new List<KeyValuePair<string, List<HtmlStyle>>>();
             styles = new List<CSSElement>();
-            mediaQueries = new List<KeyValuePair<string, List<KeyValuePair<string, List<HtmlStyle>>>>>();
+            mediaQueries = new List<MediaQuery>();
         }
 
-        internal void AddRange(string selectorText, List<HtmlStyle> htmlStyles)
+        internal void AddRange(List<CSSElement> elements)
         {
-            foreach (string selector in selectorText.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                //styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector.Trim(), htmlStyles));
-                styles.Add(new CSSElement(selector.Trim(), htmlStyles));
-            }
+            styles.AddRange(elements);
         }
 
-        internal void AddMediaQuery(string mediaQuery, List<KeyValuePair<string, List<HtmlStyle>>> styles)
+        internal void AddElement(CSSElement element)
         {
-            mediaQueries.Add(new KeyValuePair<string,
-                List<KeyValuePair<string, List<HtmlStyle>>>>(mediaQuery, styles));
+            styles.Add(element);
+        }
+
+        internal void AddMediaQueryRange(List<MediaQuery> mediaQueries)
+        {
+            mediaQueries.AddRange(mediaQueries);
+        }
+
+        internal void AddMediaQuery(MediaQuery mediaQuery)
+        {
+            mediaQueries.Add(mediaQuery);
         }
 
         internal void Add(string selector, List<HtmlStyle> htmlStyles)
         {
-            //styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector, htmlStyles));
             styles.Add(new CSSElement(selector, htmlStyles));
         }
 
@@ -94,7 +97,6 @@
                         break;
                     }
                 }
-
             }
         }
 

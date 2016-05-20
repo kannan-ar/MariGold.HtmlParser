@@ -9,7 +9,6 @@
     internal sealed class CSSParser
     {
         private const string rel = "stylesheet";
-        private Regex mediaRegex;
 
         private string uriSchema;
         private string baseUrl;
@@ -39,12 +38,7 @@
                 baseUrl = value;
             }
         }
-        
-        internal CSSParser()
-        {
-            mediaRegex = new Regex(@"^\s*@media");
-        }
-        
+
         private int ParseSelector(int position, string style, out string selectorText)
         {
             selectorText = string.Empty;
@@ -96,53 +90,7 @@
             //+1 to advance to next location
             return closeBraceIndex + 1;
         }
-        
-        private bool IsMediaQuery(string selectorText, string styleText, ref int position)
-        {
-            if (string.IsNullOrEmpty(styleText))
-            {
-                return false;
-            }
-
-            Match match = mediaRegex.Match(selectorText);
-
-            if (!match.Success)
-            {
-                return false;
-            }
-
-            int closeBraceIndex = 0;
-            string style = CSSTokenizer.FindOpenCloseBraceArea(styleText, position + 1, out closeBraceIndex);
-
-            if (closeBraceIndex > position)
-            {
-                if (!string.IsNullOrEmpty(style))
-                {
-                    List<KeyValuePair<string, List<HtmlStyle>>> styles = new List<KeyValuePair<string, List<HtmlStyle>>>();
-
-                    var htmlStyles = ParseCSS(style);
-
-                    foreach (var htmlStyle in htmlStyles)
-                    {
-                        string selecters = htmlStyle.Key;
-
-                        foreach (string selector in selecters.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                        {
-                            styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector.Trim(), htmlStyle.Value));
-                        }
-                    }
-
-                    selectorText = selectorText.Substring(match.Length + 1);
-
-                    //styleSheet.AddMediaQuery(selectorText, styles);
-                }
-
-                position = closeBraceIndex + 1;
-            }
-
-            return true;
-        }
-        
+       
         private void TraverseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
         {
             string style = string.Empty;
@@ -171,12 +119,13 @@
 
             if (!string.IsNullOrEmpty(style))
             {
-                var styles = ParseCSS(style);
+                List<CSSElement> styles = new List<CSSElement>();
+                List<MediaQuery> mediaQueries = new List<MediaQuery>();
 
-                foreach (var styleNode in styles)
-                {
-                    styleSheet.AddRange(styleNode.Key, styleNode.Value);
-                }
+                ParseCSS(style, styles, mediaQueries);
+
+                styleSheet.AddRange(styles);
+                styleSheet.AddMediaQueryRange(mediaQueries);
             }
 
             foreach (HtmlNode n in node.GetChildren())
@@ -205,12 +154,11 @@
             }
         }
 
-        internal List<KeyValuePair<string, List<HtmlStyle>>> ParseCSS(string style)
+        internal void ParseCSS(string style, List<CSSElement> elements, List<MediaQuery> mediaQuries)
         {
-            //MediaQuery mediaQuery=new MediaQuery(sty)
+            MediaQuery mediaQuery = new MediaQuery();
             int eof = style.Length;
             int position = 0;
-            List<KeyValuePair<string, List<HtmlStyle>>> styles = new List<KeyValuePair<string, List<HtmlStyle>>>();
 
             while (position < eof)
             {
@@ -222,12 +170,15 @@
                 {
                     List<HtmlStyle> htmlStyles;
 
-                    if (!IsMediaQuery(selectorText, style, ref bracePosition))
+                    if (!mediaQuery.Process(selectorText, style, mediaQuries, ref bracePosition))
                     {
                         //Returning close brace index
                         bracePosition = ParseHtmlStyles(bracePosition, style, out htmlStyles);
-                        styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selectorText, htmlStyles));
-                        //action(selectorText, htmlStyles);
+
+                        foreach (string selector in selectorText.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            elements.Add(new CSSElement(selector.Trim(), htmlStyles));
+                        }
                     }
                 }
 
@@ -238,8 +189,6 @@
 
                 position = bracePosition;
             }
-
-            return styles;
         }
 
         internal StyleSheet ParseStyleSheet(HtmlNode node)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
-  <TopNode>[0-1051]MariGold.HtmlParser.Tests.BasicStyle.ExcludePrintMediaCSSWithNoSpace</TopNode>
+  <TopNode>[0-1082]MariGold.HtmlParser.Tests.ComplexStyles.DivClassImmediateP</TopNode>
   <SelectedNode>[0-1000]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\MariGold.HtmlParser.Tests.nunit</SelectedNode>
   <ExcludeCategories>false</ExcludeCategories>
   <Nodes>
@@ -10,5 +10,6 @@
     <Node UniqueName="[0-1279]MariGold.HtmlParser" Expanded="true" />
     <Node UniqueName="[0-1280]MariGold.HtmlParser.Tests" Expanded="true" />
     <Node UniqueName="[0-1017]MariGold.HtmlParser.Tests.BasicStyle" Expanded="true" />
+    <Node UniqueName="[0-1063]MariGold.HtmlParser.Tests.ComplexStyles" Expanded="true" />
   </Nodes>
 </VisualState>

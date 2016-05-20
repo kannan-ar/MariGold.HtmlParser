@@ -7,22 +7,34 @@
     internal sealed class MediaQuery
     {
         private readonly Regex mediaRegex;
-        private readonly StyleSheet styleSheet;
+        private string selector;
+        private List<CSSElement> elements;
 
-        internal MediaQuery(StyleSheet styleSheet)
+        internal MediaQuery()
         {
             mediaRegex = new Regex(@"^\s*@media");
-            this.styleSheet = styleSheet;
+            elements = new List<CSSElement>();
         }
 
-        private bool Process(string selectorText, string styleText, ref int position)
+        internal MediaQuery(string selector, List<CSSElement> elements)
+            : base()
+        {
+            this.selector = selector;
+            this.elements = elements;
+        }
+
+        internal bool Process(string selectorText, string styleText, List<MediaQuery> mediaQuries, ref int position)
         {
             CSSParser cssParser = new CSSParser();
-
+            List<CSSElement> elements = new List<CSSElement>();
             Match match = mediaRegex.Match(selectorText);
 
-
             if (string.IsNullOrEmpty(styleText))
+            {
+                return false;
+            }
+
+            if(!match.Success)
             {
                 return false;
             }
@@ -34,23 +46,10 @@
             {
                 if (!string.IsNullOrEmpty(style))
                 {
-                    List<KeyValuePair<string, List<HtmlStyle>>> styles = new List<KeyValuePair<string, List<HtmlStyle>>>();
-
-                    var htmlStyles = cssParser.ParseCSS(style);
-
-                    foreach (var htmlStyle in htmlStyles)
-                    {
-                        string selecters = htmlStyle.Key;
-
-                        foreach (string selector in selecters.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                        {
-                            styles.Add(new KeyValuePair<string, List<HtmlStyle>>(selector.Trim(), htmlStyle.Value));
-                        }
-                    }
-
+                    cssParser.ParseCSS(style, elements, mediaQuries);
+                   
                     selectorText = selectorText.Substring(match.Length + 1);
-
-                    styleSheet.AddMediaQuery(selectorText, styles);
+                    mediaQuries.Add(new MediaQuery(selectorText, elements));
                 }
 
                 position = closeBraceIndex + 1;
