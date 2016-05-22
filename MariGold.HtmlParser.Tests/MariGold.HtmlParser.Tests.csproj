@@ -50,6 +50,7 @@
     <Compile Include="FindTag.cs" />
     <Compile Include="FromFile.cs" />
     <Compile Include="HtmlAttributes.cs" />
+    <Compile Include="InvalidHtml.cs" />
     <Compile Include="InvalidMultiElements.cs" />
     <Compile Include="InvalidOpenClose.cs" />
     <Compile Include="OneLevelHierarchy.cs" />

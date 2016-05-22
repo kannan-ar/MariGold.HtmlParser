@@ -40,12 +40,17 @@
                 start = position + 1;
                 quote = letter;
             }
-            else if (letter == HtmlTag.equalSign && position > start)
+            else if (letter == HtmlTag.equalSign && start > -1 && position > start)
             {
                 key = context.Html.Substring(start, position - start);
                 start = -1;
                 quote = char.MinValue;
                 analyze = ValueSeek;
+            }
+            else if (start > -1 && quote != char.MinValue && start == position && letter == quote)//A quote is already opened and a close quote found with empty content inbetween. So resetting the indexes
+            {
+                start = -1;
+                quote = char.MinValue;
             }
             else if (start > -1 && ((!IsValidHtmlLetter(letter) && quote == char.MinValue) ||
                 letter == quote || letter == HtmlTag.closeAngle) && position > start)
@@ -89,8 +94,8 @@
                     attributes.Add(key, string.Empty);
                     Clear();
                 }
-                
-                if(isQuote)
+
+                if (isQuote)
                 {
                     start = position + 1;
                     quote = letter;
@@ -99,7 +104,7 @@
                 {
                     start = position;
                 }
-                
+
                 analyze = KeySeek;
             }
         }
