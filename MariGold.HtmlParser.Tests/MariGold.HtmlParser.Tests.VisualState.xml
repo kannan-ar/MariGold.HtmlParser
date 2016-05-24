@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
-  <TopNode>[0-1076]MariGold.HtmlParser.Tests.ComplexStyles.DivWithClassThenIdentity</TopNode>
-  <SelectedNode>[0-1260]MariGold.HtmlParser.Tests.SpecialTags.DocTypeFullHeadWithAttrAndTitleLink</SelectedNode>
+  <TopNode>[0-1104]MariGold.HtmlParser.Tests.ComplexStyles.DivNthChildAllNextElement</TopNode>
+  <SelectedNode>[0-1000]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\MariGold.HtmlParser.Tests.nunit</SelectedNode>
   <ExcludeCategories>false</ExcludeCategories>
   <Nodes>
     <Node UniqueName="[0-1000]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\MariGold.HtmlParser.Tests.nunit" Expanded="true" />
-    <Node UniqueName="[0-1279]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\bin\Debug\MariGold.HtmlParser.Tests.dll" Expanded="true" />
-    <Node UniqueName="[0-1280]MariGold" Expanded="true" />
-    <Node UniqueName="[0-1281]MariGold.HtmlParser" Expanded="true" />
-    <Node UniqueName="[0-1282]MariGold.HtmlParser.Tests" Expanded="true" />
+    <Node UniqueName="[0-1280]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\bin\Debug\MariGold.HtmlParser.Tests.dll" Expanded="true" />
+    <Node UniqueName="[0-1281]MariGold" Expanded="true" />
+    <Node UniqueName="[0-1282]MariGold.HtmlParser" Expanded="true" />
+    <Node UniqueName="[0-1283]MariGold.HtmlParser.Tests" Expanded="true" />
     <Node UniqueName="[0-1017]MariGold.HtmlParser.Tests.BasicStyle" Expanded="true" />
     <Node UniqueName="[0-1063]MariGold.HtmlParser.Tests.ComplexStyles" Expanded="true" />
-    <Node UniqueName="[0-1174]MariGold.HtmlParser.Tests.InvalidHtml" Expanded="true" />
-    <Node UniqueName="[0-1255]MariGold.HtmlParser.Tests.SpecialTags" Expanded="true" />
   </Nodes>
 </VisualState>

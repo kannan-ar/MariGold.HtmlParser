@@ -513,8 +513,8 @@
             node.AnalyzeNode("div", "<span>test</span>", "<div><span>test</span></div>", null, false, true, 1, 0, 0);
 
             node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node, false, true, 1, 0, 2);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-family", "arial");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-size", "15pt");
         }
 
         [Test]
@@ -556,9 +556,9 @@
 
             node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span class='s'>test</span>", node, false, true, 1, 1, 3);
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "class", "s");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-family", "arial");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-weight", "bold");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-weight", "bold");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-size", "15pt");
         }
 
         [Test]
@@ -607,9 +607,9 @@
 
             node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span class='s'>test</span>", node, false, true, 1, 1, 3);
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "class", "s");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-weight", "normal");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-family", "arial");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-size", "15pt");
 
         }
 
@@ -660,9 +660,9 @@
             node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span style='font-family:verdana' class='s'>test</span>", node, false, true, 1, 2, 3);
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "font-family:verdana");
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(1, "class", "s");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "verdana");
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-weight", "normal");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-family", "verdana");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-size", "15pt");
 
         }
 
@@ -713,9 +713,9 @@
             node.Children.ElementAt(0).AnalyzeNode("span", "test", "<span style='font-family:verdana' class='s'>test</span>", node, false, true, 1, 2, 3);
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "font-family:verdana");
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(1, "class", "s");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "15pt");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-weight", "normal");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-family", "arial");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-size", "15pt");
 
         }
 

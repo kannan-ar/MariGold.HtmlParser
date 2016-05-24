@@ -720,5 +720,38 @@
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "class", "cls ano");
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-size", "20px");
         }
+
+        [Test]
+        public void CascadeCSS()
+        {
+            string html = @"<style>
+                                .entry .updated {
+                                    color: green;
+                                }
+
+                                .updated {
+                                    color: red;
+                                }
+                            </style>
+                            <div class='entry'><span class='updated'>test</span></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseCSS();
+
+            Assert.IsNotNull(parser.Current);
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+                node = node.Next;
+            IHtmlNode div=node;
+            node = node.Children.ElementAt(0);
+
+            TestUtility.AnalyzeNode(node, "span", "test", "<span class='updated'>test</span>", div, false, true, 1, 1);
+            Assert.AreEqual(1, node.Styles.Count);
+            TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "green");
+        }
 	}
 }

@@ -25,6 +25,11 @@
         {
             string style;
 
+            foreach (HtmlNode node in htmlNode.GetChildren())
+            {
+                InterpretStyles(node);
+            }
+
             if (!HtmlStyle.IsNonStyleElement(htmlNode.Tag))
             {
                 if (htmlNode.Attributes.TryGetValue("style", out style))
@@ -36,10 +41,7 @@
                 Parse(htmlNode);
             }
 
-            foreach (HtmlNode node in htmlNode.GetChildren())
-            {
-                InterpretStyles(node);
-            }
+            
 
             //This loop only needs when the parent is null. If parent is not null, it will loop through all the 
             //child elements thus next nodes processed without this loop.
