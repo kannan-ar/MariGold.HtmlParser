@@ -32,7 +32,7 @@
 				new NthChildSelector(this),
 				new NthLastChildSelector(this),
 				new OnlyChildSelector(this),
-				new GlobalSelector()
+				new GlobalSelector(this)
 			};
         }
 

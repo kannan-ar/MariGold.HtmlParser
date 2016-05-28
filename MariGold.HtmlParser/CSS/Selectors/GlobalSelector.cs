@@ -6,6 +6,17 @@
     internal sealed class GlobalSelector : CSSelector
     {
         private const string globalSelector = "*";
+        private string selectorText;
+
+        internal GlobalSelector(ISelectorContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            this.context = context;
+        }
 
         internal override bool Prepare(string selector)
         {
@@ -16,12 +27,25 @@
                 return true;
             }
 
+            if (selector.StartsWith(globalSelector))
+            {
+                selectorText = selector.Remove(0, 1);
+                return true;
+            }
+
             return false;
         }
 
         internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            ApplyStyle(node, htmlStyles);
+            if (string.IsNullOrEmpty(selectorText))
+            {
+                ApplyStyle(node, htmlStyles);
+            }
+            else
+            {
+                context.ParseSelectorOrBehavior(this.selectorText, CalculateSpecificity(SelectorType.Global), node, htmlStyles);
+            }
         }
 
         internal override bool IsValidNode(HtmlNode node)
