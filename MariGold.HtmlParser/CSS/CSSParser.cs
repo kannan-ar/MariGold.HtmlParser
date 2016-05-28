@@ -68,7 +68,7 @@
                 value = value.Replace("!important", string.Empty).Trim();
             }
 
-            return new HtmlStyle(styleName, value, important, weight);
+            return new HtmlStyle(styleName, value, important, (int)weight);
         }
 
         private int ParseHtmlStyles(int position, string styleText, out List<HtmlStyle> htmlStyles)

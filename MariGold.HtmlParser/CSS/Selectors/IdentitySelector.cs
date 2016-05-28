@@ -9,7 +9,7 @@
         private const string key = "id";
 
         private readonly Regex regex;
-        
+
         private string currentSelector;
         private string selectorText;
 
@@ -28,16 +28,17 @@
         {
             Match match = regex.Match(selector);
 
-			this.currentSelector = string.Empty;
-			this.selectorText = string.Empty;
-            
-			if (match.Success)
-			{
-				this.currentSelector = match.Value.Replace("#", string.Empty);
-				this.selectorText = selector.Substring(match.Value.Length);
-			}
-			
-			return match.Success;
+            this.currentSelector = string.Empty;
+            this.selectorText = string.Empty;
+            this.specificity = 0;
+
+            if (match.Success)
+            {
+                this.currentSelector = match.Value.Replace("#", string.Empty);
+                this.selectorText = selector.Substring(match.Value.Length);
+            }
+
+            return match.Success;
         }
 
         internal override bool IsValidNode(HtmlNode node)
@@ -65,7 +66,7 @@
 
             return isValid;
         }
-        
+
         internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             if (string.IsNullOrEmpty(selectorText))
@@ -74,22 +75,22 @@
             }
             else
             {
-                context.ParseSelectorOrBehavior(this.selectorText, node, htmlStyles);
+                context.ParseSelectorOrBehavior(this.selectorText, CalculateSpecificity(SelectorWeight.Identity), node, htmlStyles);
             }
         }
-        
-		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
-		{
-			string id;
+
+        internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+        {
+            string id;
 
             if (node.Attributes.TryGetValue(key, out id))
             {
                 if (string.Compare(currentSelector, id, StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
-					node.CopyHtmlStyles(htmlStyles, SelectorWeight.Identity);
+                    node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorWeight.Identity));
                 }
             }
-			
-		}
+
+        }
     }
 }

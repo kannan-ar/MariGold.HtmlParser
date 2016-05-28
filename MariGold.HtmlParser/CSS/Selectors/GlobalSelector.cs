@@ -9,6 +9,8 @@
 
         internal override bool Prepare(string selector)
         {
+            this.specificity = 0;
+
             if (selector == globalSelector)
             {
                 return true;
@@ -41,7 +43,7 @@
         {
             if (IsValidNode(node))
             {
-                node.CopyHtmlStyles(htmlStyles, SelectorWeight.Global);
+                node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorWeight.Global));
             }
         }
     }

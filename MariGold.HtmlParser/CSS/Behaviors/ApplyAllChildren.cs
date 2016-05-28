@@ -26,16 +26,17 @@
 			parse = new Regex(@"\s+");
 		}
 
-		private void ApplyStyle(CSSelector nextSelector, HtmlNode node, List<HtmlStyle> htmlStyles)
+        private void ApplyStyle(CSSelector nextSelector, int specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			if (nextSelector.IsValidNode(node))
 			{
+                nextSelector.AddSpecificity(specificity);
 				nextSelector.Parse(node, htmlStyles);
 			}
 
 			foreach (HtmlNode child in node.GetChildren())
 			{
-				ApplyStyle(nextSelector, child, htmlStyles);
+                ApplyStyle(nextSelector, specificity, child, htmlStyles);
 			}
 		}
 
@@ -56,7 +57,7 @@
 			return found;
 		}
 
-		internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+        internal override void Parse(HtmlNode node, int specificity, List<HtmlStyle> htmlStyles)
 		{
 			CSSelector nextSelector;
 			
@@ -66,7 +67,7 @@
 				{
 					foreach (HtmlNode child in node.GetChildren())
 					{
-						ApplyStyle(nextSelector, child, htmlStyles);
+                        ApplyStyle(nextSelector, specificity, child, htmlStyles);
 					}
 				}
 			}

@@ -35,7 +35,7 @@
             return match.Success;
         }
 
-        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+        internal override void Parse(HtmlNode node, int specificity, List<HtmlStyle> htmlStyles)
         {
             if (node.Next != null)
             {
@@ -53,9 +53,9 @@
 			
 					if (context.ParseSelector(this.selectorText, out nextSelector))
 					{
-
 						if (nextSelector != null && nextSelector.IsValidNode(temp))
 						{
+                            nextSelector.AddSpecificity(specificity);
 							nextSelector.Parse(temp, htmlStyles);
 						}
 					}

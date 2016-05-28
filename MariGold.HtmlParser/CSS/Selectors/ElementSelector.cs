@@ -7,7 +7,7 @@
     internal sealed class ElementSelector : CSSelector
     {
         private readonly Regex regex;
-        
+
         private string currentSelector;
         private string selectorText;
 
@@ -28,14 +28,15 @@
 
             this.currentSelector = string.Empty;
             this.selectorText = string.Empty;
-            
+            this.specificity = 0;
+
             if (match.Success)
             {
-				this.currentSelector = match.Value;
+                this.currentSelector = match.Value;
                 this.selectorText = selector.Substring(match.Value.Length);
             }
-            
-			return match.Success;
+
+            return match.Success;
         }
 
         internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
@@ -46,7 +47,7 @@
             }
             else
             {
-				context.ParseSelectorOrBehavior(this.selectorText, node, htmlStyles);
+                context.ParseSelectorOrBehavior(this.selectorText, CalculateSpecificity(SelectorWeight.Element), node, htmlStyles);
             }
         }
 
@@ -61,7 +62,7 @@
             {
                 return false;
             }
-			
+
             bool isValid = false;
 
             if (string.Compare(node.Tag, currentSelector, StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -71,10 +72,10 @@
 
             return isValid;
         }
-        
-		internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
-		{
-			node.CopyHtmlStyles(htmlStyles, SelectorWeight.Element);
-		}
+
+        internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+        {
+            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorWeight.Element));
+        }
     }
 }

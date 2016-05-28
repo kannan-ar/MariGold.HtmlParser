@@ -172,13 +172,13 @@
 			htmlStyles.AddRange(styles);
 		}
 
-		internal void CopyHtmlStyles(List<HtmlStyle> newStyles, SelectorWeight weight)
+        internal void CopyHtmlStyles(List<HtmlStyle> newStyles, int specificity)
 		{
 			foreach (HtmlStyle newStyle in newStyles)
 			{
 				bool found = false;
 
-				newStyle.Weight = weight;
+                newStyle.Specificity = specificity;
 
 				foreach (HtmlStyle style in htmlStyles)
 				{

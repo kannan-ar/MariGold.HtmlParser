@@ -5,13 +5,13 @@
 	internal enum SelectorWeight
 	{
 		None = 0,
-		Global = 1,
-		Child = 2,
-		Element = 3,
-		Attribute = 4,
+		Global = 0,
+		Element = 1,
+        Child = 10,
+		Attribute = 10,
 		//Attribute and Class have same weight
-		Class = 4,
-		Identity = 5,
-		Inline = 6,
+		Class = 10,
+		Identity = 100,
+		Inline = 1000,
 	}
 }

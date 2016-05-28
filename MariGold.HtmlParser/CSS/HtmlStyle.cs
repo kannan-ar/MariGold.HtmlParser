@@ -8,7 +8,7 @@
 		private string name;
 		private string value;
 		private bool important;
-		private SelectorWeight weight;
+		private int specificity;
 
 		public string Name
 		{
@@ -39,20 +39,20 @@
 			}
 		}
 
-		internal SelectorWeight Weight
+        internal int Specificity
 		{
 			get
 			{
-				return weight;
+				return specificity;
 			}
 
 			set
 			{
-				weight = value;
+				specificity = value;
 			}
 		}
 
-		internal HtmlStyle(string name, string value, bool important, SelectorWeight weight)
+        internal HtmlStyle(string name, string value, bool important, int specificity)
 		{
 			if (string.IsNullOrEmpty(name))
 			{
@@ -64,15 +64,15 @@
 				throw new ArgumentNullException("value");
 			}
 
-			if (weight < 0)
+            if (specificity < 0)
 			{
-				throw new ArgumentOutOfRangeException("weight");
+                throw new ArgumentOutOfRangeException("specificity");
 			}
 
 			this.name = name;
 			this.value = value;
 			this.important = important;
-			this.weight = weight;
+            this.specificity = specificity;
 		}
 
 		internal void OverWrite(HtmlStyle htmlStyle)
@@ -83,9 +83,9 @@
 				{
 					value = htmlStyle.Value;
 					important = htmlStyle.Important;
-					weight = htmlStyle.Weight;
+					specificity = htmlStyle.Specificity;
 				}
-				else if (htmlStyle.Weight >= weight && (!important || (important && htmlStyle.Important)))
+                else if (htmlStyle.Specificity >= specificity && (!important || (important && htmlStyle.Important)))
 				{
 					value = htmlStyle.Value;
 				}
@@ -99,7 +99,7 @@
 		
 		internal HtmlStyle Clone()
 		{
-			return new HtmlStyle(name, value, important, weight);
+			return new HtmlStyle(name, value, important, specificity);
 		}
 		
 		static internal bool IsNonStyleElement(string tag)

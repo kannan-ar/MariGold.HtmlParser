@@ -5,11 +5,10 @@
   <ExcludeCategories>false</ExcludeCategories>
   <Nodes>
     <Node UniqueName="[0-1000]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\MariGold.HtmlParser.Tests.nunit" Expanded="true" />
-    <Node UniqueName="[0-1280]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\bin\Debug\MariGold.HtmlParser.Tests.dll" Expanded="true" />
-    <Node UniqueName="[0-1281]MariGold" Expanded="true" />
-    <Node UniqueName="[0-1282]MariGold.HtmlParser" Expanded="true" />
-    <Node UniqueName="[0-1283]MariGold.HtmlParser.Tests" Expanded="true" />
-    <Node UniqueName="[0-1017]MariGold.HtmlParser.Tests.BasicStyle" Expanded="true" />
+    <Node UniqueName="[0-1283]C:\Projects\MariGold.HtmlParser\MariGold.HtmlParser.Tests\bin\Debug\MariGold.HtmlParser.Tests.dll" Expanded="true" />
+    <Node UniqueName="[0-1284]MariGold" Expanded="true" />
+    <Node UniqueName="[0-1285]MariGold.HtmlParser" Expanded="true" />
+    <Node UniqueName="[0-1286]MariGold.HtmlParser.Tests" Expanded="true" />
     <Node UniqueName="[0-1063]MariGold.HtmlParser.Tests.ComplexStyles" Expanded="true" />
   </Nodes>
 </VisualState>
