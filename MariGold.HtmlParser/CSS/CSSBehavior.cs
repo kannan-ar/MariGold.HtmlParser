@@ -8,6 +8,6 @@
 		protected ISelectorContext context;
     	
 		internal abstract bool IsValidBehavior(string selectorText);
-        internal abstract void Parse(HtmlNode node, int specificity, List<HtmlStyle> htmlStyles);
+        internal abstract void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles);
 	}
 }

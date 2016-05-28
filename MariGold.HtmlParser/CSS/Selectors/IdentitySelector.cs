@@ -30,7 +30,7 @@
 
             this.currentSelector = string.Empty;
             this.selectorText = string.Empty;
-            this.specificity = 0;
+            this.specificity = new Specificity();
 
             if (match.Success)
             {
@@ -75,7 +75,7 @@
             }
             else
             {
-                context.ParseSelectorOrBehavior(this.selectorText, CalculateSpecificity(SelectorWeight.Identity), node, htmlStyles);
+                context.ParseSelectorOrBehavior(this.selectorText, CalculateSpecificity(SelectorType.Identity), node, htmlStyles);
             }
         }
 
@@ -87,7 +87,7 @@
             {
                 if (string.Compare(currentSelector, id, StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
-                    node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorWeight.Identity));
+                    node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Identity));
                 }
             }
 

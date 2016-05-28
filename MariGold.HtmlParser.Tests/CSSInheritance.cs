@@ -541,5 +541,43 @@
                  false, true, 1, 0, 1);
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
+
+        [Test]
+        public void CSSChain10Classes()
+        {
+            string path = TestUtility.GetFolderPath("Html\\csschain10classes.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "html")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            IHtmlNode parent = node;
+
+            while (node.Tag != "h2")
+            {
+                parent = node;
+                node = node.Children.ElementAt(0);
+            }
+
+            node.AnalyzeNode("h2", "test", "<h2 id=\"h\">test</h2>", parent,
+                 false, true, 1, 1, 1);
+            TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
+        }
     }
 }

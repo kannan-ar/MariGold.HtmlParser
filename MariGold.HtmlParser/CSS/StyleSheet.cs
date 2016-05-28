@@ -30,7 +30,7 @@
                 if (htmlNode.Attributes.TryGetValue("style", out style))
                 {
                     CSSParser cssParser = new CSSParser();
-                    htmlNode.AddStyles(cssParser.ParseRules(style, SelectorWeight.Inline));
+                    htmlNode.AddStyles(cssParser.ParseRules(style, SelectorType.Inline));
                 }
 
                 Parse(htmlNode);

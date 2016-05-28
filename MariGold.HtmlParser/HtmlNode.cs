@@ -172,7 +172,7 @@
 			htmlStyles.AddRange(styles);
 		}
 
-        internal void CopyHtmlStyles(List<HtmlStyle> newStyles, int specificity)
+        internal void CopyHtmlStyles(List<HtmlStyle> newStyles, Specificity specificity)
 		{
 			foreach (HtmlStyle newStyle in newStyles)
 			{

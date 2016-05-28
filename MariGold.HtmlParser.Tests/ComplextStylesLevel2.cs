@@ -4,6 +4,7 @@
 	using NUnit.Framework;
 	using MariGold.HtmlParser;
 	using System.Linq;
+    using System.IO;
 	
 	[TestFixture]
 	public partial class ComplexStyles
@@ -251,5 +252,168 @@
 			node.Children.ElementAt(2).AnalyzeNode("div", "3", "<div>3</div>", node, false, true, 1, 0, 1);
 			node.Children.ElementAt(1).Styles.CheckKeyValuePair(0, "background-color", "red");
 		}
+
+        [Test]
+        public void OverrideGlobalStyle()
+        {
+            string path = TestUtility.GetFolderPath("Html\\overrideglobalstyle.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "html")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            IHtmlNode body = node;
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "one", "<div class=\"cls\">one</div>", body, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "blue");
+        }
+
+        [Test]
+        public void GlobalStyleChain()
+        {
+            string path = TestUtility.GetFolderPath("Html\\globalstylechain.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "html")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            IHtmlNode body = node;
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "one", "<div class=\"cls\">one</div>", body, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "gray");
+        }
+
+        [Test]
+        public void IdentityOverClass()
+        {
+            string path = TestUtility.GetFolderPath("Html\\identityoverclass.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "html")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            IHtmlNode body = node;
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "one", "<div id=\"dv\" class=\"cls\">one</div>", body, false, true, 1, 2, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "red");
+
+            node = node.Next;
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "two", "<div class=\"cls\">two</div>", body, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "blue");
+        }
+
+        [Test]
+        public void ElementFirstChildChain()
+        {
+            string path = TestUtility.GetFolderPath("Html\\elementfirstchildchain.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "html")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            IHtmlNode body = node;
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "one", "<div>one</div>", body, false, true, 1, 0, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "red");
+
+            node = node.Next;
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "<p>two</p>", "<div><p>two</p></div>", body, false, true, 1, 0, 0);
+
+            IHtmlNode p = node.Children.ElementAt(0);
+            TestUtility.AnalyzeNode(p, "p", "two", "<p>two</p>", node, false, true, 1, 0, 1);
+            TestUtility.CheckStyle(p.Styles.ElementAt(0), "color", "blue");
+        }
 	}
 }

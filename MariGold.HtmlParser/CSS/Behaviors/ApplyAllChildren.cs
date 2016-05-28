@@ -26,7 +26,7 @@
 			parse = new Regex(@"\s+");
 		}
 
-        private void ApplyStyle(CSSelector nextSelector, int specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
+        private void ApplyStyle(CSSelector nextSelector, Specificity specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
 		{
 			if (nextSelector.IsValidNode(node))
 			{
@@ -57,7 +57,7 @@
 			return found;
 		}
 
-        internal override void Parse(HtmlNode node, int specificity, List<HtmlStyle> htmlStyles)
+        internal override void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles)
 		{
 			CSSelector nextSelector;
 			

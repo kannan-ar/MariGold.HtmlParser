@@ -192,7 +192,7 @@
         {
             Match match = isValid.Match(selector);
             element = null;
-            this.specificity = 0;
+            this.specificity = new Specificity();
 
             if (match.Success)
             {
@@ -210,7 +210,7 @@
             }
             else
             {
-                context.ParseSelectorOrBehavior(element.SelectorText, CalculateSpecificity(SelectorWeight.Attribute), node, htmlStyles);
+                context.ParseSelectorOrBehavior(element.SelectorText, CalculateSpecificity(SelectorType.Attribute), node, htmlStyles);
             }
         }
 
@@ -218,7 +218,7 @@
         {
             if (IsValidNode(node))
             {
-                node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorWeight.Attribute));
+                node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Attribute));
             }
         }
 

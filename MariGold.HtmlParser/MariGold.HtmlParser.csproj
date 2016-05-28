@@ -68,7 +68,8 @@
     <Compile Include="CSS\Selectors\NthChildSelector.cs" />
     <Compile Include="CSS\Selectors\NthLastChildSelector.cs" />
     <Compile Include="CSS\Selectors\OnlyChildSelector.cs" />
-    <Compile Include="CSS\SelectorWeight.cs" />
+    <Compile Include="CSS\SelectorType.cs" />
+    <Compile Include="CSS\Specificity.cs" />
     <Compile Include="CSS\StyleSheet.cs" />
     <Compile Include="HandleInvalidTags.cs" />
     <Compile Include="HtmlAnalyzer.cs" />

@@ -6,11 +6,11 @@
     internal abstract class CSSelector
     {
         protected ISelectorContext context;
-        protected int specificity;
+        protected Specificity specificity;
 
-        protected int CalculateSpecificity(SelectorWeight weight)
+        protected Specificity CalculateSpecificity(SelectorType type)
         {
-            return this.specificity + (int)weight;
+            return this.specificity += type;
         }
 
         internal abstract bool Prepare(string selector);
@@ -19,9 +19,9 @@
 		internal abstract void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles);
 
         //This is method is public because it can serve as the IAttachedSelector.AddSpecificity
-        public void AddSpecificity(int specificity)
+        public void AddSpecificity(Specificity specificity)
         {
-            this.specificity += specificity;
+            this.specificity = specificity;
         }
     }
 }

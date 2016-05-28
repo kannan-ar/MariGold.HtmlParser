@@ -53,7 +53,7 @@
             return openBraceIndex;
         }
 
-        private HtmlStyle CreateHtmlStyleFromRule(string styleName, string value, SelectorWeight weight)
+        private HtmlStyle CreateHtmlStyleFromRule(string styleName, string value, SelectorType type)
         {
             styleName = styleName.Trim().Replace("\"", string.Empty).Replace("'", string.Empty);
             value = value.Trim();
@@ -68,7 +68,7 @@
                 value = value.Replace("!important", string.Empty).Trim();
             }
 
-            return new HtmlStyle(styleName, value, important, (int)weight);
+            return new HtmlStyle(styleName, value, important, type);
         }
 
         private int ParseHtmlStyles(int position, string styleText, out List<HtmlStyle> htmlStyles)
@@ -83,7 +83,7 @@
 
                 if (!string.IsNullOrEmpty(styles))
                 {
-                    htmlStyles = ParseRules(styles, SelectorWeight.None).ToList();
+                    htmlStyles = ParseRules(styles, SelectorType.Global).ToList();
                 }
             }
 
@@ -134,7 +134,7 @@
             }
         }
 
-        internal IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorWeight weight)
+        internal IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorType type)
         {
             string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -148,7 +148,7 @@
 
                     if (nodeSet != null && nodeSet.Length > 1)
                     {
-                        yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], weight);
+                        yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], type);
                     }
                 }
             }

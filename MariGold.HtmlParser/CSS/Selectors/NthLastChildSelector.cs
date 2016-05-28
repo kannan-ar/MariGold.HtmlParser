@@ -30,7 +30,7 @@
 
             this.selectorText = string.Empty;
             this.position = -1;
-            this.specificity = 0;
+            this.specificity = new Specificity();
 
             if (match.Success)
             {
@@ -103,14 +103,14 @@
                 }
                 else
                 {
-                    context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorWeight.Child), node, htmlStyles);
+                    context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
                 }
             }
         }
 
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorWeight.Child));
+            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
         }
 
         bool IAttachedSelector.Prepare(string selector)

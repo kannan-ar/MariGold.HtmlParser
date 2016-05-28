@@ -86,14 +86,19 @@
   <ItemGroup>
     <Content Include="Html\basic.htm" />
     <Content Include="Html\basicwithattributes.htm" />
+    <Content Include="Html\csschain10classes.htm" />
     <Content Include="Html\cssspecificity.htm" />
     <Content Include="Html\emptymediaprint.htm" />
     <Content Include="Html\globalselectors.htm" />
+    <Content Include="Html\globalstylechain.htm" />
+    <Content Include="Html\identityoverclass.htm" />
+    <Content Include="Html\elementfirstchildchain.htm" />
     <Content Include="Html\mediaprintstyle.htm" />
     <Content Include="Html\mediaprintwithnospace.htm" />
     <Content Include="Html\mediaqueryatfirst.htm" />
     <Content Include="Html\multilevelstyles.htm" />
     <Content Include="Html\nthchildpriority.htm" />
+    <Content Include="Html\overrideglobalstyle.htm" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

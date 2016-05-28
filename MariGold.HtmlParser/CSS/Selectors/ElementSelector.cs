@@ -28,7 +28,7 @@
 
             this.currentSelector = string.Empty;
             this.selectorText = string.Empty;
-            this.specificity = 0;
+            this.specificity = new Specificity();
 
             if (match.Success)
             {
@@ -47,7 +47,7 @@
             }
             else
             {
-                context.ParseSelectorOrBehavior(this.selectorText, CalculateSpecificity(SelectorWeight.Element), node, htmlStyles);
+                context.ParseSelectorOrBehavior(this.selectorText, CalculateSpecificity(SelectorType.Element), node, htmlStyles);
             }
         }
 
@@ -75,7 +75,7 @@
 
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorWeight.Element));
+            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Element));
         }
     }
 }

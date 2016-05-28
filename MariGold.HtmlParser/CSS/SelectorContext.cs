@@ -82,7 +82,7 @@
             return false;
         }
 
-        public bool ParseBehavior(string selectorText, int specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
+        public bool ParseBehavior(string selectorText, Specificity specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             bool foundBehavior = false;
 
@@ -101,7 +101,7 @@
             return foundBehavior;
         }
 
-        public bool ParseSelectorOrBehavior(string selectorText, int specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
+        public bool ParseSelectorOrBehavior(string selectorText, Specificity specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             bool found = false;
 
