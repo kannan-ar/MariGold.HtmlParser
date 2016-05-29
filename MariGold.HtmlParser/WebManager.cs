@@ -8,7 +8,7 @@
         private readonly string uriSchema;
         private readonly string baseUrl;
 
-        internal WebManager(string uriSchema,string baseUrl)
+        internal WebManager(string uriSchema, string baseUrl)
         {
             this.uriSchema = uriSchema;
             this.baseUrl = baseUrl;
@@ -23,7 +23,8 @@
 
             if (Uri.IsWellFormedUriString(url, UriKind.Relative) && !string.IsNullOrEmpty(baseUrl))
             {
-                url = string.Concat(baseUrl, url);
+                url = string.Concat(baseUrl,
+                    (!baseUrl.EndsWith("/") && !url.StartsWith("/") ? "/" : string.Empty), url);
             }
 
             return url;
