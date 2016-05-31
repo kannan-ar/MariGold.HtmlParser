@@ -86,6 +86,7 @@
   <ItemGroup>
     <Content Include="Html\basic.htm" />
     <Content Include="Html\basicwithattributes.htm" />
+    <Content Include="Html\complexcsschain.htm" />
     <Content Include="Html\csschain10classes.htm" />
     <Content Include="Html\cssspecificity.htm" />
     <Content Include="Html\emptymediaprint.htm" />
@@ -93,6 +94,7 @@
     <Content Include="Html\globalstylechain.htm" />
     <Content Include="Html\identityoverclass.htm" />
     <Content Include="Html\elementfirstchildchain.htm" />
+    <Content Include="Html\level3specificity.htm" />
     <Content Include="Html\mediaprintstyle.htm" />
     <Content Include="Html\mediaprintwithnospace.htm" />
     <Content Include="Html\mediaqueryatfirst.htm" />
