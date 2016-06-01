@@ -20,6 +20,15 @@
             internal string Value { get; set; }
         }
 
+        private AttributeSelector(ISelectorContext context, AttributeElements element, Specificity specificity)
+        {
+            this.context = context;
+            this.element = element;
+            this.specificity = specificity;
+            isValid = new Regex("^\\[([a-zA-Z]+[0-9]*)+([~|^$*]?=+[\"']?([a-zA-Z]+[0-9]*)+[\"']?)*\\]");
+            spliter = new Regex(@"\w+|[~|^$*]|=");
+        }
+
         internal AttributeSelector(ISelectorContext context)
         {
             if (context == null)
@@ -220,6 +229,11 @@
             {
                 node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Attribute));
             }
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new AttributeSelector(context, element, specificity.Clone());
         }
 
         bool IAttachedSelector.Prepare(string selector)

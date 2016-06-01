@@ -49,6 +49,11 @@
             }
         }
 
+        internal Specificity Clone()
+        {
+            return new Specificity(inline, id, classes, elements);
+        }
+
         public static implicit operator Specificity(SelectorType type)
         {
             Specificity specificity = new Specificity();

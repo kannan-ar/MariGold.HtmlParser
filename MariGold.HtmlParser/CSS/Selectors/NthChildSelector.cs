@@ -12,6 +12,15 @@
         private string selectorText;
         private int position;
 
+        private NthChildSelector(ISelectorContext context, string selectorText, int position, Specificity specificity)
+        {
+            this.context = context;
+            regex = new Regex("^:nth-child\\(\\d+\\)");
+            this.selectorText = selectorText;
+            this.position = position;
+            this.specificity = specificity;
+        }
+
         internal NthChildSelector(ISelectorContext context)
         {
             if (context == null)
@@ -146,6 +155,11 @@
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new NthChildSelector(context, selectorText, position, specificity.Clone());
         }
 
         bool IAttachedSelector.Prepare(string selector)

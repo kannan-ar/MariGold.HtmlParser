@@ -17,6 +17,7 @@
         internal abstract bool IsValidNode(HtmlNode node);
         internal abstract void Parse(HtmlNode node, List<HtmlStyle> htmlStyles);
 		internal abstract void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles);
+        internal abstract CSSelector Clone();
 
         //This is method is public because it can serve as the IAttachedSelector.AddSpecificity
         public void AddSpecificity(Specificity specificity)

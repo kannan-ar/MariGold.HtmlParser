@@ -13,6 +13,15 @@
         private string currentSelector;
         private string selectorText;
 
+        private ClassSelector(ISelectorContext context, string currentSelector, string selectorText, Specificity specificity)
+        {
+            this.context = context;
+            regex = new Regex(@"^\.[-_]*([a-zA-Z]+[0-9_-]*)+");
+            this.currentSelector = currentSelector;
+            this.selectorText = selectorText;
+            this.specificity = specificity;
+        }
+
         internal ClassSelector(ISelectorContext context)
         {
             if (context == null)
@@ -90,6 +99,11 @@
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Class));
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new ClassSelector(context, currentSelector, selectorText, this.specificity.Clone());
         }
 
         bool IAttachedSelector.Prepare(string selector)

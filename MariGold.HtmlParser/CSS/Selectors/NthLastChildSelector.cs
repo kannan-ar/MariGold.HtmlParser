@@ -11,6 +11,15 @@
         private string selectorText;
         private int position;
 
+        private NthLastChildSelector(ISelectorContext context, string selectorText, int position, Specificity specificity)
+        {
+            this.context = context;
+            regex = new Regex("^(:nth-last-child\\(\\d+\\))|(:nth-last-of-type\\(\\d+\\))");
+            this.selectorText = selectorText;
+            this.position = position;
+            this.specificity = specificity;
+        }
+
         internal NthLastChildSelector(ISelectorContext context)
         {
             if (context == null)
@@ -111,6 +120,11 @@
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new NthLastChildSelector(context, selectorText, position, specificity.Clone());
         }
 
         bool IAttachedSelector.Prepare(string selector)

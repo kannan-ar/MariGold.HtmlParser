@@ -10,6 +10,14 @@
 
         private readonly Regex regex;
 
+        private FirstChildSelector(ISelectorContext context, string selectorText, Specificity specificity)
+        {
+            this.context = context;
+            regex = new Regex("^:first-child");
+            this.selectorText = selectorText;
+            this.specificity = specificity;
+        }
+
         internal FirstChildSelector(ISelectorContext context)
         {
             if (context == null)
@@ -108,6 +116,11 @@
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new FirstChildSelector(context, selectorText, specificity.Clone());
         }
 
         bool IAttachedSelector.Prepare(string selector)

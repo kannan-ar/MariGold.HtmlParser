@@ -8,6 +8,13 @@
         private const string globalSelector = "*";
         private string selectorText;
 
+        private GlobalSelector(ISelectorContext context, string selectorText, Specificity specificity)
+        {
+            this.context = context;
+            this.selectorText = selectorText;
+            this.specificity = specificity;
+        }
+
         internal GlobalSelector(ISelectorContext context)
         {
             if (context == null)
@@ -69,6 +76,11 @@
             {
                 node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Global));
             }
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new GlobalSelector(context, selectorText, specificity.Clone());
         }
     }
 }

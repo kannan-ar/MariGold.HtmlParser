@@ -368,5 +368,20 @@
             Assert.IsNotNull(node);
             node.AnalyzeNode("li", "2", "<li>2</li>", parser.Current, false, true, 1, 0, 0);
         }
+
+        [Test]
+        public void DuplicateStyle()
+        {
+            string html = "<div style='color:#fff;color:#000;'>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            Assert.IsTrue(parser.Parse());
+            parser.ParseCSS();
+
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "div", "test", "<div style='color:#fff;color:#000;'>test</div>",
+                null, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(parser.Current.Styles.ElementAt(0), "color", "#fff");
+        }
 	}
 }

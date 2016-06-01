@@ -62,7 +62,10 @@
 
         public void AddAttachedSelector(IAttachedSelector selector)
         {
-            attachedSelectors.Add(selector);
+            if (!attachedSelectors.Contains(selector))
+            {
+                attachedSelectors.Add(selector);
+            }
         }
 
         public bool ParseSelector(string selectorText, out CSSelector selector)
@@ -73,7 +76,7 @@
             {
                 if (item.Prepare(selectorText))
                 {
-                    selector = item;
+                    selector = item.Clone();
 
                     return true;
                 }

@@ -36,7 +36,7 @@
 
 			foreach (HtmlNode child in node.GetChildren())
 			{
-                ApplyStyle(nextSelector, specificity, child, htmlStyles);
+                ApplyStyle(nextSelector.Clone(), specificity, child, htmlStyles);
 			}
 		}
 
@@ -67,7 +67,8 @@
 				{
 					foreach (HtmlNode child in node.GetChildren())
 					{
-                        ApplyStyle(nextSelector, specificity, child, htmlStyles);
+                        CSSelector clone = nextSelector.Clone();
+                        ApplyStyle(clone, specificity, child, htmlStyles);
 					}
 				}
 			}

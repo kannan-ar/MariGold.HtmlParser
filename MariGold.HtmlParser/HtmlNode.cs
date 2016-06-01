@@ -414,7 +414,10 @@
 
                     foreach (HtmlStyle style in htmlStyles)
                     {
-                        styles.Add(style.Name, style.Value);
+                        if (!styles.ContainsKey(style.Name))
+                        {
+                            styles.Add(style.Name, style.Value);
+                        }
                     }
                 }
 

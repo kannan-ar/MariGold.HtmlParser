@@ -10,6 +10,14 @@
 
         private string selectorText;
 
+        private OnlyChildSelector(ISelectorContext context, string selectorText, Specificity specificity)
+        {
+            this.context = context;
+            regex = new Regex("^:only-child");
+            this.selectorText = selectorText;
+            this.specificity = specificity;
+        }
+
         internal OnlyChildSelector(ISelectorContext context)
         {
             if (context == null)
@@ -88,6 +96,11 @@
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new OnlyChildSelector(context, selectorText, specificity.Clone());
         }
 
         bool IAttachedSelector.Prepare(string selector)

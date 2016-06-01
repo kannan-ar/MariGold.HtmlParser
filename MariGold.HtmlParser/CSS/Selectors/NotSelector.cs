@@ -12,6 +12,16 @@
         private string selectorText;
         private string currentSelector;
 
+        private NotSelector(ISelectorContext context, string selectorText, string currentSelector, Specificity specificity)
+        {
+            this.context = context;
+            regex = new Regex("^:not\\([a-zA-Z]+[0-9]*\\)");
+            elementName = new Regex("\\([a-zA-Z]+[0-9]*\\)");
+            this.selectorText = selectorText;
+            this.currentSelector = currentSelector;
+            this.specificity = specificity;
+        }
+
         internal NotSelector(ISelectorContext context)
         {
             if (context == null)
@@ -100,6 +110,11 @@
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new NotSelector(context, selectorText, currentSelector, specificity.Clone());
         }
 
         bool IAttachedSelector.Prepare(string selector)

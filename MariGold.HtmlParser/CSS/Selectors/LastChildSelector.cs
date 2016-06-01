@@ -10,6 +10,14 @@
 
         private string selectorText;
 
+        private LastChildSelector(ISelectorContext context, string selectorText, Specificity specificity)
+        {
+            this.context = context;
+            regex = new Regex("^(:last-child)|(:last-of-type)");
+            this.selectorText = selectorText;
+            this.specificity = specificity;
+        }
+
         internal LastChildSelector(ISelectorContext context)
         {
             if (context == null)
@@ -97,6 +105,11 @@
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new LastChildSelector(context, selectorText, specificity.Clone());
         }
 
         bool IAttachedSelector.Prepare(string selector)

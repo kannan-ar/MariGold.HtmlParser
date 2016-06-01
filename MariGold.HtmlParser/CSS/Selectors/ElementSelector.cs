@@ -11,6 +11,15 @@
         private string currentSelector;
         private string selectorText;
 
+        private ElementSelector(ISelectorContext context, string currentSelector, string selectorText, Specificity specificity)
+        {
+            this.context = context;
+            regex = new Regex(@"^([a-zA-Z]+[0-9]*)+");
+            this.currentSelector = currentSelector;
+            this.selectorText = selectorText;
+            this.specificity = specificity;
+        }
+
         internal ElementSelector(ISelectorContext context)
         {
             if (context == null)
@@ -76,6 +85,11 @@
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
             node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Element));
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new ElementSelector(context, currentSelector, selectorText, specificity.Clone());
         }
     }
 }

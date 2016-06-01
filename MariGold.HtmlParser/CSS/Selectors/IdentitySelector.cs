@@ -13,6 +13,15 @@
         private string currentSelector;
         private string selectorText;
 
+        private IdentitySelector(ISelectorContext context, string currentSelector, string selectorText, Specificity specificity)
+        {
+            this.context = context;
+            regex = new Regex("^#[-_]*([a-zA-Z]+[0-9_-]*)+");
+            this.currentSelector = currentSelector;
+            this.selectorText = selectorText;
+            this.specificity = specificity;
+        }
+
         internal IdentitySelector(ISelectorContext context)
         {
             if (context == null)
@@ -91,6 +100,11 @@
                 }
             }
 
+        }
+
+        internal override CSSelector Clone()
+        {
+            return new IdentitySelector(context, currentSelector, selectorText, specificity.Clone());
         }
     }
 }
