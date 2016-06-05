@@ -64,5 +64,116 @@
             TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls'>test</div>", null, false, true, 1, 1, 1);
             TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "red");
         }
+
+        [Test]
+        public void CommentInStyles()
+        {
+            string html = @"<style>
+                                .cls
+                                {
+                                    /*color:red;*/
+                                    color:white;
+                                }
+                            </style>
+                            <div class='cls'>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls'>test</div>", null, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "white");
+        }
+
+        [Test]
+        public void MultipleCommentsInStyles()
+        {
+            string html = @"<style>
+                                .cls
+                                {
+                                    /*color:red;*/
+                                    color:white;
+                                    /*color:blue*/
+                                }
+                            </style>
+                            <div class='cls'>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls'>test</div>", null, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "white");
+        }
+
+        [Test]
+        public void MultipleCommentsInStylesWithoutSpace()
+        {
+            string html = @"<style>.cls{/*color:red;*/color:white;/*color:blue*/}</style><div class='cls'>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls'>test</div>", null, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "white");
+        }
+
+        [Test]
+        public void MultipleCommentsInStyleSheet()
+        {
+            string html = @"<style>
+                                /* .cls beginning */
+
+                                .cls
+                                {
+                                    color:white;
+                                }
+                                
+                                /* .cls end */
+
+                                /* fnt beginning */
+
+                                .fnt
+                                {
+                                    font-weight:bold;
+                                }
+
+                                /* fnt end */
+                            </style>
+                            <div class='cls fnt'>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls fnt'>test</div>", null, false, true, 1, 1, 2);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "white");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-weight", "bold");
+        }
     }
 }

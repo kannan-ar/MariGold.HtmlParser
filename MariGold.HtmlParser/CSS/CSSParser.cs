@@ -106,8 +106,30 @@
             return false;
         }
 
+        private string TrimComments(string styleText)
+        {
+            int startPosition = FindComment(0, styleText, CSSTokenizer.openComment);
+
+            while (startPosition != -1)
+            {
+                int endPosition = FindComment(startPosition + 2, styleText, CSSTokenizer.closeComment);
+
+                if (endPosition == -1)
+                {
+                    endPosition = styleText.Length;
+                }
+
+                styleText = styleText.Remove(startPosition, endPosition - startPosition + 2);
+                startPosition = FindComment(0, styleText, CSSTokenizer.openComment);
+            }
+
+            return styleText;
+        }
+
         internal IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorType type)
         {
+            styleText = TrimComments(styleText);
+
             string[] styleSet = styleText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string style in styleSet)
