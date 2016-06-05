@@ -6,6 +6,8 @@
     {
         internal const char openBrace = '{';
         internal const char closeBrace = '}';
+        internal const string openComment = "/*";
+        internal const string closeComment = "*/";
 
         internal static string FindOpenCloseBraceArea(
            string styleText,

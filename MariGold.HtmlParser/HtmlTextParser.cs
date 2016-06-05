@@ -154,12 +154,12 @@
 		{
 			if (current != null)
 			{
-				CSSParser cssParser = new CSSParser();
+				CSSTracker cssTracker = new CSSTracker();
 
-                cssParser.UriSchema = uriSchema;
-                cssParser.BaseURL = baseUrl;
+                cssTracker.UriSchema = uriSchema;
+                cssTracker.BaseURL = baseUrl;
 
-				StyleSheet styleSheet = cssParser.ParseStyleSheet(current);
+				StyleSheet styleSheet = cssTracker.TrackCSS(current);
                 styleSheet.ApplyStyles(current);
 
                 CSSInheritance cssInheritance = new CSSInheritance();

@@ -1626,5 +1626,18 @@
 
             Assert.AreEqual("#f90", node.Styles["color"]);
         }
+
+        [Test]
+        public void EmptyStyle()
+        {
+            string html = "<div style='color:!important;'>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            Assert.NotNull(parser.Current);
+            TestUtility.AnalyzeNode(parser.Current, "div", "test", html, null, false, true, 1, 1, 0);
+        }
 	}
 }

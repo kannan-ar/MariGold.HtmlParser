@@ -44,6 +44,7 @@
     <Compile Include="ComplexStyles.cs" />
     <Compile Include="ComplexStylesLevel1.cs" />
     <Compile Include="ComplextStylesLevel2.cs" />
+    <Compile Include="CSSComments.cs" />
     <Compile Include="CSSelectorTypePriority.cs" />
     <Compile Include="CSSInheritance.cs" />
     <Compile Include="ExternalStyles.cs" />
@@ -86,6 +87,7 @@
   <ItemGroup>
     <Content Include="Html\basic.htm" />
     <Content Include="Html\basicwithattributes.htm" />
+    <Content Include="Html\commentwithmediaquery.htm" />
     <Content Include="Html\complexcsschain.htm" />
     <Content Include="Html\csschain10classes.htm" />
     <Content Include="Html\cssspecificity.htm" />

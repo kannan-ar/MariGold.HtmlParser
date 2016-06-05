@@ -1,44 +1,11 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
-    using System.Net;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     internal sealed class CSSParser
     {
-        private const string rel = "stylesheet";
-
-        private string uriSchema;
-        private string baseUrl;
-
-        internal string UriSchema
-        {
-            get
-            {
-                return uriSchema;
-            }
-
-            set
-            {
-                uriSchema = value;
-            }
-        }
-
-        internal string BaseURL
-        {
-            get
-            {
-                return baseUrl;
-            }
-
-            set
-            {
-                baseUrl = value;
-            }
-        }
-
         private int ParseSelector(int position, string style, out string selectorText)
         {
             selectorText = string.Empty;
@@ -68,6 +35,11 @@
                 value = value.Replace("!important", string.Empty).Trim();
             }
 
+            if (string.IsNullOrEmpty(styleName) || string.IsNullOrEmpty(value))
+            {
+                return null;
+            }
+
             return new HtmlStyle(styleName, value, important, type);
         }
 
@@ -90,48 +62,48 @@
             //+1 to advance to next location
             return closeBraceIndex + 1;
         }
-       
-        private void TraverseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
+
+        private int FindComment(int position, string style, string commentToken)
         {
-            string style = string.Empty;
+            char firstLetter = commentToken[0];
+            int eof = style.Length;
+            int commentPosition = -1;
 
-            if (string.Compare(node.Tag, HtmlTag.STYLE, StringComparison.InvariantCultureIgnoreCase) == 0)
+            for (int i = position; eof > i; i++)
             {
-                style = node.InnerHtml == null ? string.Empty : node.InnerHtml.Trim();
-            }
-            else if (string.Compare(node.Tag, HtmlTag.LINK, StringComparison.InvariantCultureIgnoreCase) == 0)
-            {
-                string relValue = node.ExtractAttributeValue("rel");
-                string media = node.ExtractAttributeValue("media");
-
-                if (string.Compare(rel, relValue, StringComparison.InvariantCultureIgnoreCase) == 0 &&
-                    (string.IsNullOrEmpty(media) || media.CompareStringInvariantCultureIgnoreCase("screen")))
+                if (style[i] == firstLetter && i + 1 <= eof && style[i + 1] == commentToken[1])
                 {
-                    string url = node.ExtractAttributeValue("href");
-
-                    if (!string.IsNullOrEmpty(url))
-                    {
-                        WebManager web = new WebManager(uriSchema, baseUrl);
-                        style = web.ExtractStylesFromLink(url);
-                    }
+                    commentPosition = i;
+                    break;
                 }
             }
 
-            if (!string.IsNullOrEmpty(style))
+            return commentPosition;
+        }
+
+        private bool HasComment(int position, int bracePosition, int eof, string style, out int commentPosition)
+        {
+            commentPosition = FindComment(position, style, CSSTokenizer.openComment);
+
+            if (commentPosition != -1 && commentPosition < bracePosition)
             {
-                List<CSSElement> styles = new List<CSSElement>();
-                List<MediaQuery> mediaQueries = new List<MediaQuery>();
+                commentPosition = FindComment(commentPosition + 2, style, CSSTokenizer.closeComment);
 
-                ParseCSS(style, styles, mediaQueries);
+                if (commentPosition == -1)
+                {
+                    //Open comment found and respective close comment tag not found. Thus skip to the very end.
+                    commentPosition = eof;
+                }
+                else
+                {
+                    //+2 to skip the comment tag
+                    commentPosition += 2;
+                }
 
-                styleSheet.AddRange(styles);
-                styleSheet.AddMediaQueryRange(mediaQueries);
+                return true;
             }
 
-            foreach (HtmlNode n in node.GetChildren())
-            {
-                TraverseHtmlNodes(n, styleSheet);
-            }
+            return false;
         }
 
         internal IEnumerable<HtmlStyle> ParseRules(string styleText, SelectorType type)
@@ -148,7 +120,12 @@
 
                     if (nodeSet != null && nodeSet.Length > 1)
                     {
-                        yield return CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], type);
+                        HtmlStyle htmlStyle = CreateHtmlStyleFromRule(nodeSet[0], nodeSet[1], type);
+
+                        if (htmlStyle != null)
+                        {
+                            yield return htmlStyle;
+                        }
                     }
                 }
             }
@@ -165,6 +142,13 @@
                 string selectorText;
 
                 int bracePosition = ParseSelector(position, style, out selectorText);
+                int commentPosition;
+
+                if (HasComment(position, bracePosition, eof, style, out commentPosition))
+                {
+                    position = commentPosition;
+                    continue;
+                }
 
                 if (bracePosition > position && selectorText != string.Empty)
                 {
@@ -189,23 +173,6 @@
 
                 position = bracePosition;
             }
-        }
-
-        internal StyleSheet ParseStyleSheet(HtmlNode node)
-        {
-            StyleSheet styleSheet = new StyleSheet(new SelectorContext());
-
-            TraverseHtmlNodes(node, styleSheet);
-
-            HtmlNode nextNode = node.GetNext();
-
-            while (nextNode != null)
-            {
-                TraverseHtmlNodes(nextNode, styleSheet);
-                nextNode = nextNode.GetNext();
-            }
-
-            return styleSheet;
         }
     }
 }

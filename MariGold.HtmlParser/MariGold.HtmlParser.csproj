@@ -47,6 +47,7 @@
     <Compile Include="CSS\Behaviors\ApplyNextElement.cs" />
     <Compile Include="CSS\CSSElement.cs" />
     <Compile Include="CSS\CSSInheritance.cs" />
+    <Compile Include="CSS\CSSParser.cs" />
     <Compile Include="CSS\CSSTokenizer.cs" />
     <Compile Include="CSS\IAttachedSelector.cs" />
     <Compile Include="CSS\MediaQuery.cs">
@@ -59,7 +60,7 @@
     <Compile Include="CSS\Selectors\ElementSelector.cs" />
     <Compile Include="CSS\Selectors\FirstChildSelector.cs" />
     <Compile Include="CSS\Selectors\GlobalSelector.cs" />
-    <Compile Include="CSS\CSSParser.cs" />
+    <Compile Include="CSS\CSSTracker.cs" />
     <Compile Include="CSS\CSSelector.cs" />
     <Compile Include="CSS\Selectors\ClassSelector.cs" />
     <Compile Include="CSS\Selectors\IdentitySelector.cs" />
