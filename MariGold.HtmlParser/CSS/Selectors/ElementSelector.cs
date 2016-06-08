@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
+    using System.Globalization;
 
     internal sealed class ElementSelector : CSSelector
     {
@@ -10,17 +11,9 @@
 
         private string currentSelector;
         private string selectorText;
+        private Dictionary<string, Func<string>> specialTags;
 
         private ElementSelector(ISelectorContext context, string currentSelector, string selectorText, Specificity specificity)
-        {
-            this.context = context;
-            regex = new Regex(@"^([a-zA-Z]+[0-9]*)+");
-            this.currentSelector = currentSelector;
-            this.selectorText = selectorText;
-            this.specificity = specificity;
-        }
-
-        internal ElementSelector(ISelectorContext context)
         {
             if (context == null)
             {
@@ -29,23 +22,59 @@
 
             this.context = context;
             regex = new Regex(@"^([a-zA-Z]+[0-9]*)+");
+            this.currentSelector = currentSelector;
+            this.selectorText = selectorText;
+            this.specificity = specificity;
+
+            FillSpecialTags();
+        }
+
+        internal ElementSelector(ISelectorContext context)
+            : this(context, string.Empty, string.Empty, new Specificity())
+        {
+        }
+
+        private void FillSpecialTags()
+        {
+            specialTags = new Dictionary<string, Func<string>>();
+            specialTags.Add("a:link", () => { return "a"; });
+        }
+
+        private bool IsSpecialTag(string selector)
+        {
+            foreach (var item in specialTags)
+            {
+                if (selector.StartsWith(item.Key, true, CultureInfo.InvariantCulture))
+                {
+                    this.currentSelector = item.Value();
+                    this.selectorText = selector.Substring(item.Key.Length);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         internal override bool Prepare(string selector)
         {
-            Match match = regex.Match(selector);
-
             this.currentSelector = string.Empty;
             this.selectorText = string.Empty;
             this.specificity = new Specificity();
+            bool success = IsSpecialTag(selector);
 
-            if (match.Success)
+            if (!success)
             {
-                this.currentSelector = match.Value;
-                this.selectorText = selector.Substring(match.Value.Length);
+                Match match = regex.Match(selector);
+
+                if (match.Success)
+                {
+                    this.currentSelector = match.Value;
+                    this.selectorText = selector.Substring(match.Value.Length);
+                    success = true;
+                }
             }
 
-            return match.Success;
+            return success;
         }
 
         internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)

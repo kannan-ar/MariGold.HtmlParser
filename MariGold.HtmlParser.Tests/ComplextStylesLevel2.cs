@@ -519,5 +519,21 @@
             TestUtility.AnalyzeNode(node, "span", "two", "<span class=\"text\">two</span>", div, false, true, 1, 1, 1);
             TestUtility.CheckStyle(node.Styles.ElementAt(0), "background-color", "transparent");
         }
+
+        [Test]
+        public void ALink()
+        {
+            string html = @"<style>a:link{color:#333;}</style><a href='http://google.com'>test</a>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current.Next;
+
+            Assert.IsNotNull(node);
+            TestUtility.AnalyzeNode(node, "a", "test", "<a href='http://google.com'>test</a>", null, false,true, 1, 1, 1);
+        }
     }
 }
