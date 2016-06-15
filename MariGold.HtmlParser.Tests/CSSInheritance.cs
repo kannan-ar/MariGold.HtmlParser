@@ -202,8 +202,9 @@
             node.Styles.CheckKeyValuePair(0, "color", "#fff");
             node.Styles.CheckKeyValuePair(1, "background-color", "#000");
 
-            TestUtility.AnalyzeNode(node.Children.ElementAt(0), "div", "one", "<div>one</div>", node, false, true, 1, 0, 1);
+            TestUtility.AnalyzeNode(node.Children.ElementAt(0), "div", "one", "<div>one</div>", node, false, true, 1, 0, 2);
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "color", "#fff");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "background-color", "#000");
         }
 
         [Test]
@@ -237,11 +238,13 @@
             node.Styles.CheckKeyValuePair(0, "color", "#fff");
             node.Styles.CheckKeyValuePair(1, "background-color", "#000");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 1);
+            node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 2);
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "color", "#fff");
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "background-color", "#000");
 
-            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 1);
+            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 2);
             node.Children.ElementAt(1).Styles.CheckKeyValuePair(0, "color", "#fff");
+            node.Children.ElementAt(1).Styles.CheckKeyValuePair(1, "background-color", "#000");
 
             node = node.Next;
 
