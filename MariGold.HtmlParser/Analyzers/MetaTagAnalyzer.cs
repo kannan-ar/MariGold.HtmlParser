@@ -77,8 +77,7 @@
 
             char plus2 = html[position + 2];
 
-            return html[position] == HtmlTag.openAngle && html[position + 1] == HtmlTag.exclamation &&
-                (plus2 == HtmlTag.space || char.IsLetter(plus2));
+            return html[position] == HtmlTag.openAngle && html[position + 1] == HtmlTag.exclamation;
         }
 
         public HtmlAnalyzer GetAnalyzer(int position, HtmlNode parent)

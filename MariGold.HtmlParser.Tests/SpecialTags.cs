@@ -233,5 +233,16 @@
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
         }
+
+        [Test]
+        public void CData()
+        {
+            string html = "<![CDATA[test]]>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Traverse());
+            Assert.IsNotNull(parser.Current);
+        }
 	}
 }

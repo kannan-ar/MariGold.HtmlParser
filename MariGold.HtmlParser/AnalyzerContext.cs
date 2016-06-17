@@ -85,8 +85,8 @@
             return new List<IOpenTag>()
             {
                 new OpenTagAnalyzer(this),
-                new MetaTagAnalyzer(this),
-                new CommentAnalyzer(this)
+                new CommentAnalyzer(this),
+                new MetaTagAnalyzer(this)
             };
         }
 
