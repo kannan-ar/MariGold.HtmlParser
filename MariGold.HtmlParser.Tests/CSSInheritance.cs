@@ -582,5 +582,24 @@
                  false, true, 1, 1, 1);
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
+
+        [Test]
+        public void BackgroundInheritance()
+        {
+            string html = "<div style='background: #fff'><div>Test</div></div>";
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "<div>Test</div>", html, null, false, true, 1, 1, 1);
+            IHtmlNode head = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "Test", "<div>Test</div>", head, false, true, 1, 0, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "background", "#fff");
+        }
     }
 }
