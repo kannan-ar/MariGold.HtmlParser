@@ -86,7 +86,7 @@
     <Compile Include="IOpenTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchAnalyzerContext.cs" />
-    <Compile Include="StringUtility.cs" />
+    <Compile Include="HtmlStringComparer.cs" />
     <Compile Include="WebManager.cs" />
   </ItemGroup>
   <ItemGroup />
