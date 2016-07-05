@@ -601,5 +601,28 @@
             node.AnalyzeNode("div", "Test", "<div>Test</div>", head, false, true, 1, 0, 1);
             TestUtility.CheckStyle(node.Styles.ElementAt(0), "background", "#fff");
         }
+
+        [Test]
+        public void CSSFontAndFontFamily()
+        {
+            string html = "<div style='font:10px Arial'><div style='font-family:Verdana;'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style='font-family:Verdana;'>test</div>", html, null, false, true, 1, 1, 1);
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style='font-family:Verdana;'>test</div>", parent, false, true, 1, 1, 2);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-family", "Verdana");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-size", "10px");
+
+        }
     }
 }

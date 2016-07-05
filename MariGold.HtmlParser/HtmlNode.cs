@@ -11,7 +11,6 @@
         private readonly string tag;
         private readonly HtmlNode parent;
         private readonly HtmlContext context;
-        private readonly List<HtmlStyle> htmlStyles;
         private readonly bool isText;
 
         private int htmlStart;
@@ -24,6 +23,7 @@
         private HtmlNode next;
         private Dictionary<string, string> attributes;
         private Dictionary<string, string> styles;
+        private List<HtmlStyle> htmlStyles;
 
         private HtmlNode(
             string tag,
@@ -179,7 +179,7 @@
                 bool found = false;
 
                 newStyle.Specificity = specificity;
-                
+
                 foreach (HtmlStyle style in htmlStyles)
                 {
                     if (string.Compare(newStyle.Name, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -408,7 +408,7 @@
         {
             get
             {
-                if (styles == null)
+                if (styles == null || (styles != null && htmlStyles.Count != styles.Count))
                 {
                     styles = new Dictionary<string, string>();
 
@@ -422,6 +422,18 @@
                 }
 
                 return styles;
+            }
+
+            set
+            {
+                styles = value;
+                //
+                htmlStyles = new List<HtmlStyle>();
+
+                foreach(KeyValuePair<string,string> style in styles)
+                {
+                    htmlStyles.Add(new HtmlStyle(style.Key, style.Value, false));
+                }
             }
         }
 

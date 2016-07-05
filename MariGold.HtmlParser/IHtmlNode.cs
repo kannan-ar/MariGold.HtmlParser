@@ -16,7 +16,7 @@
 		bool SelfClosing{ get; }
 		bool IsText{ get; }
 		Dictionary<string, string> Attributes{ get; }
-		Dictionary<string, string> Styles{ get; }
+        Dictionary<string, string> Styles { get; set; }
 		
 		IHtmlNode Clone();
 	}

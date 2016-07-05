@@ -6,18 +6,28 @@
     internal sealed class CSSInheritance
     {
         private string[][] tags;
+        private List<CSSProperty> properties;
 
         internal CSSInheritance()
         {
+            Init();
+        }
+
+        private void Init()
+        {
             tags = new string[][] {
-				new string[]{"font-family"},
-				new string[]{"font-size"},
-				new string[]{"color"},
-				new string[]{"font-weight"},
-				new string[]{"text-decoration"},
-				new string[]{"font-style"},
-                new string[]{"background-color","background"}
+				new string[]{CSSProperty.fontFamily},
+				new string[]{CSSProperty.fontSize},
+				new string[]{CSSProperty.color},
+				new string[]{CSSProperty.fontWeight},
+				new string[]{CSSProperty.textDecoration},
+				new string[]{CSSProperty.fontStyle},
+                new string[]{CSSProperty.backgroundColor,CSSProperty.background}
 			};
+
+            properties = new List<CSSProperty>(){
+                new FontProperty()
+            };
         }
 
         private bool CanInherit(string tag)
@@ -46,15 +56,33 @@
             return false;
         }
 
+        private bool HasPropertyProcessed(HtmlStyle parentStyle, HtmlNode child)
+        {
+            foreach (CSSProperty property in properties)
+            {
+                if (property.AppendStyle(parentStyle, child))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void AppendStyles(HtmlNode node, List<HtmlStyle> styles)
         {
             foreach (HtmlStyle parentStyle in styles)
             {
                 bool found = false;
-
-                foreach(HtmlStyle childStyle in node.HtmlStyles)
+                
+                if (HasPropertyProcessed(parentStyle, node))
                 {
-                    if(StyleContains(parentStyle,childStyle))
+                    continue;
+                }
+                
+                foreach (HtmlStyle childStyle in node.HtmlStyles)
+                {
+                    if (StyleContains(parentStyle, childStyle))
                     {
                         found = true;
                         break;

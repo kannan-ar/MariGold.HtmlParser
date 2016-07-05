@@ -5,7 +5,7 @@
 
     internal static class HtmlStringComparer
     {
-        internal static bool CompareStringInvariantCultureIgnoreCase(this string source, string value)
+        internal static bool CompareInvariantCultureIgnoreCase(this string source, string value)
         {
             if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(value))
             {

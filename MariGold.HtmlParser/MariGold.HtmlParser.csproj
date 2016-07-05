@@ -48,11 +48,13 @@
     <Compile Include="CSS\CSSElement.cs" />
     <Compile Include="CSS\CSSInheritance.cs" />
     <Compile Include="CSS\CSSParser.cs" />
+    <Compile Include="CSS\CSSProperty.cs" />
     <Compile Include="CSS\CSSTokenizer.cs" />
     <Compile Include="CSS\IAttachedSelector.cs" />
     <Compile Include="CSS\MediaQuery.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CSS\Properties\FontProperty.cs" />
     <Compile Include="CSS\SelectorContext.cs" />
     <Compile Include="CSS\CSSBehavior.cs" />
     <Compile Include="CSS\ISelectorContext.cs" />

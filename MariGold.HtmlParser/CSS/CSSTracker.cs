@@ -53,7 +53,7 @@
                 string media = node.ExtractAttributeValue("media");
 
                 if (string.Compare(rel, relValue, StringComparison.InvariantCultureIgnoreCase) == 0 &&
-                    (string.IsNullOrEmpty(media) || media.CompareStringInvariantCultureIgnoreCase("screen")))
+                    (string.IsNullOrEmpty(media) || media.CompareInvariantCultureIgnoreCase("screen")))
                 {
                     string url = node.ExtractAttributeValue("href");
 
