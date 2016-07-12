@@ -16,13 +16,14 @@
         private void Init()
         {
             tags = new string[][] {
+                new string[]{CSSProperty.font},
 				new string[]{CSSProperty.fontFamily},
 				new string[]{CSSProperty.fontSize},
 				new string[]{CSSProperty.color},
 				new string[]{CSSProperty.fontWeight},
 				new string[]{CSSProperty.textDecoration},
 				new string[]{CSSProperty.fontStyle},
-                new string[]{CSSProperty.backgroundColor,CSSProperty.background}
+                new string[]{CSSProperty.backgroundColor, CSSProperty.background}
 			};
 
             properties = new List<CSSProperty>(){
@@ -74,12 +75,12 @@
             foreach (HtmlStyle parentStyle in styles)
             {
                 bool found = false;
-                
+
                 if (HasPropertyProcessed(parentStyle, node))
                 {
                     continue;
                 }
-                
+
                 foreach (HtmlStyle childStyle in node.HtmlStyles)
                 {
                     if (StyleContains(parentStyle, childStyle))
