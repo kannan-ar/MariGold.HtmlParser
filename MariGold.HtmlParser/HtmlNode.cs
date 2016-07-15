@@ -269,6 +269,47 @@
             return string.Empty;
         }
 
+        internal bool HasStyle(string styleName)
+        {
+            foreach (HtmlStyle style in htmlStyles)
+            {
+                if (string.Compare(styleName, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal bool TryGetStyle(string styleName, out HtmlStyle htmlStyle)
+        {
+            htmlStyle = null;
+
+            foreach (HtmlStyle style in htmlStyles)
+            {
+                if (string.Compare(styleName, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    htmlStyle = style;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal void RemoveStyle(string styleName)
+        {
+            for (int i = 0; htmlStyles.Count > i; i++)
+            {
+                if (string.Compare(styleName, htmlStyles[i].Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    htmlStyles.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
         /// <summary>
         /// Html tag of the node.
         /// </summary>
@@ -430,7 +471,7 @@
                 //
                 htmlStyles = new List<HtmlStyle>();
 
-                foreach(KeyValuePair<string,string> style in styles)
+                foreach (KeyValuePair<string, string> style in styles)
                 {
                     htmlStyles.Add(new HtmlStyle(style.Key, style.Value, false));
                 }

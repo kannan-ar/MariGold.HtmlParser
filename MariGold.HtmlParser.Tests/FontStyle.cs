@@ -43,8 +43,9 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-family:verdana'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "25px arial");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-family:verdana'>test</div>", html, null, false, true, 1, 1, 2);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "25px");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-family", "arial");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -66,8 +67,10 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-family:verdana'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "25px/2pt arial");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-family:verdana'>test</div>", html, null, false, true, 1, 1, 3);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "25px");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "line-height", "2pt");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-family", "arial");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -112,8 +115,10 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "8pt arial");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 2);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "8pt");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-family", "arial");
+
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -135,8 +140,10 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "normal 8pt arial");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 3);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-weight", "normal");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-size", "8pt");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-family", "arial");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -159,8 +166,11 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "normal inherit 1em arial");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 4);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-weight", "inherit");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-variant", "normal");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-size", "1em");
+            TestUtility.CheckStyle(node.Styles.ElementAt(3), "font-family", "arial");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -184,8 +194,12 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "initial normal inherit 1em arial");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 5);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-weight", "inherit");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-variant", "normal");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-style", "initial");
+            TestUtility.CheckStyle(node.Styles.ElementAt(3), "font-size", "1em");
+            TestUtility.CheckStyle(node.Styles.ElementAt(4), "font-family", "arial");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -210,8 +224,13 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "initial normal inherit 1em/2px arial");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 6);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-weight", "inherit");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-variant", "normal");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-style", "initial");
+            TestUtility.CheckStyle(node.Styles.ElementAt(3), "font-size", "1em");
+            TestUtility.CheckStyle(node.Styles.ElementAt(4), "line-height", "2px");
+            TestUtility.CheckStyle(node.Styles.ElementAt(5), "font-family", "arial");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -237,8 +256,13 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "initial normal inherit 1em/2px arial  caption");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 6);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-weight", "inherit");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-variant", "normal");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-style", "initial");
+            TestUtility.CheckStyle(node.Styles.ElementAt(3), "font-size", "1em");
+            TestUtility.CheckStyle(node.Styles.ElementAt(4), "line-height", "2px");
+            TestUtility.CheckStyle(node.Styles.ElementAt(5), "font-family", "arial");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -264,8 +288,10 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "8pt/2px verdana caption");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 3);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "8pt");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "line-height", "2px");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-family", "verdana");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -288,8 +314,10 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "bold 8pt verdana message-box");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 3);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-weight", "bold");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-size", "8pt");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-family", "verdana");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -312,8 +340,11 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "small-caps  bold 8pt  verdana  message-box");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 4);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-variant", "small-caps");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-weight", "bold");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-size", "8pt");
+            TestUtility.CheckStyle(node.Styles.ElementAt(3), "font-family", "verdana");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
@@ -337,8 +368,12 @@
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font", "oblique small-caps  bold 8pt  verdana  message-box");
+            TestUtility.AnalyzeNode(node, "div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 5);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-style", "oblique");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-variant", "small-caps");
+            TestUtility.CheckStyle(node.Styles.ElementAt(2), "font-weight", "bold");
+            TestUtility.CheckStyle(node.Styles.ElementAt(3), "font-size", "8pt");
+            TestUtility.CheckStyle(node.Styles.ElementAt(4), "font-family", "verdana");
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);

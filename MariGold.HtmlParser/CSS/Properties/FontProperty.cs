@@ -104,22 +104,22 @@
             string[] fontStyles = { "italic", "oblique" };
 
             int index;
-            string fontStyle;
+            string value;
 
-            if (!ExtractProperty(font, new char[] { space }, 0, out index, out fontStyle))
+            if (!ExtractProperty(font, new char[] { space }, 0, out index, out value))
             {
                 return false;
             }
 
-            styleStack.Key.Push("font-style");
+            styleStack.Key.Push(fontStyle);
 
-            if (Contains(fontStyles, fontStyle))
+            if (Contains(fontStyles, value))
             {
-                styleList.Add("font-style", fontStyle);
+                styleList.Add(fontStyle, value);
             }
-            else if (Contains(styles, fontStyle))
+            else if (Contains(styles, value))
             {
-                styleStack.Value.Push(fontStyle);
+                styleStack.Value.Push(value);
             }
             else
             {
@@ -137,23 +137,23 @@
         {
             string[] fontStyles = { "small-caps" };
             int index;
-            string fontVariant;
+            string value;
 
-            if (!ExtractProperty(font, new char[] { space }, startIndex, out index, out fontVariant))
+            if (!ExtractProperty(font, new char[] { space }, startIndex, out index, out value))
             {
                 return false;
             }
 
-            styleStack.Key.Push("font-variant");
+            styleStack.Key.Push(fontVariant);
 
-            if (Contains(fontStyles, fontVariant))
+            if (Contains(fontStyles, value))
             {
                 ProcessNormalValues(styleList, styleStack);
-                styleList.Add("font-variant", fontVariant);
+                styleList.Add(fontVariant, value);
             }
-            else if (Contains(styles, fontVariant))
+            else if (Contains(styles, value))
             {
-                styleStack.Value.Push(fontVariant);
+                styleStack.Value.Push(value);
             }
             else
             {
@@ -171,24 +171,24 @@
         {
             string[] fontStyles = { "bold", "bolder", "lighter" };
             int index;
-            string fontWeight;
+            string value;
 
-            if (!ExtractProperty(font, new char[] { space }, startIndex, out index, out fontWeight))
+            if (!ExtractProperty(font, new char[] { space }, startIndex, out index, out value))
             {
                 return false;
             }
 
             int weight;
-            styleStack.Key.Push("font-weight");
+            styleStack.Key.Push(fontWeight);
 
-            if (Contains(fontStyles, fontWeight) || Int32.TryParse(fontWeight, out weight))
+            if (Contains(fontStyles, value) || Int32.TryParse(value, out weight))
             {
                 ProcessNormalValues(styleList, styleStack);
-                styleList.Add("font-weight", fontWeight);
+                styleList.Add(fontWeight, value);
             }
-            else if (Contains(styles, fontWeight))
+            else if (Contains(styles, value))
             {
-                styleStack.Value.Push(fontWeight);
+                styleStack.Value.Push(value);
             }
             else
             {
@@ -207,27 +207,27 @@
             string[] fontStyles = { "medium", "xx-small", "x-small", "small", "large", "x-large", "xx-large", "smaller", "larger" };
             string[] lengthTypes = { "px", "pt", "em", "cm", "in" };
             int index;
-            string fontSize;
+            string value;
 
-            if (!ExtractProperty(font, new char[] { slash, space }, startIndex, out index, out fontSize))
+            if (!ExtractProperty(font, new char[] { slash, space }, startIndex, out index, out value))
             {
                 return false;
             }
 
-            if (Contains(fontStyles, fontSize))
+            if (Contains(fontStyles, value))
             {
                 ProcessNormalValues(styleList, styleStack);
-                styleList.Add("font-size", fontSize);
+                styleList.Add(fontSize, value);
             }
-            else if (ContainsText(lengthTypes, fontSize))
+            else if (ContainsText(lengthTypes, value))
             {
                 ProcessNormalValues(styleList, styleStack);
-                styleList.Add("font-size", fontSize);
+                styleList.Add(fontSize, value);
             }
-            else if (fontSize.Contains("%"))
+            else if (value.Contains("%"))
             {
                 ProcessNormalValues(styleList, styleStack);
-                styleList.Add("font-size", fontSize);
+                styleList.Add(fontSize, value);
             }
             else
             {
@@ -246,22 +246,22 @@
         {
             string[] fontStyles = { "medium", "xx-small", "x-small", "small", "large", "x-large", "xx-large", "smaller", "larger" };
             string[] lengthTypes = { "px", "pt", "em", "cm", "in" };
-            string lineHeight;
+            string value;
             int index;
 
-            if (ExtractProperty(font, new char[] { space }, startIndex, out index, out lineHeight))
+            if (ExtractProperty(font, new char[] { space }, startIndex, out index, out value))
             {
-                if (Contains(fontStyles, lineHeight))
+                if (Contains(fontStyles, value))
                 {
-                    styleList.Add("line-height", lineHeight);
+                    styleList.Add(lineHeight, value);
                 }
-                else if (ContainsText(lengthTypes, lineHeight))
+                else if (ContainsText(lengthTypes, value))
                 {
-                    styleList.Add("line-height", lineHeight);
+                    styleList.Add(lineHeight, value);
                 }
-                else if (lineHeight.Contains("%"))
+                else if (value.Contains("%"))
                 {
-                    styleList.Add("line-height", lineHeight);
+                    styleList.Add(lineHeight, value);
                 }
                 else
                 {
@@ -279,9 +279,9 @@
             Dictionary<string, string> styleList)
         {
             string[] fontProperties = { "caption", "icon", "menu", "message-box", "small-caption", "status-bar" };
-            string fontFamily = font.Substring(startIndex).Trim();
+            string value = font.Substring(startIndex).Trim();
 
-            if (string.IsNullOrEmpty(fontFamily))
+            if (string.IsNullOrEmpty(value))
             {
                 return false;
             }
@@ -290,18 +290,18 @@
 
             foreach (string fontProperty in fontProperties)
             {
-                index = fontFamily.IndexOf(fontProperty);
+                index = value.IndexOf(fontProperty);
 
                 if (index != -1)
                 {
-                    fontFamily = fontFamily.Remove(index).Trim();
+                    value = value.Remove(index).Trim();
                     break;
                 }
             }
 
-            if (!string.IsNullOrEmpty(fontFamily))
+            if (!string.IsNullOrEmpty(value))
             {
-                styleList.Add("font-family", fontFamily);
+                styleList.Add(fontFamily, value);
                 return true;
             }
 
@@ -316,18 +316,9 @@
 
             if (ProcessFontStyle(parentStyle.Value, parentStyles, styleStack) && parentStyles.Count > 0)
             {
-                Dictionary<string, string> childStyles = new Dictionary<string, string>();
-
-                if (child.Styles.ContainsKey(font))
-                {
-                    styleStack = new KeyValuePair<Stack<string>, Stack<string>>(new Stack<string>(), new Stack<string>());
-
-                    ProcessFontStyle(child.Styles[font], childStyles, styleStack);
-                }
-
                 foreach (var style in parentStyles)
                 {
-                    if(!child.Styles.ContainsKey(style.Key) && !childStyles.ContainsKey(style.Key))
+                    if (!child.HasStyle(style.Key))
                     {
                         child.HtmlStyles.Add(new HtmlStyle(style.Key, style.Value, false));
                     }
@@ -337,31 +328,56 @@
 
         private void ProcessFontFamily(HtmlStyle parentStyle, HtmlNode child)
         {
-            if (!child.Styles.ContainsKey(fontFamily) && !child.Styles.ContainsKey(font))
+            if (!child.HasStyle(fontFamily) && !child.HasStyle(font))
             {
                 child.HtmlStyles.Add(parentStyle.Clone());
             }
         }
 
-        internal override bool AppendStyle(HtmlStyle parentStyle, HtmlNode child)
+        internal override bool AppendStyle(HtmlStyle style, HtmlNode node)
         {
-            if (parentStyle == null || child == null)
+            if (style == null || node == null)
             {
                 return false;
             }
 
-            if (parentStyle.Name.CompareInvariantCultureIgnoreCase(fontFamily))
+            if (style.Name.CompareInvariantCultureIgnoreCase(fontFamily))
             {
-                ProcessFontFamily(parentStyle, child);
+                ProcessFontFamily(style, node);
                 return true;
             }
-            else if (parentStyle.Name.CompareInvariantCultureIgnoreCase(font))
+            else if (style.Name.CompareInvariantCultureIgnoreCase(font))
             {
-                ProcessFont(parentStyle, child);
+                ProcessFont(style, node);
                 return true;
             }
 
             return false;
+        }
+
+        internal override void ParseStyle(HtmlNode node)
+        {
+            HtmlStyle value;
+
+            Dictionary<string, string> styles = new Dictionary<string, string>();
+            KeyValuePair<Stack<string>, Stack<string>> styleStack =
+                new KeyValuePair<Stack<string>, Stack<string>>(new Stack<string>(), new Stack<string>());
+
+            if (node.TryGetStyle(font, out value))
+            {
+                if (ProcessFontStyle(value.Value, styles, styleStack))
+                {
+                    foreach (var style in styles)
+                    {
+                        if (!node.HasStyle(style.Key))
+                        {
+                            node.HtmlStyles.Add(new HtmlStyle(style.Key, style.Value, false));
+                        }
+                    }
+
+                    node.RemoveStyle(font);
+                }
+            }
         }
     }
 }

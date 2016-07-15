@@ -614,7 +614,7 @@
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
 
-            node.AnalyzeNode("div", "<div style='font-family:Verdana;'>test</div>", html, null, false, true, 1, 1, 1);
+            node.AnalyzeNode("div", "<div style='font-family:Verdana;'>test</div>", html, null, false, true, 1, 1, 2);
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);

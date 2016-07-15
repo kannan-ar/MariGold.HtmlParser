@@ -161,7 +161,10 @@
 
 				StyleSheet styleSheet = cssTracker.TrackCSS(current);
                 styleSheet.ApplyStyles(current);
-
+                
+                CSSPropertyParser propertyParser = new CSSPropertyParser();
+                propertyParser.ParseStyle(current);
+                
                 CSSInheritance cssInheritance = new CSSInheritance();
                 cssInheritance.Apply(current);
 			}

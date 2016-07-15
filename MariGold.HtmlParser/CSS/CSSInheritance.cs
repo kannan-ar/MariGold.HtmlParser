@@ -6,7 +6,6 @@
     internal sealed class CSSInheritance
     {
         private string[][] tags;
-        private List<CSSProperty> properties;
 
         internal CSSInheritance()
         {
@@ -23,12 +22,10 @@
 				new string[]{CSSProperty.fontWeight},
 				new string[]{CSSProperty.textDecoration},
 				new string[]{CSSProperty.fontStyle},
+                new string[]{CSSProperty.lineHeight},
+                new string[]{CSSProperty.fontVariant},
                 new string[]{CSSProperty.backgroundColor, CSSProperty.background}
 			};
-
-            properties = new List<CSSProperty>(){
-                new FontProperty()
-            };
         }
 
         private bool CanInherit(string tag)
@@ -59,15 +56,8 @@
 
         private bool HasPropertyProcessed(HtmlStyle parentStyle, HtmlNode child)
         {
-            foreach (CSSProperty property in properties)
-            {
-                if (property.AppendStyle(parentStyle, child))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            CSSPropertyParser propertyParser = new CSSPropertyParser();
+            return propertyParser.InheritStyle(parentStyle, child);
         }
 
         private void AppendStyles(HtmlNode node, List<HtmlStyle> styles)

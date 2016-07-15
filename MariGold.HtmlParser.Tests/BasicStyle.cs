@@ -49,7 +49,7 @@
 		[Test]
 		public void BasicIdentityTagStyle()
 		{
-			string html = "<html><style>#dv{font:verdana,arial;color:#000}</style><div id='dv'>test</div></html>";
+			string html = "<html><style>#dv{font:10px verdana,arial;color:#000}</style><div id='dv'>test</div></html>";
 
 			HtmlParser parser = new HtmlTextParser(html);
 
@@ -64,15 +64,16 @@
 				parser.Current, false, true, 1, 1);
 
 			Assert.IsNotNull(parser.Current.Children.ElementAt(1).Styles);
-			Assert.AreEqual(2, parser.Current.Children.ElementAt(1).Styles.Count());
-			TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(0), "font", "verdana,arial");
-			TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(1), "color", "#000");
+			Assert.AreEqual(3, parser.Current.Children.ElementAt(1).Styles.Count());
+            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(0), "color", "#000");
+            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(1), "font-size", "10px");
+            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(2), "font-family", "verdana,arial");
 		}
 
 		[Test]
 		public void BasicClassTagStyle()
 		{
-			string html = "<html><style>.cls{font:verdana,arial;color:#000}</style><div class='cls'>test</div></html>";
+			string html = "<html><style>.cls{font:12px verdana,arial;color:#000}</style><div class='cls'>test</div></html>";
 
 			HtmlParser parser = new HtmlTextParser(html);
 
@@ -87,9 +88,10 @@
 				parser.Current, false, true, 1, 1);
 
 			Assert.IsNotNull(parser.Current.Children.ElementAt(1).Styles);
-			Assert.AreEqual(2, parser.Current.Children.ElementAt(1).Styles.Count);
-			TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(0), "font", "verdana,arial");
-			TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(1), "color", "#000");
+			Assert.AreEqual(3, parser.Current.Children.ElementAt(1).Styles.Count);
+            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(0), "color", "#000");
+			TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(1), "font-size", "12px");
+            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(2), "font-family", "verdana,arial");
 		}
 
 		[Test]

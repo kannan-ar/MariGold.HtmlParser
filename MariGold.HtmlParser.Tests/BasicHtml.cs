@@ -46,7 +46,7 @@
 			string html = "<";
 
 			HtmlParser parser = new HtmlTextParser(html);
-
+            
 			Assert.AreEqual(true, parser.Traverse());
 			Assert.IsNotNull(parser.Current);
 			TestUtility.AreEqual(parser.Current, "#text", "<", "<");
