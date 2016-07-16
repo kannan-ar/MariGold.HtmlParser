@@ -111,8 +111,6 @@
                 return false;
             }
 
-            styleStack.Key.Push(fontStyle);
-
             if (Contains(fontStyles, value))
             {
                 styleList.Add(fontStyle, value);
@@ -125,6 +123,8 @@
             {
                 index = 0;
             }
+
+            styleStack.Key.Push(fontStyle);
 
             return ProcessFontVariant(index, font, styleList, styleStack);
         }
@@ -144,8 +144,6 @@
                 return false;
             }
 
-            styleStack.Key.Push(fontVariant);
-
             if (Contains(fontStyles, value))
             {
                 ProcessNormalValues(styleList, styleStack);
@@ -159,6 +157,8 @@
             {
                 index = startIndex;
             }
+
+            styleStack.Key.Push(fontVariant);
 
             return ProcessFontWeight(index, font, styleList, styleStack);
         }
@@ -179,7 +179,6 @@
             }
 
             int weight;
-            styleStack.Key.Push(fontWeight);
 
             if (Contains(fontStyles, value) || Int32.TryParse(value, out weight))
             {
@@ -194,6 +193,8 @@
             {
                 index = startIndex;
             }
+
+            styleStack.Key.Push(fontWeight);
 
             return ProcessFontSize(index, font, styleList, styleStack);
         }
