@@ -624,5 +624,68 @@
             TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-size", "10px");
 
         }
+
+        [Test]
+        public void OverrideBackgroundTransparent()
+        {
+            string html = "<div style='background-color:#000'><div style='background-color:transparent'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style='background-color:transparent'>test</div>", html, null, false, true, 1, 1, 1);
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style='background-color:transparent'>test</div>", parent, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "background-color", "#000");
+        }
+
+        [Test]
+        public void OverrideBackgroundColorTransparent()
+        {
+            string html = "<div style='background: #000 url(\"img.gif\") no-repeat fixed center;'><div style='background-color:transparent'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style='background-color:transparent'>test</div>", html, null, false, true, 1, 1, 1);
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style='background-color:transparent'>test</div>", parent, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "background-color", "#000");
+        }
+
+        [Test]
+        public void OverrideBackgroundColorBackgroundTransparent()
+        {
+            string html = "<div style='background-color: #000'><div style='background:transparent'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style='background:transparent'>test</div>", html, null, false, true, 1, 1, 1);
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style='background:transparent'>test</div>", parent, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "background", "#000");
+        }
     }
 }

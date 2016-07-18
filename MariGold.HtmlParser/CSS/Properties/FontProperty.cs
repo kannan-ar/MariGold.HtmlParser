@@ -335,21 +335,21 @@
             }
         }
 
-        internal override bool AppendStyle(HtmlStyle style, HtmlNode node)
+        internal override bool AppendStyle(HtmlStyle parentStyle, HtmlNode child)
         {
-            if (style == null || node == null)
+            if (parentStyle == null || child == null)
             {
                 return false;
             }
 
-            if (style.Name.CompareInvariantCultureIgnoreCase(fontFamily))
+            if (parentStyle.Name.CompareInvariantCultureIgnoreCase(fontFamily))
             {
-                ProcessFontFamily(style, node);
+                ProcessFontFamily(parentStyle, child);
                 return true;
             }
-            else if (style.Name.CompareInvariantCultureIgnoreCase(font))
+            else if (parentStyle.Name.CompareInvariantCultureIgnoreCase(font))
             {
-                ProcessFont(style, node);
+                ProcessFont(parentStyle, child);
                 return true;
             }
 

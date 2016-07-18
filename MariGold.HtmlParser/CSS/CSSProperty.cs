@@ -16,6 +16,7 @@
         internal const string textDecoration = "text-decoration";
         internal const string backgroundColor = "background-color";
         internal const string background = "background";
+        internal const string transparent = "transparent";
 
         internal abstract bool AppendStyle(HtmlStyle parentStyle, HtmlNode child);
         internal abstract void ParseStyle(HtmlNode node);

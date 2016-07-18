@@ -10,7 +10,8 @@
         private void Init()
         {
             properties = new List<CSSProperty>(){
-                new FontProperty()
+                new FontProperty(),
+                new BackgroundProperty()
             };
         }
 

@@ -38,7 +38,7 @@
                 baseUrl = value;
             }
         }
-        
+
         private void TraverseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
         {
             string style = string.Empty;
@@ -53,7 +53,8 @@
                 string media = node.ExtractAttributeValue("media");
 
                 if (string.Compare(rel, relValue, StringComparison.InvariantCultureIgnoreCase) == 0 &&
-                    (string.IsNullOrEmpty(media) || media.CompareInvariantCultureIgnoreCase("screen")))
+                    (string.IsNullOrEmpty(media) || media.CompareInvariantCultureIgnoreCase("screen")
+                    || media.CompareInvariantCultureIgnoreCase("all")))
                 {
                     string url = node.ExtractAttributeValue("href");
 
