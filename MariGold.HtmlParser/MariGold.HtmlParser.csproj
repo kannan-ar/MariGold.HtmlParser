@@ -76,7 +76,7 @@
     <Compile Include="CSS\SelectorType.cs" />
     <Compile Include="CSS\Specificity.cs" />
     <Compile Include="CSS\StyleSheet.cs" />
-    <Compile Include="HandleInvalidTags.cs" />
+    <Compile Include="InvalidTagHandler.cs" />
     <Compile Include="HtmlAnalyzer.cs" />
     <Compile Include="HtmlContext.cs" />
     <Compile Include="HtmlNode.cs" />

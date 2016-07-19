@@ -94,21 +94,23 @@
             {
                 ExtractTag(position - 1);
                 
-                HandleInvalidTags invalidTag = new HandleInvalidTags();
+                InvalidTagHandler invalidTag = new InvalidTagHandler();
                 invalidTag.CloseNonNestedParents(startPosition, tag, context, ref parent);
 
                 this.AddAnalyzer("attributeAnalyzer", new AttributeAnalyzer(context));
             }
 
-            if (IsOpenTag(position, out openTag))
+            ProcessQuote(letter);
+
+            if (!QuoteOpened && IsOpenTag(position, out openTag))
             {
                 context.SetAnalyzer(openTag.GetAnalyzer(position, parent));
             }
-            else if (IsValidSelfClosing(position))
+            else if (!QuoteOpened && IsValidSelfClosing(position))
             {
                 tagCreated = OnSelfClose(position, ref node);
             }
-            else if (letter == HtmlTag.closeAngle)
+            else if (!QuoteOpened && letter == HtmlTag.closeAngle)
             {
                 if (HtmlTag.IsSelfClosing(tag))
                 {

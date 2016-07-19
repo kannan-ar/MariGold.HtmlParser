@@ -38,7 +38,9 @@
                 this.AddAnalyzer("attributeAnalyzer", new AttributeAnalyzer(context));
             }
 
-            if (letter == HtmlTag.closeAngle)
+            ProcessQuote(letter);
+
+            if (!QuoteOpened && letter == HtmlTag.closeAngle)
             {
                 if (string.IsNullOrEmpty(tag))
                 {

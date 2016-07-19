@@ -485,5 +485,17 @@
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
         }
+
+        [Test]
+        public void BracesInAttributeQuotes()
+        {
+            string html = "<a t=\"a<b>\">test</a>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            Assert.IsNotNull(parser.Current);
+            parser.Current.AnalyzeNode("a", "test", html, null, false, true, 1, 1, 0);
+            parser.Current.Attributes.CheckKeyValuePair(0, "t", "a<b>");
+        }
     }
 }

@@ -79,7 +79,9 @@
             bool tagCreated = false;
             char letter = context.Html[position];
 
-            if (!ignoreTag)
+            ProcessQuote(letter);
+
+            if (!QuoteOpened && !ignoreTag)
             {
                 if (tagStart == -1 && IsValidHtmlLetter(letter))
                 {
@@ -98,7 +100,7 @@
                 }
             }
 
-            if (letter == HtmlTag.closeAngle)
+            if (!QuoteOpened && letter == HtmlTag.closeAngle)
             {
                 HtmlNode nextNode = current;
                 HtmlNode newNode = null;

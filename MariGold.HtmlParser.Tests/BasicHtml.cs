@@ -383,5 +383,15 @@
                 null, false, true, 1, 1, 1);
             TestUtility.CheckStyle(parser.Current.Styles.ElementAt(0), "color", "#fff");
         }
+
+        [Test]
+        public void AngularInTest()
+        {
+            string html = "<div>te\"<a\"st</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            Assert.IsTrue(parser.Parse());
+            parser.Current.AnalyzeNode("div", "te\"<a\"st", html, null, false, true, 1, 0, 0);
+        }
 	}
 }

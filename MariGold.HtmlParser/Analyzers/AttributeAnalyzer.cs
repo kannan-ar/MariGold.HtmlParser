@@ -8,7 +8,6 @@
         private Action<int, HtmlNode> analyze;
         private int start;
         private string key;
-        private char quote;
         private Dictionary<string, string> attributes;
 
         public AttributeAnalyzer(IAnalyzerContext context)
@@ -53,7 +52,7 @@
                 quote = char.MinValue;
             }
             else if (start > -1 && ((!IsValidHtmlLetter(letter) && quote == char.MinValue) ||
-                letter == quote || letter == HtmlTag.closeAngle) && position > start)
+                letter == quote || (letter == HtmlTag.closeAngle && quote == char.MinValue)) && position > start)
             {
                 key = context.Html.Substring(start, position - start);
                 quote = char.MinValue;
@@ -124,7 +123,7 @@
             }
             else if (start > -1 &&
                 ((!IsValidHtmlLetter(letter) && quote == char.MinValue) ||
-                letter == quote || letter == HtmlTag.closeAngle) && position > start)
+                letter == quote || (letter == HtmlTag.closeAngle && quote == char.MinValue)) && position > start)
             {
                 if (letter != HtmlTag.closeAngle)
                 {

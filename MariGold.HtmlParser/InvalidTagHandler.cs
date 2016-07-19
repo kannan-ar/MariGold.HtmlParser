@@ -3,11 +3,11 @@
     using System;
     using System.Collections.Generic;
 
-    internal class HandleInvalidTags
+    internal class InvalidTagHandler
     {
         private static Dictionary<string, List<string>> nonNestedTags;
 
-        static HandleInvalidTags()
+        static InvalidTagHandler()
         {
             nonNestedTags = new Dictionary<string, List<string>>();
 

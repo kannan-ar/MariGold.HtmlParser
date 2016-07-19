@@ -1,171 +1,195 @@
 ﻿namespace MariGold.HtmlParser
 {
-	using System;
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
 
-	internal abstract class HtmlAnalyzer
-	{
-		private Dictionary<string, HtmlAnalyzer> subAnalyzers;
+    internal abstract class HtmlAnalyzer
+    {
+        private Dictionary<string, HtmlAnalyzer> subAnalyzers;
 
-		internal event Action<string> OnTagCreate;
+        protected readonly IAnalyzerContext context;
+        protected char quote;
 
-		protected readonly IAnalyzerContext context;
+        internal event Action<string> OnTagCreate;
 
-		protected bool IsOpenTag(int position, out IOpenTag openTag)
-		{
-			openTag = null;
+        protected bool QuoteOpened
+        {
+            get
+            {
+                return quote == HtmlTag.singleQuote || quote == HtmlTag.doubleQuote;
+            }
+        }
 
-			foreach (IOpenTag tag in context.OpenTags)
-			{
-				if (tag.IsOpenTag(position, context.Html))
-				{
-					openTag = tag;
-					return true;
-				}
-			}
+        protected bool IsOpenTag(int position, out IOpenTag openTag)
+        {
+            openTag = null;
 
-			return false;
-		}
+            foreach (IOpenTag tag in context.OpenTags)
+            {
+                if (tag.IsOpenTag(position, context.Html))
+                {
+                    openTag = tag;
+                    return true;
+                }
+            }
 
-		protected bool IsCloseTag(int position, out ICloseTag closeTag)
-		{
-			closeTag = null;
+            return false;
+        }
 
-			foreach (ICloseTag tag in context.CloseTags)
-			{
-				if (tag.IsCloseTag(position, context.Html))
-				{
-					closeTag = tag;
-					return true;
-				}
-			}
+        protected bool IsCloseTag(int position, out ICloseTag closeTag)
+        {
+            closeTag = null;
 
-			return false;
-		}
+            foreach (ICloseTag tag in context.CloseTags)
+            {
+                if (tag.IsCloseTag(position, context.Html))
+                {
+                    closeTag = tag;
+                    return true;
+                }
+            }
 
-		protected bool IsValidHtmlLetter(char letter)
-		{
-			return char.IsLetterOrDigit(letter) || letter == HtmlTag.hypen;
-		}
+            return false;
+        }
 
-		protected bool CreateTag(string tag, int htmlStart, int textStart, int textEnd, int htmlEnd,
-			HtmlNode parent, out HtmlNode node)
-		{
-			node = null;
+        protected bool IsValidHtmlLetter(char letter)
+        {
+            return char.IsLetterOrDigit(letter) || letter == HtmlTag.hypen;
+        }
 
-			if (htmlEnd != -1 && htmlEnd <= htmlStart)
-			{
-				return false;
-			}
+        protected bool CreateTag(string tag, int htmlStart, int textStart, int textEnd, int htmlEnd,
+            HtmlNode parent, out HtmlNode node)
+        {
+            node = null;
 
-			if (textEnd != -1 && textEnd < textStart)
-			{
-				return false;
-			}
+            if (htmlEnd != -1 && htmlEnd <= htmlStart)
+            {
+                return false;
+            }
 
-			node = new HtmlNode(tag, htmlStart, textStart, textEnd, htmlEnd, context.HtmlContext, parent);
+            if (textEnd != -1 && textEnd < textStart)
+            {
+                return false;
+            }
 
-			if (context.PreviousNode != null)
-			{
-				node.SetPreviousNode(context.PreviousNode);
-				context.PreviousNode.SetNextNode(node);
-			}
+            node = new HtmlNode(tag, htmlStart, textStart, textEnd, htmlEnd, context.HtmlContext, parent);
 
-			context.PreviousNode = node;
+            if (context.PreviousNode != null)
+            {
+                node.SetPreviousNode(context.PreviousNode);
+                context.PreviousNode.SetNextNode(node);
+            }
 
-			return parent == null;
-		}
+            context.PreviousNode = node;
 
-		protected bool AssignNextAnalyzer(int position, HtmlNode node)
-		{
-			IOpenTag openTag;
-			ICloseTag closeTag;
-			bool assigned = false;
+            return parent == null;
+        }
 
-			if (IsOpenTag(position, out openTag))
-			{
-				context.SetAnalyzer(openTag.GetAnalyzer(position, node));
-				assigned = true;
-			}
-			else if (IsCloseTag(position, out closeTag))
-			{
-				closeTag.Init(position, node);
-				context.SetAnalyzer(closeTag.GetAnalyzer());
-				assigned = true;
-			}
+        protected bool AssignNextAnalyzer(int position, HtmlNode node)
+        {
+            IOpenTag openTag;
+            ICloseTag closeTag;
+            bool assigned = false;
 
-			return assigned;
-		}
+            if (IsOpenTag(position, out openTag))
+            {
+                context.SetAnalyzer(openTag.GetAnalyzer(position, node));
+                assigned = true;
+            }
+            else if (IsCloseTag(position, out closeTag))
+            {
+                closeTag.Init(position, node);
+                context.SetAnalyzer(closeTag.GetAnalyzer());
+                assigned = true;
+            }
 
-		protected HtmlAnalyzer(IAnalyzerContext context)
-		{
-			if (context == null)
-			{
-				throw new ArgumentNullException("context");
-			}
+            return assigned;
+        }
 
-			this.context = context;
-		}
+        protected HtmlAnalyzer(IAnalyzerContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
-		protected abstract bool ProcessHtml(int position, ref HtmlNode node);
-		protected abstract void Finalize(int position, ref HtmlNode node);
+            this.context = context;
+        }
 
-		protected void AddAnalyzer(string name, HtmlAnalyzer analyzer)
-		{
-			if (subAnalyzers == null)
-			{
-				subAnalyzers = new Dictionary<string, HtmlAnalyzer>();
-			}
+        protected abstract bool ProcessHtml(int position, ref HtmlNode node);
+        protected abstract void Finalize(int position, ref HtmlNode node);
 
-			subAnalyzers.Add(name, analyzer);
-		}
+        protected void AddAnalyzer(string name, HtmlAnalyzer analyzer)
+        {
+            if (subAnalyzers == null)
+            {
+                subAnalyzers = new Dictionary<string, HtmlAnalyzer>();
+            }
 
-		protected void FinalizeSubAnalyzers(int position, ref HtmlNode node)
-		{
-			if (subAnalyzers != null)
-			{
-				foreach (var subAnalyzer in subAnalyzers)
-				{
-					subAnalyzer.Value.Finalize(position, ref node);
-				}
+            subAnalyzers.Add(name, analyzer);
+        }
 
-				subAnalyzers = null;
-			}
-		}
+        protected void FinalizeSubAnalyzers(int position, ref HtmlNode node)
+        {
+            if (subAnalyzers != null)
+            {
+                foreach (var subAnalyzer in subAnalyzers)
+                {
+                    subAnalyzer.Value.Finalize(position, ref node);
+                }
 
-		protected void TagCreated(string tag)
-		{
-			if (OnTagCreate != null)
-			{
-				OnTagCreate(tag);
-			}
-		}
+                subAnalyzers = null;
+            }
+        }
 
-		protected void InnerTagOpened(HtmlNode parentNode)
-		{
-			//New inner rows opened. So clearing the previous node.
-			context.PreviousNode = null;
-		}
+        protected void TagCreated(string tag)
+        {
+            if (OnTagCreate != null)
+            {
+                OnTagCreate(tag);
+            }
+        }
 
-		protected void InnerTagClosed(HtmlNode currentNode)
-		{
-			//Closed a row of nodes. So current node assigned as previous node.
-			context.PreviousNode = currentNode;
-		}
+        protected void InnerTagOpened(HtmlNode parentNode)
+        {
+            //New inner rows opened. So clearing the previous node.
+            context.PreviousNode = null;
+        }
 
-		public bool Process(int position, ref HtmlNode node)
-		{
-			bool tagCreated = ProcessHtml(position, ref node);
+        protected void InnerTagClosed(HtmlNode currentNode)
+        {
+            //Closed a row of nodes. So current node assigned as previous node.
+            context.PreviousNode = currentNode;
+        }
 
-			if (subAnalyzers != null)
-			{
-				foreach (var subAnalyzer in subAnalyzers)
-				{
-					subAnalyzer.Value.Process(position, ref node);
-				}
-			}
+        protected void ProcessQuote(char letter)
+        {
+            if (letter == HtmlTag.singleQuote || letter == HtmlTag.doubleQuote)
+            {
+                if (quote == char.MinValue)
+                {
+                    quote = letter;
+                }
+                else if (quote == letter)
+                {
+                    quote = char.MinValue;
+                }
+            }
+        }
 
-			return tagCreated;
-		}
-	}
+        public bool Process(int position, ref HtmlNode node)
+        {
+            bool tagCreated = ProcessHtml(position, ref node);
+
+            if (subAnalyzers != null)
+            {
+                foreach (var subAnalyzer in subAnalyzers)
+                {
+                    subAnalyzer.Value.Process(position, ref node);
+                }
+            }
+
+            return tagCreated;
+        }
+    }
 }
