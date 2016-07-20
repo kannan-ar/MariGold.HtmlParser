@@ -32,13 +32,10 @@
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             bool tagCreated = false;
-            char letter = context.Html[position];
             IOpenTag openTag;
             ICloseTag closeTag;
 
-            ProcessQuote(letter);
-
-            if (!QuoteOpened && IsOpenTag(position, out openTag))
+            if (IsOpenTag(position, out openTag))
             {
                 //+1 is required because the Html is zero based array so the position is always -1 of total length.
                 tagCreated = CreateTag(HtmlTag.TEXT, startPosition, startPosition, position,
@@ -46,7 +43,7 @@
 
                 context.SetAnalyzer(openTag.GetAnalyzer(position, parent));
             }
-            else if (!QuoteOpened && IsCloseTag(position, out closeTag))
+            else if (IsCloseTag(position, out closeTag))
             {
                 tagCreated = CreateTag(HtmlTag.TEXT, startPosition, startPosition, position,
                     position, parent, out node);
