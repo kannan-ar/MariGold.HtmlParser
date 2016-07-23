@@ -464,18 +464,6 @@
 
                 return styles;
             }
-
-            set
-            {
-                styles = value;
-                //
-                htmlStyles = new List<HtmlStyle>();
-
-                foreach (KeyValuePair<string, string> style in styles)
-                {
-                    htmlStyles.Add(new HtmlStyle(style.Key, style.Value, false));
-                }
-            }
         }
 
         public IHtmlNode Clone()

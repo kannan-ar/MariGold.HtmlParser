@@ -10,5 +10,6 @@
     <Node UniqueName="[0-1324]MariGold.HtmlParser" Expanded="true" />
     <Node UniqueName="[0-1325]MariGold.HtmlParser.Tests" Expanded="true" />
     <Node UniqueName="[0-1001]MariGold.HtmlParser.Tests.BasicHtml" Expanded="true" />
+    <Node UniqueName="[0-1143]MariGold.HtmlParser.Tests.CSSInheritance" Expanded="true" />
   </Nodes>
 </VisualState>
