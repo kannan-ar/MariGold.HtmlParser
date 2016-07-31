@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    internal sealed class IdentitySelector : CSSelector
+    internal sealed class IdentitySelector : CSSelector, IAttachedSelector
     {
         private const string key = "id";
 
@@ -29,6 +29,7 @@
                 throw new ArgumentNullException("context");
             }
 
+            context.AddAttachedSelector(this);
             this.context = context;
             regex = new Regex("^#[-_]*([a-zA-Z]+[0-9_-]*)+");
         }
@@ -105,6 +106,21 @@
         internal override CSSelector Clone()
         {
             return new IdentitySelector(context, currentSelector, selectorText, specificity.Clone());
+        }
+
+        bool IAttachedSelector.Prepare(string selector)
+        {
+            return Prepare(selector);
+        }
+
+        bool IAttachedSelector.IsValidNode(HtmlNode node)
+        {
+            return IsValidNode(node);
+        }
+
+        void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+        {
+            Parse(node, htmlStyles);
         }
     }
 }

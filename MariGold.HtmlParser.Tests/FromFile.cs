@@ -182,5 +182,38 @@
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
         }
+
+        [Test]
+        public void ElementIdentityStyles()
+        {
+            string path = TestUtility.GetFolderPath("Html\\elementidentity.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+            {
+                node = node.Next;
+            }
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "div")
+            {
+                node = node.Next;
+            }
+
+            node.AnalyzeNode("div", "test", "<div id=\"gray\">test</div>", node.Parent, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "background-color", "#eee");
+        }
     }
 }
