@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    internal class CSSPropertyParser
+    internal sealed class CSSPropertyParser
     {
         private List<CSSProperty> properties;
 
@@ -11,7 +11,8 @@
         {
             properties = new List<CSSProperty>(){
                 new FontProperty(),
-                new BackgroundProperty()
+                new BackgroundProperty(),
+                new FontSizeProperty()
             };
         }
 

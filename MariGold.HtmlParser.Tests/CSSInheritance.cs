@@ -687,5 +687,85 @@
             node.AnalyzeNode("div", "test", "<div style='background:transparent'>test</div>", parent, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "background", "#000");
         }
+
+        [Test]
+        public void OverrideChildFontSizePercentage()
+        {
+            string html = "<div style='font-size:4em'><div style='font-size:100%'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "<div style='font-size:100%'>test</div>", html, null, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "font-size", "4em");
+
+            IHtmlNode parent = node;
+            node = node.Children.ElementAt(0);
+            node.AnalyzeNode("div", "test", "<div style='font-size:100%'>test</div>", parent, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "font-size", "4em");
+        }
+
+        [Test]
+        public void OverrideChildFontSizeTwoHunderedPercentage()
+        {
+            string html = "<div style='font-size:4em'><div style='font-size:200%'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "<div style='font-size:200%'>test</div>", html, null, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "font-size", "4em");
+
+            IHtmlNode parent = node;
+            node = node.Children.ElementAt(0);
+            node.AnalyzeNode("div", "test", "<div style='font-size:200%'>test</div>", parent, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "font-size", "8em");
+        }
+
+        [Test]
+        public void OverrideChildFontSizeAllPercentages()
+        {
+            string html = "<div style='font-size:200%'><div style='font-size:50%'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "<div style='font-size:50%'>test</div>", html, null, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "font-size", "200%");
+
+            IHtmlNode parent = node;
+            node = node.Children.ElementAt(0);
+            node.AnalyzeNode("div", "test", "<div style='font-size:50%'>test</div>", parent, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "font-size", "100%");
+        }
+
+        [Test]
+        public void OverrideChildFontSizeWith120Percentage()
+        {
+            string html = "<div style='font-size:10px'><div style='font-size:120%'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "<div style='font-size:120%'>test</div>", html, null, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "font-size", "10px");
+
+            IHtmlNode parent = node;
+            node = node.Children.ElementAt(0);
+            node.AnalyzeNode("div", "test", "<div style='font-size:120%'>test</div>", parent, false, true, 1, 1, 1);
+            node.Styles.CheckKeyValuePair(0, "font-size", "12px");
+        }
     }
 }

@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal class Specificity
+    internal sealed class Specificity
     {
         private Int16 inline;
         private Int16 id;

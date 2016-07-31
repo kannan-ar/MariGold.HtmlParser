@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="CSS\Properties\BackgroundProperty.cs" />
     <Compile Include="CSS\Properties\FontProperty.cs" />
+    <Compile Include="CSS\Properties\FontSizeProperty.cs" />
     <Compile Include="CSS\SelectorContext.cs" />
     <Compile Include="CSS\CSSBehavior.cs" />
     <Compile Include="CSS\ISelectorContext.cs" />
