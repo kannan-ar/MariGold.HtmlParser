@@ -767,5 +767,49 @@
             node.AnalyzeNode("div", "test", "<div style='font-size:120%'>test</div>", parent, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "font-size", "12px");
         }
+
+        [Test]
+        public void CSSFontPercentageAndFontFamily()
+        {
+            string html = "<div style='font:10px Arial'><div style='font-size:75%'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style='font-size:75%'>test</div>", html, null, false, true, 1, 1, 2);
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style='font-size:75%'>test</div>", parent, false, true, 1, 1, 2);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "8px");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-family", "Arial");
+        }
+
+        [Test]
+        public void CSSFontPercentageInheritance()
+        {
+            string html = "<div style='font:10px Arial'><div style='font:50% Verdana'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style='font:50% Verdana'>test</div>", html, null, false, true, 1, 1, 2);
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style='font:50% Verdana'>test</div>", parent, false, true, 1, 1, 2);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "5px");
+            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-family", "Verdana");
+        }
     }
 }
