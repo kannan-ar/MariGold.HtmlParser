@@ -8,6 +8,7 @@
         private HtmlNode parent;
         private int tagStart;
         private string tag;
+        private AttributeAnalyzer attributeAnalyzer;
 
         public OpenTagAnalyzer(IAnalyzerContext context)
             : base(context)
@@ -38,7 +39,7 @@
             tagCreated = CreateTag(tag, startPosition, startPosition, position + 2, position + 2,
                     parent, out node);
 
-			node.SetSelfClosing(true);
+            node.SetSelfClosing(true);
             //+ 2 is to find next position of />
             if (!AssignNextAnalyzer(position + 2, parent))
             {
@@ -47,9 +48,23 @@
 
             context.SetPosition(position + 1);
 
-            this.FinalizeSubAnalyzers(position, ref node);
+            //this.FinalizeSubAnalyzers(position, ref node);
+            if (attributeAnalyzer != null)
+            {
+                attributeAnalyzer.Finalize(position, ref node);
+            }
 
             return tagCreated;
+        }
+
+        private bool IsQuotedValueSeek()
+        {
+            if (attributeAnalyzer == null)
+            {
+                return false;
+            }
+
+            return attributeAnalyzer.IsQuotedValueSeek();
         }
 
         public bool IsOpenTag(int position, string html)
@@ -74,11 +89,11 @@
 
             return analyzer;
         }
-
+        /*
         protected override void Finalize(int position, ref HtmlNode node)
         {
         }
-
+        */
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             IOpenTag openTag;
@@ -93,31 +108,32 @@
             if (string.IsNullOrEmpty(tag) && tagStart > -1 && !IsValidHtmlLetter(letter))
             {
                 ExtractTag(position - 1);
-                
+
                 InvalidTagHandler invalidTag = new InvalidTagHandler();
                 invalidTag.CloseNonNestedParents(startPosition, tag, context, ref parent);
 
-                this.AddAnalyzer("attributeAnalyzer", new AttributeAnalyzer(context));
+                //this.AddAnalyzer("attributeAnalyzer", new AttributeAnalyzer(context));
+                attributeAnalyzer = new AttributeAnalyzer(context);
             }
 
-            ProcessQuote(letter);
+            // ProcessQuote(letter);
 
-            if (!QuoteOpened && IsOpenTag(position, out openTag))
+            if (!IsQuotedValueSeek() && IsOpenTag(position, out openTag))
             {
                 context.SetAnalyzer(openTag.GetAnalyzer(position, parent));
             }
-            else if (!QuoteOpened && IsValidSelfClosing(position))
+            else if (!IsQuotedValueSeek() && IsValidSelfClosing(position))
             {
                 tagCreated = OnSelfClose(position, ref node);
             }
-            else if (!QuoteOpened && letter == HtmlTag.closeAngle)
+            else if (!IsQuotedValueSeek() && letter == HtmlTag.closeAngle)
             {
                 if (HtmlTag.IsSelfClosing(tag))
                 {
                     tagCreated = CreateTag(tag, startPosition, startPosition, position + 1,
                         position + 1, parent, out node);
 
-					node.SetSelfClosing(true);
+                    node.SetSelfClosing(true);
 
                     if (!AssignNextAnalyzer(position + 1, parent))
                     {
@@ -136,7 +152,16 @@
                     InnerTagOpened(node);
                 }
 
-                this.FinalizeSubAnalyzers(position, ref node);
+                //this.FinalizeSubAnalyzers(position, ref node);
+                if (attributeAnalyzer != null)
+                {
+                    attributeAnalyzer.Finalize(position, ref node);
+                }
+            }
+
+            if (attributeAnalyzer != null)
+            {
+                attributeAnalyzer.Process(position, ref node);
             }
 
             return tagCreated;

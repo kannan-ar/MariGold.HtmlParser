@@ -69,19 +69,20 @@
         {
             return this;
         }
-
+        /*
         protected override void Finalize(int position, ref HtmlNode node)
         {
         }
-
+        */
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             bool tagCreated = false;
             char letter = context.Html[position];
 
-            ProcessQuote(letter);
+           // ProcessQuote(letter);
 
-            if (!QuoteOpened && !ignoreTag)
+            //if (!QuoteOpened && !ignoreTag)
+            if (!ignoreTag)
             {
                 if (tagStart == -1 && IsValidHtmlLetter(letter))
                 {
@@ -100,7 +101,8 @@
                 }
             }
 
-            if (!QuoteOpened && letter == HtmlTag.closeAngle)
+            //if (!QuoteOpened && letter == HtmlTag.closeAngle)
+            if (letter == HtmlTag.closeAngle)
             {
                 HtmlNode nextNode = current;
                 HtmlNode newNode = null;

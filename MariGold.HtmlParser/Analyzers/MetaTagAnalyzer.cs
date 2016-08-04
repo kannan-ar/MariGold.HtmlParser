@@ -8,8 +8,19 @@
         private HtmlNode parent;
         private int tagStart;
         private string tag;
+        private AttributeAnalyzer attributeAnalyzer;
 
         public MetaTagAnalyzer(IAnalyzerContext context) : base(context) { }
+
+        private bool IsQuotedValueSeek()
+        {
+            if (attributeAnalyzer == null)
+            {
+                return false;
+            }
+
+            return attributeAnalyzer.IsQuotedValueSeek();
+        }
 
         private void ExtractTag(int position)
         {
@@ -35,12 +46,13 @@
             {
                 ExtractTag(position - 1);
 
-                this.AddAnalyzer("attributeAnalyzer", new AttributeAnalyzer(context));
+                //this.AddAnalyzer("attributeAnalyzer", new AttributeAnalyzer(context));
+                attributeAnalyzer = new AttributeAnalyzer(context);
             }
 
-            ProcessQuote(letter);
+           // ProcessQuote(letter);
 
-            if (!QuoteOpened && letter == HtmlTag.closeAngle)
+            if (!IsQuotedValueSeek() && letter == HtmlTag.closeAngle)
             {
                 if (string.IsNullOrEmpty(tag))
                 {
@@ -55,7 +67,11 @@
 					node.SetSelfClosing(true);
                 }
 
-                this.FinalizeSubAnalyzers(position, ref node);
+                //this.FinalizeSubAnalyzers(position, ref node);
+                if (attributeAnalyzer != null)
+                {
+                    attributeAnalyzer.Finalize(position, ref node);
+                }
 
                 if (!AssignNextAnalyzer(position + 1, parent))
                 {
@@ -63,13 +79,18 @@
                 }
             }
 
+            if (attributeAnalyzer != null)
+            {
+                attributeAnalyzer.Process(position, ref node);
+            }
+
             return tagCreated;
         }
-
+        /*
         protected override void Finalize(int position, ref HtmlNode node)
         {
         }
-
+        */
         public bool IsOpenTag(int position, string html)
         {
             if (position + 2 >= context.EOF)

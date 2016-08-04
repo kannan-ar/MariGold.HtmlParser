@@ -5,10 +5,20 @@
 
     internal sealed class AttributeAnalyzer : HtmlAnalyzer
     {
+        private enum Mode
+        {
+            Invalid,
+            KeySeek,
+            AssignSeek,
+            ValueSeek
+        }
+
         private Action<int, HtmlNode> analyze;
         private int start;
         private string key;
         private Dictionary<string, string> attributes;
+        private char quote;
+        private Mode mode;
 
         public AttributeAnalyzer(IAnalyzerContext context)
             : base(context)
@@ -16,6 +26,7 @@
             analyze = KeySeek;
             start = -1;
             quote = char.MinValue;
+            mode = Mode.Invalid;
             attributes = new Dictionary<string, string>();
         }
 
@@ -24,11 +35,13 @@
             start = -1;
             key = string.Empty;
             quote = char.MinValue;
+            mode = Mode.Invalid;
         }
 
         private void KeySeek(int position, HtmlNode node)
         {
             char letter = context.Html[position];
+            mode = Mode.KeySeek;
 
             if (start == -1 && IsValidHtmlLetter(letter))
             {
@@ -79,6 +92,7 @@
         {
             char letter = context.Html[position];
             bool isQuote = letter == HtmlTag.doubleQuote || letter == HtmlTag.singleQuote;
+            mode = Mode.AssignSeek;
 
             if (letter == HtmlTag.equalSign)
             {
@@ -111,6 +125,7 @@
         private void ValueSeek(int position, HtmlNode node)
         {
             char letter = context.Html[position];
+            mode = Mode.ValueSeek;
 
             if (start == -1 && IsValidHtmlLetter(letter))
             {
@@ -138,12 +153,28 @@
                 {
                     string value = context.Html.Substring(start, position - start);
                     attributes.Add(key, value);
-                    Clear();
                 }
+
+                Clear();
             }
         }
-
+        /*
         protected override void Finalize(int position, ref HtmlNode node)
+        {
+            FinalizeNode(position, ref node);
+        }
+        */
+        protected override bool ProcessHtml(int position, ref HtmlNode node)
+        {
+            if (analyze != null)
+            {
+                analyze(position, node);
+            }
+
+            return false;
+        }
+
+        internal void Finalize(int position, ref HtmlNode node)
         {
             foreach (KeyValuePair<string, string> attribute in attributes)
             {
@@ -172,14 +203,9 @@
             analyze = null;
         }
 
-        protected override bool ProcessHtml(int position, ref HtmlNode node)
+        internal bool IsQuotedValueSeek()
         {
-            if (analyze != null)
-            {
-                analyze(position, node);
-            }
-
-            return false;
+            return (quote == HtmlTag.singleQuote || quote == HtmlTag.doubleQuote) && mode == Mode.ValueSeek;
         }
     }
 }
