@@ -705,7 +705,7 @@
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
             node.AnalyzeNode("div", "test", "<div style='font-size:100%'>test</div>", parent, false, true, 1, 1, 1);
-            node.Styles.CheckKeyValuePair(0, "font-size", "4em");
+            node.Styles.CheckKeyValuePair(0, "font-size", "64px");
         }
 
         [Test]
@@ -725,7 +725,7 @@
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
             node.AnalyzeNode("div", "test", "<div style='font-size:200%'>test</div>", parent, false, true, 1, 1, 1);
-            node.Styles.CheckKeyValuePair(0, "font-size", "8em");
+            node.Styles.CheckKeyValuePair(0, "font-size", "128px");
         }
 
         [Test]
@@ -745,7 +745,7 @@
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
             node.AnalyzeNode("div", "test", "<div style='font-size:50%'>test</div>", parent, false, true, 1, 1, 1);
-            node.Styles.CheckKeyValuePair(0, "font-size", "100%");
+            node.Styles.CheckKeyValuePair(0, "font-size", "16px");
         }
 
         [Test]
@@ -786,7 +786,7 @@
             node = node.Children.ElementAt(0);
             Assert.IsNotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font-size:75%'>test</div>", parent, false, true, 1, 1, 2);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "8px");
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "7.5px");
             TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-family", "Arial");
         }
 
@@ -810,6 +810,136 @@
             node.AnalyzeNode("div", "test", "<div style='font:50% Verdana'>test</div>", parent, false, true, 1, 1, 2);
             TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "5px");
             TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-family", "Verdana");
+        }
+
+        [Test]
+        public void TextAlignInheritance()
+        {
+            string html = "<div style='text-align:center'><div>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseCSS();
+
+            Assert.IsNotNull(parser.Current);
+
+            IHtmlNode node = parser.Current;
+
+            node.AnalyzeNode("div", "<div>test</div>", html, null, false, true, 1, 1, 1);
+            node.Attributes.CheckKeyValuePair(0, "style", "text-align:center");
+            node.Styles.CheckKeyValuePair(0, "text-align", "center");
+
+            node.Children.ElementAt(0).AnalyzeNode("div", "test", "<div>test</div>", node, false, true, 1, 0, 1);
+            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "text-align", "center");
+        }
+
+        [Test]
+        public void CSSFontEmSizeInheritance()
+        {
+            string html = "<div style='font-size:2em'><div style='font-size:2em'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style='font-size:2em'>test</div>", html, null, false, true, 1, 1, 1);
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style='font-size:2em'>test</div>", parent, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "64px");
+        }
+
+        [Test]
+        public void CSSFontSizePercentageInheritance()
+        {
+            string html = "<div style='font-size:50%'><div style='font-size:75%'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style='font-size:75%'>test</div>", html, null, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "50%");
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style='font-size:75%'>test</div>", parent, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "6px");
+        }
+
+        [Test]
+        public void FontSizeParentPxtoChildPx()
+        {
+            string html = "<div style='font-size:15px'><div style='font-size:10px'>test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "15px");
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style='font-size:10px'>test</div>", parent, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "10px");
+        }
+
+        [Test]
+        public void FontSizeParent10PxtoChild2Em()
+        {
+            string html = "<div style=\"font-size:10px\"><div style=\"font-size:2em\">test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style=\"font-size:2em\">test</div>", html, null, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "10px");
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style=\"font-size:2em\">test</div>", parent, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "20px");
+        }
+
+        [Test]
+        public void Div10PxFontSizeH130PxFontSize()
+        {
+            string html = "<div style=\"font-size:10px\"><h1 style=\"font-size:30px\">test</h1></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseCSS();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<h1 style=\"font-size:30px\">test</h1>", html, null, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "10px");
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            node.AnalyzeNode("h1", "test", "<h1 style=\"font-size:30px\">test</h1>", parent, false, true, 1, 1, 1);
+            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "30px");
         }
     }
 }

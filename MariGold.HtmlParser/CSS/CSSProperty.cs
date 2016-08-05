@@ -11,6 +11,7 @@
         internal const string fontStyle = "font-style";
         internal const string fontVariant = "font-variant";
         internal const string lineHeight = "line-height";
+        internal const string textAlign = "text-align";
 
         internal const string color = "color";
         internal const string textDecoration = "text-decoration";
