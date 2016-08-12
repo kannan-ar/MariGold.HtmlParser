@@ -17,7 +17,7 @@
 		bool IsText{ get; }
 		Dictionary<string, string> Attributes{ get; }
         Dictionary<string, string> Styles { get; }
-		
+        Dictionary<string, string> InheritedStyles { get; }
 		IHtmlNode Clone();
 	}
 }

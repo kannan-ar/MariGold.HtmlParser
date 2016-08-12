@@ -41,6 +41,7 @@
     <Compile Include="Analyzers\MetaTagAnalyzer.cs" />
     <Compile Include="Analyzers\OpenTagAnalyzer.cs" />
     <Compile Include="Analyzers\TextAnalyzer.cs" />
+    <Compile Include="CSSUtility.cs" />
     <Compile Include="CSS\Behaviors\ApplyAllChildren.cs" />
     <Compile Include="CSS\Behaviors\ApplyAllNextElement.cs" />
     <Compile Include="CSS\Behaviors\ApplyImmediateChildren.cs" />

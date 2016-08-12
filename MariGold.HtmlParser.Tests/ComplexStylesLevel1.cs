@@ -755,7 +755,7 @@
             }
 
             TestUtility.AnalyzeNode(node, "div", "div", "<div>div</div>", body, false, true, 1, 0, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "red");
+            node.CheckStyle(0, "color", "red");
 
             while (node.Tag != "p")
             {
@@ -763,7 +763,7 @@
             }
 
             TestUtility.AnalyzeNode(node, "p", "p", "<p>p</p>", body, false, true, 1, 0, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "blue");
+            node.CheckStyle(0, "color", "blue");
 
             while (node.Tag != "span")
             {
@@ -771,7 +771,7 @@
             }
 
             TestUtility.AnalyzeNode(node, "span", "span", "<span>span</span>", body, false, true, 1, 0, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "red");
+            node.CheckStyle(0, "color", "red");
         }
     }
 }

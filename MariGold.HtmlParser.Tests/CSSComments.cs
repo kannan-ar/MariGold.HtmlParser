@@ -62,7 +62,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls'>test</div>", null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "red");
+            node.CheckStyle(0, "color", "red");
         }
 
         [Test]
@@ -88,7 +88,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls'>test</div>", null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "white");
+            node.CheckStyle(0, "color", "white");
         }
 
         [Test]
@@ -115,7 +115,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls'>test</div>", null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "white");
+            node.CheckStyle(0, "color", "white");
         }
 
         [Test]
@@ -134,7 +134,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls'>test</div>", null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "white");
+            node.CheckStyle(0, "color", "white");
         }
 
         [Test]
@@ -172,8 +172,8 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "test", "<div class='cls fnt'>test</div>", null, false, true, 1, 1, 2);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "white");
-            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-weight", "bold");
+            node.CheckStyle(0, "color", "white");
+            node.CheckStyle(1, "font-weight", "bold");
         }
     }
 }

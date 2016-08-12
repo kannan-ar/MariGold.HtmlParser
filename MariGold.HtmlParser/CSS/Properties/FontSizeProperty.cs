@@ -178,6 +178,24 @@
             Init();
         }
 
+        internal decimal CalculateChildNodeFontSize(string parentFontSizeValue, string childFontSizeValue)
+        {
+            if (!childFontSizeValue.Contains("%") && !childFontSizeValue.Contains("em") &&
+                !IsAbsoluteFont(childFontSizeValue))
+            {
+                return 0;
+            }
+
+            decimal parentFontSize = ConvertParentFontSize(parentFontSizeValue);
+
+            if (parentFontSize == 0)
+            {
+                return 0;
+            }
+
+            return ConvertChildFontSize(childFontSizeValue, parentFontSize);
+        }
+
         internal override bool AppendStyle(HtmlStyle parentStyle, HtmlNode child)
         {
             if (parentStyle == null || child == null)
@@ -194,7 +212,8 @@
 
             if (!child.HasStyle(fontSize))
             {
-                child.HtmlStyles.Add(new HtmlStyle(parentStyle.Name, parentStyle.Value, false));
+                //child.HtmlStyles.Add(new HtmlStyle(parentStyle.Name, parentStyle.Value, false));
+                child.UpdateInheritedStyles(parentStyle);
                 return PROCESSED;
             }
             else if (!child.TryGetStyle(fontSize, out childFontSize))
@@ -210,12 +229,16 @@
                 return PROCESSED;
             }
 
-            if (!childFontSizeValue.Contains("%") && !childFontSizeValue.Contains("em") &&
-                !IsAbsoluteFont(childFontSizeValue))
+            decimal childFont = CalculateChildNodeFontSize(parentFontSizeValue, childFontSizeValue);
+
+            if (childFont != 0)
             {
-                return PROCESSED;
+                childFontSize.ModifyStyle(string.Concat(childFont.ToString("G29"), "px"));
             }
 
+            return PROCESSED;
+
+            /*
             decimal parentFontSize = ConvertParentFontSize(parentFontSizeValue);
 
             if (parentFontSize == 0)
@@ -231,8 +254,7 @@
             }
 
             childFontSize.ModifyStyle(string.Concat(childFont.ToString("G29"), "px"));
-            
-            return PROCESSED;
+            */
 
             /*
             childFontSizeValue = childFontSizeValue.Replace("%", string.Empty).Trim();

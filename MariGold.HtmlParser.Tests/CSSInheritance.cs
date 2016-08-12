@@ -27,8 +27,9 @@
             node.Attributes.CheckKeyValuePair(0, "style", "font-family:arial");
             node.Styles.CheckKeyValuePair(0, "font-family", "arial");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "test", "<div>test</div>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(0).AnalyzeNode("div", "test", "<div>test</div>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).InheritedStyles.CheckKeyValuePair(0, "font-family", "arial");
         }
 
         [Test]
@@ -49,11 +50,13 @@
             node.Attributes.CheckKeyValuePair(0, "style", "font-family:arial");
             node.Styles.CheckKeyValuePair(0, "font-family", "arial");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span>", "<div><span>test</span></div>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span>", "<div><span>test</span></div>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
 
-            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
         }
 
         [Test]
@@ -75,11 +78,13 @@
             node.Styles.CheckKeyValuePair(0, "font-family", "arial");
             node.Styles.CheckKeyValuePair(1, "width", "10px");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span>", "<div><span>test</span></div>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span>", "<div><span>test</span></div>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
 
-            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
         }
 
         [Test]
@@ -100,14 +105,17 @@
             node.Attributes.CheckKeyValuePair(0, "style", "font-family:arial");
             node.Styles.CheckKeyValuePair(0, "font-family", "arial");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
 
-            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(1).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(1).InheritedStyles.Count);
+            node.Children.ElementAt(1).CheckInheritedStyle(0, "font-family", "arial");
 
-            node.Children.ElementAt(2).AnalyzeNode("p", "three", "<p>three</p>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(2).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(2).AnalyzeNode("p", "three", "<p>three</p>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(2).InheritedStyles.Count);
+            node.Children.ElementAt(2).CheckInheritedStyle(0, "font-family", "arial");
         }
 
         [Test]
@@ -129,14 +137,17 @@
             node.Styles.CheckKeyValuePair(0, "font-family", "arial");
             node.Styles.CheckKeyValuePair(1, "margin", "20px");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
 
-            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(1).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(1).InheritedStyles.Count);
+            node.Children.ElementAt(1).CheckInheritedStyle(0, "font-family", "arial");
 
-            node.Children.ElementAt(2).AnalyzeNode("p", "three", "<p>three</p>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(2).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(2).AnalyzeNode("p", "three", "<p>three</p>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(2).InheritedStyles.Count);
+            node.Children.ElementAt(2).CheckInheritedStyle(0, "font-family", "arial");
         }
 
         [Test]
@@ -161,14 +172,17 @@
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "font-family:verdana");
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "verdana");
 
-            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("b", "one", "<b>one</b>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "verdana");
+            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("b", "one", "<b>one</b>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "verdana");
 
-            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(1).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(1).InheritedStyles.Count);
+            node.Children.ElementAt(1).CheckInheritedStyle(0, "font-family", "arial");
 
-            node.Children.ElementAt(2).AnalyzeNode("p", "three", "<p>three</p>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(2).Styles.CheckKeyValuePair(0, "font-family", "arial");
+            node.Children.ElementAt(2).AnalyzeNode("p", "three", "<p>three</p>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(2).InheritedStyles.Count);
+            node.Children.ElementAt(2).CheckInheritedStyle(0, "font-family", "arial");
         }
 
         [Test]
@@ -202,9 +216,10 @@
             node.Styles.CheckKeyValuePair(0, "color", "#fff");
             node.Styles.CheckKeyValuePair(1, "background-color", "#000");
 
-            TestUtility.AnalyzeNode(node.Children.ElementAt(0), "div", "one", "<div>one</div>", node, false, true, 1, 0, 2);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "color", "#fff");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "background-color", "#000");
+            TestUtility.AnalyzeNode(node.Children.ElementAt(0), "div", "one", "<div>one</div>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(2, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "color", "#fff");
+            node.Children.ElementAt(0).CheckInheritedStyle(1, "background-color", "#000");
         }
 
         [Test]
@@ -238,13 +253,15 @@
             node.Styles.CheckKeyValuePair(0, "color", "#fff");
             node.Styles.CheckKeyValuePair(1, "background-color", "#000");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 2);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "color", "#fff");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "background-color", "#000");
+            node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(2, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "color", "#fff");
+            node.Children.ElementAt(0).CheckInheritedStyle(1, "background-color", "#000");
 
-            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 2);
-            node.Children.ElementAt(1).Styles.CheckKeyValuePair(0, "color", "#fff");
-            node.Children.ElementAt(1).Styles.CheckKeyValuePair(1, "background-color", "#000");
+            node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(2, node.Children.ElementAt(1).InheritedStyles.Count);
+            node.Children.ElementAt(1).CheckInheritedStyle(0, "color", "#fff");
+            node.Children.ElementAt(1).CheckInheritedStyle(1, "background-color", "#000");
 
             node = node.Next;
 
@@ -317,11 +334,13 @@
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "font-size:inherit");
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "10px");
 
-            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "10px");
+            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
-            node.Children.ElementAt(0).Children.ElementAt(1).AnalyzeNode("p", "one", "<p>one</p>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(1).Styles.CheckKeyValuePair(0, "font-size", "10px");
+            node.Children.ElementAt(0).Children.ElementAt(1).AnalyzeNode("p", "one", "<p>one</p>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(1).InheritedStyles.Count);
+            node.Children.ElementAt(0).Children.ElementAt(1).CheckInheritedStyle(0, "font-size", "10px");
         }
 
         [Test]
@@ -343,16 +362,19 @@
             node.Styles.CheckKeyValuePair(0, "font-size", "10px");
             node.Styles.CheckKeyValuePair(1, "width", "20px");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span><p>one</p>", "<div style='width:inherit'><span>test</span><p>one</p></div>", node, false, true, 2, 1, 2);
+            node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span><p>one</p>", "<div style='width:inherit'><span>test</span><p>one</p></div>", node, false, true, 2, 1, 1);
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "width:inherit");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "width", "20px");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-size", "10px");
+            node.Children.ElementAt(0).CheckStyle(0, "width", "20px");
+            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
-            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "10px");
+            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
-            node.Children.ElementAt(0).Children.ElementAt(1).AnalyzeNode("p", "one", "<p>one</p>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(1).Styles.CheckKeyValuePair(0, "font-size", "10px");
+            node.Children.ElementAt(0).Children.ElementAt(1).AnalyzeNode("p", "one", "<p>one</p>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(1).InheritedStyles.Count);
+            node.Children.ElementAt(0).Children.ElementAt(1).CheckInheritedStyle(0, "font-size", "10px");
         }
 
         [Test]
@@ -374,19 +396,23 @@
             node.Styles.CheckKeyValuePair(0, "font-size", "10px");
             node.Styles.CheckKeyValuePair(1, "width", "20px");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span><p>one</p>", "<div style='width:inherit'><span>test</span><p>one</p></div>", node, false, true, 2, 1, 2);
+            node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span><p>one</p>", "<div style='width:inherit'><span>test</span><p>one</p></div>", node, false, true, 2, 1, 1);
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "width:inherit");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "width", "20px");
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-size", "10px");
+            node.Children.ElementAt(0).CheckStyle(0, "width", "20px");
+            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
-            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "10px");
+            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
-            node.Children.ElementAt(0).Children.ElementAt(1).AnalyzeNode("p", "one", "<p>one</p>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(1).Styles.CheckKeyValuePair(0, "font-size", "10px");
+            node.Children.ElementAt(0).Children.ElementAt(1).AnalyzeNode("p", "one", "<p>one</p>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(1).InheritedStyles.Count);
+            node.Children.ElementAt(0).Children.ElementAt(1).CheckInheritedStyle(0, "font-size", "10px");
 
-            node.Children.ElementAt(1).AnalyzeNode("div", "last", "<div>last</div>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(1).Styles.CheckKeyValuePair(0, "font-size", "10px");
+            node.Children.ElementAt(1).AnalyzeNode("div", "last", "<div>last</div>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(1).InheritedStyles.Count);
+            node.Children.ElementAt(1).CheckInheritedStyle(0, "font-size", "10px");
         }
 
         [Test]
@@ -428,8 +454,9 @@
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
 
-            node.Children.ElementAt(0).AnalyzeNode("p", "one", "<p>one</p>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-weight", "bold");
+            node.Children.ElementAt(0).AnalyzeNode("p", "one", "<p>one</p>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "font-weight", "bold");
 
             Assert.IsNull(node.Next);
         }
@@ -475,8 +502,8 @@
             node.Children.ElementAt(0).AnalyzeNode("p", "<span>one</span>", "<p><span>one</span></p>", node, false, true, 1, 0, 1);
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-weight", "bold");
 
-            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "one", "<span>one</span>", node.Children.ElementAt(0), false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-weight", "bold");
+            node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "one", "<span>one</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
+            node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-weight", "bold");
 
             Assert.IsNull(node.Next);
         }
@@ -598,8 +625,9 @@
 
             node = node.Children.ElementAt(0);
             Assert.IsNotNull(node);
-            node.AnalyzeNode("div", "Test", "<div>Test</div>", head, false, true, 1, 0, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "background", "#fff");
+            node.AnalyzeNode("div", "Test", "<div>Test</div>", head, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.InheritedStyles.Count);
+            node.CheckInheritedStyle(0, "background", "#fff");
         }
 
         [Test]
@@ -619,10 +647,11 @@
 
             node = node.Children.ElementAt(0);
             Assert.IsNotNull(node);
-            node.AnalyzeNode("div", "test", "<div style='font-family:Verdana;'>test</div>", parent, false, true, 1, 1, 2);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-family", "Verdana");
-            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-size", "10px");
-
+            node.AnalyzeNode("div", "test", "<div style='font-family:Verdana;'>test</div>", parent, false, true, 1, 1, 1);
+            node.CheckStyle(0, "font-family", "Verdana");
+            Assert.AreEqual(2, node.InheritedStyles.Count);
+            node.CheckInheritedStyle(0, "font-size", "10px");
+            node.CheckInheritedStyle(1, "font-family", "Verdana");
         }
 
         [Test]
@@ -785,9 +814,11 @@
 
             node = node.Children.ElementAt(0);
             Assert.IsNotNull(node);
-            node.AnalyzeNode("div", "test", "<div style='font-size:75%'>test</div>", parent, false, true, 1, 1, 2);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "7.5px");
-            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-family", "Arial");
+            node.AnalyzeNode("div", "test", "<div style='font-size:75%'>test</div>", parent, false, true, 1, 1, 1);
+            node.CheckStyle(0, "font-size", "7.5px");
+            Assert.AreEqual(2, node.InheritedStyles.Count);
+            node.CheckInheritedStyle(0, "font-family", "Arial");
+            node.CheckInheritedStyle(1, "font-size", "7.5px");
         }
 
         [Test]
@@ -808,8 +839,8 @@
             node = node.Children.ElementAt(0);
             Assert.IsNotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font:50% Verdana'>test</div>", parent, false, true, 1, 1, 2);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "5px");
-            TestUtility.CheckStyle(node.Styles.ElementAt(1), "font-family", "Verdana");
+            node.CheckStyle(0, "font-size", "5px");
+            node.CheckStyle(1, "font-family", "Verdana");
         }
 
         [Test]
@@ -830,8 +861,9 @@
             node.Attributes.CheckKeyValuePair(0, "style", "text-align:center");
             node.Styles.CheckKeyValuePair(0, "text-align", "center");
 
-            node.Children.ElementAt(0).AnalyzeNode("div", "test", "<div>test</div>", node, false, true, 1, 0, 1);
-            node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "text-align", "center");
+            node.Children.ElementAt(0).AnalyzeNode("div", "test", "<div>test</div>", node, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            node.Children.ElementAt(0).CheckInheritedStyle(0, "text-align", "center");
         }
 
         [Test]
@@ -852,7 +884,7 @@
             node = node.Children.ElementAt(0);
             Assert.IsNotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font-size:2em'>test</div>", parent, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "64px");
+            node.CheckStyle(0, "font-size", "64px");
         }
 
         [Test]
@@ -868,13 +900,13 @@
             Assert.IsNotNull(node);
 
             node.AnalyzeNode("div", "<div style='font-size:75%'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "50%");
+            node.CheckStyle(0, "font-size", "50%");
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
             Assert.IsNotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font-size:75%'>test</div>", parent, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "6px");
+            node.CheckStyle(0, "font-size", "6px");
         }
 
         [Test]
@@ -890,13 +922,13 @@
             Assert.IsNotNull(node);
 
             node.AnalyzeNode("div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "15px");
+            node.CheckStyle(0, "font-size", "15px");
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
             Assert.IsNotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font-size:10px'>test</div>", parent, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "10px");
+            node.CheckStyle(0, "font-size", "10px");
         }
 
         [Test]
@@ -912,13 +944,13 @@
             Assert.IsNotNull(node);
 
             node.AnalyzeNode("div", "<div style=\"font-size:2em\">test</div>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "10px");
+            node.CheckStyle(0, "font-size", "10px");
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
             Assert.IsNotNull(node);
             node.AnalyzeNode("div", "test", "<div style=\"font-size:2em\">test</div>", parent, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "20px");
+            node.CheckStyle(0, "font-size", "20px");
         }
 
         [Test]
@@ -934,12 +966,12 @@
             Assert.IsNotNull(node);
 
             node.AnalyzeNode("div", "<h1 style=\"font-size:30px\">test</h1>", html, null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "10px");
+            node.CheckStyle(0, "font-size", "10px");
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
             node.AnalyzeNode("h1", "test", "<h1 style=\"font-size:30px\">test</h1>", parent, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "font-size", "30px");
+            node.CheckStyle(0, "font-size", "30px");
         }
     }
 }

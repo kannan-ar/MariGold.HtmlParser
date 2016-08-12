@@ -61,10 +61,15 @@
             return propertyParser.InheritStyle(parentStyle, child);
         }
 
-        private void AppendStyles(HtmlNode node, List<HtmlStyle> styles)
+        private void AppendStyles(HtmlNode node, HtmlNode parent)
         {
-            foreach (HtmlStyle parentStyle in styles)
+            foreach (HtmlStyle parentStyle in parent.HtmlStyles)
             {
+                if(!CanInherit(parentStyle.Name))
+                {
+                    continue;
+                }
+
                 bool found = false;
 
                 if (HasPropertyProcessed(parentStyle, node))
@@ -83,11 +88,12 @@
 
                 if (!found)
                 {
-                    node.HtmlStyles.Add(parentStyle.Clone());
+                    //node.HtmlStyles.Add(parentStyle.Clone());
+                    node.UpdateInheritedStyles(parentStyle);
                 }
             }
         }
-
+        /*
         private void CopyStyles(HtmlNode node, List<HtmlStyle> styles)
         {
             foreach (HtmlStyle style in node.HtmlStyles)
@@ -113,7 +119,7 @@
                 }
             }
         }
-
+        */
         private string FindParentStyle(HtmlNode node, string styleName)
         {
             string value = string.Empty;
@@ -136,13 +142,13 @@
             return value;
         }
 
-        private void InheritFromParent(HtmlNode node)
+        private void InheritFromParent(HtmlNode node, HtmlNode parent)
         {
             foreach (HtmlStyle style in node.HtmlStyles)
             {
                 if (string.Compare(style.Value, "inherit", StringComparison.InvariantCultureIgnoreCase) == 0 && node.Parent != null)
                 {
-                    string value = FindParentStyle(node.GetParent(), style.Name);
+                    string value = FindParentStyle(parent, style.Name);
 
                     if (value != string.Empty)
                     {
@@ -164,37 +170,57 @@
             return newStyles;
         }
 
-        private void ApplyToChildren(HtmlNode node, List<HtmlStyle> styles)
+        private void UpdateCurrentNodeInheritedStyles(HtmlNode node)
+        {
+            foreach(HtmlStyle style in node.HtmlStyles)
+            {
+                if(!CanInherit(style.Name))
+                {
+                    continue;
+                }
+
+                node.UpdateInheritedStyles(style);
+            }
+        }
+
+        private void ApplyToChildren(HtmlNode node, HtmlNode parent)
         {
             if (node == null)
             {
                 return;
             }
 
-            AppendStyles(node, styles);
+            if (parent != null)
+            {
+                node.ImportInheritedStyles(parent.InheritedHtmlStyles);
 
-            InheritFromParent(node);
+                AppendStyles(node, parent);
 
-            List<HtmlStyle> newStyles = CloneStyles(styles);
+                UpdateCurrentNodeInheritedStyles(node);
 
-            CopyStyles(node, newStyles);
+                InheritFromParent(node, parent);
+            }
+
+            //List<HtmlStyle> newStyles = CloneStyles(styles);
+
+            //CopyStyles(node, newStyles);
 
             foreach (HtmlNode child in node.GetChildren())
             {
-                ApplyToChildren(child, newStyles);
+                ApplyToChildren(child, node);
             }
 
             if (node.Parent == null && node.Next != null)
             {
-                ApplyToChildren(node.GetNext(), styles);
+                ApplyToChildren(node.GetNext(), parent);
             }
         }
 
         internal void Apply(HtmlNode node)
         {
-            List<HtmlStyle> styles = new List<HtmlStyle>();
+            //List<HtmlStyle> styles = new List<HtmlStyle>();
 
-            ApplyToChildren(node, styles);
+            ApplyToChildren(node, null);
         }
     }
 }

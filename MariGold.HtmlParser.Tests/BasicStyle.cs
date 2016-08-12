@@ -23,7 +23,7 @@
 				Assert.IsNotNull(parser.Current);
 				Assert.IsNotNull(parser.Current.Styles);
 				Assert.AreEqual(1, parser.Current.Styles.Count);
-				TestUtility.CheckStyle(parser.Current.Styles.ElementAt(0), "color", "#fff");
+                parser.Current.CheckStyle(0, "color", "#fff");
 			}
 		}
 
@@ -41,8 +41,8 @@
 				Assert.IsNotNull(parser.Current);
 				Assert.IsNotNull(parser.Current.Styles);
 				Assert.AreEqual(2, parser.Current.Styles.Count);
-				TestUtility.CheckStyle(parser.Current.Styles.ElementAt(0), "color", "#fff");
-				TestUtility.CheckStyle(parser.Current.Styles.ElementAt(1), "font-size", "24px");
+                parser.Current.CheckStyle(0, "color", "#fff");
+                parser.Current.CheckStyle(1, "font-size", "24px");
 			}
 		}
 
@@ -65,9 +65,9 @@
 
 			Assert.IsNotNull(parser.Current.Children.ElementAt(1).Styles);
 			Assert.AreEqual(3, parser.Current.Children.ElementAt(1).Styles.Count());
-            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(0), "color", "#000");
-            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(1), "font-size", "10px");
-            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(2), "font-family", "verdana,arial");
+            parser.Current.Children.ElementAt(1).CheckStyle(0, "color", "#000");
+            parser.Current.Children.ElementAt(1).CheckStyle(1, "font-size", "10px");
+            parser.Current.Children.ElementAt(1).CheckStyle(2, "font-family", "verdana,arial");
 		}
 
 		[Test]
@@ -89,9 +89,9 @@
 
 			Assert.IsNotNull(parser.Current.Children.ElementAt(1).Styles);
 			Assert.AreEqual(3, parser.Current.Children.ElementAt(1).Styles.Count);
-            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(0), "color", "#000");
-			TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(1), "font-size", "12px");
-            TestUtility.CheckStyle(parser.Current.Children.ElementAt(1).Styles.ElementAt(2), "font-family", "verdana,arial");
+            parser.Current.Children.ElementAt(1).CheckStyle(0, "color", "#000");
+            parser.Current.Children.ElementAt(1).CheckStyle(1, "font-size", "12px");
+            parser.Current.Children.ElementAt(1).CheckStyle(2, "font-family", "verdana,arial");
 		}
 
 		[Test]
@@ -363,7 +363,7 @@
 			Assert.IsNotNull(temp);
 			TestUtility.AreEqual(temp, "div", "one", "<div id>one</div>");
 			Assert.AreEqual(1, temp.Styles.Count);
-			TestUtility.CheckStyle(temp.Styles.ElementAt(0), "color", "#fff");
+            temp.CheckStyle(0, "color", "#fff");
 			
 			temp = temp.Next;
 			
@@ -409,7 +409,7 @@
 			Assert.IsNotNull(temp);
 			TestUtility.AreEqual(temp, "div", "one", "<div id='div'>one</div>");
 			Assert.AreEqual(1, temp.Styles.Count);
-			TestUtility.CheckStyle(temp.Styles.ElementAt(0), "color", "#fff");
+            temp.CheckStyle(0, "color", "#fff");
 			
 			temp = temp.Next;
 			
@@ -455,7 +455,7 @@
 			Assert.IsNotNull(temp);
 			TestUtility.AreEqual(temp, "div", "one", "<div id='dv'>one</div>");
 			Assert.AreEqual(1, temp.Styles.Count);
-			TestUtility.CheckStyle(temp.Styles.ElementAt(0), "color", "#fff");
+            temp.CheckStyle(0, "color", "#fff");
 			
 			temp = temp.Next;
 			
@@ -663,7 +663,7 @@
 			Assert.AreEqual(0, p.Styles.Count);
 			
 			TestUtility.AnalyzeNode(p.Children.ElementAt(0), "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0, 1);
-			TestUtility.CheckStyle(p.Children.ElementAt(0).Styles.ElementAt(0), "color", "#fff");
+            p.Children.ElementAt(0).CheckStyle(0, "color", "#fff");
 			
 			TestUtility.AnalyzeNode(p.Children.ElementAt(1), "span", "pspan2", "<span>pspan2</span>", p, false, true, 1, 0);
 			Assert.AreEqual(0, p.Children.ElementAt(1).Styles.Count);
@@ -720,15 +720,17 @@
 			TestUtility.AnalyzeNode(p, "p", "<span>pspan1</span><span>pspan2</span>", "<p><span>pspan1</span><span>pspan2</span></p>",
                 parent, false, true, 2, 0);
 			Assert.AreEqual(1, p.Styles.Count);
-            TestUtility.CheckStyle(p.Styles.ElementAt(0), "color", "#fff");
+            p.CheckStyle(0, "color", "#fff");
 
 			TestUtility.AnalyzeNode(p.Children.ElementAt(0), "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0);
-			Assert.AreEqual(1, p.Children.ElementAt(0).Styles.Count);
-            TestUtility.CheckStyle(p.Children.ElementAt(0).Styles.ElementAt(0), "color", "#fff");
+            Assert.AreEqual(0, p.Children.ElementAt(0).Styles.Count);
+			Assert.AreEqual(1, p.Children.ElementAt(0).InheritedStyles.Count);
+            p.Children.ElementAt(0).CheckInheritedStyle(0, "color", "#fff");
 
 			TestUtility.AnalyzeNode(p.Children.ElementAt(1), "span", "pspan2", "<span>pspan2</span>", p, false, true, 1, 0);
-			Assert.AreEqual(1, p.Children.ElementAt(1).Styles.Count);
-            TestUtility.CheckStyle(p.Children.ElementAt(1).Styles.ElementAt(0), "color", "#fff");
+            Assert.AreEqual(1, p.Children.ElementAt(1).InheritedStyles.Count);
+            Assert.AreEqual(0, p.Children.ElementAt(1).Styles.Count);
+            p.Children.ElementAt(1).CheckInheritedStyle(0, "color", "#fff");
 		}
 		
 		[Test]
@@ -761,7 +763,7 @@
 			
 			TestUtility.AnalyzeNode(div.Children.ElementAt(0), "span", "dspan1", "<span>dspan1</span>", div, false, true, 1, 0);
 			Assert.AreEqual(1, div.Children.ElementAt(0).Styles.Count);
-			TestUtility.CheckStyle(div.Children.ElementAt(0).Styles.ElementAt(0), "color", "#fff");
+            div.Children.ElementAt(0).CheckStyle(0, "color", "#fff");
 			
 			TestUtility.AnalyzeNode(div.Children.ElementAt(1), "span", "dspan2", "<span>dspan2</span>", div, false, true, 1, 0);
 			Assert.AreEqual(0, div.Children.ElementAt(1).Styles.Count);
@@ -777,7 +779,7 @@
 			
 			TestUtility.AnalyzeNode(p.Children.ElementAt(0), "span", "pspan1", "<span>pspan1</span>", p, false, true, 1, 0);
 			Assert.AreEqual(1, p.Children.ElementAt(0).Styles.Count);
-			TestUtility.CheckStyle(p.Children.ElementAt(0).Styles.ElementAt(0), "color", "#fff");
+            p.Children.ElementAt(0).CheckStyle(0, "color", "#fff");
 			
 			TestUtility.AnalyzeNode(p.Children.ElementAt(1), "span", "pspan2", "<span>pspan2</span>", p, false, true, 1, 0);
 			Assert.AreEqual(0, p.Children.ElementAt(1).Styles.Count);
@@ -824,7 +826,7 @@
 				{
 					TestUtility.AnalyzeNode(child, "div", "div tag", "<div>div tag</div>", body, false, true, 1, 0);
 					Assert.AreEqual(1, child.Styles.Count);
-					TestUtility.CheckStyle(child.Styles.ElementAt(0), "color", "#fff");
+                    child.CheckStyle(0, "color", "#fff");
 				}
 				else
 				{
@@ -915,7 +917,7 @@
 				{
 					TestUtility.AnalyzeNode(child, "p", "p tag", "<p>p tag</p>", body, false, true, 1, 0);
 					Assert.AreEqual(1, child.Styles.Count);
-					TestUtility.CheckStyle(child.Styles.ElementAt(0), "color", "#fff");
+                    child.CheckStyle(0, "color", "#fff");
 				}
 				else
 				if (child.Tag == "div")
@@ -970,7 +972,7 @@
 				{
 					TestUtility.AnalyzeNode(node, "div", "div tag", "<div>div tag</div>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
-					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
+                    node.CheckStyle(0, "color", "#fff");
 					divTagFound = true;
 				}
 				else
@@ -978,7 +980,7 @@
 				{
 					TestUtility.AnalyzeNode(node, "span", "span tag", "<span>span tag</span>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
-					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
+                    node.CheckStyle(0, "color", "#fff");
 					spanTagFound = true;
 				}
 				
@@ -1033,7 +1035,7 @@
 				{
 					TestUtility.AnalyzeNode(node, "p", "p tag", "<p>p tag</p>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
-					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
+                    node.CheckStyle(0, "color", "#fff");
 					pTagFound = true;
 				}
 				else
@@ -1048,7 +1050,7 @@
 				{
 					TestUtility.AnalyzeNode(node, "span", "span tag", "<span>span tag</span>", null, false, true, 1, 0);
 					Assert.AreEqual(1, node.Styles.Count);
-					TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "#fff");
+                    node.CheckStyle(0, "color", "#fff");
 					spanTagFound = true;
 				}
 				
@@ -1197,8 +1199,8 @@
 					Assert.AreEqual(0, node.Styles.Count);
 					
 					TestUtility.AnalyzeNode(node.Children.ElementAt(0), "span", "one", "<span>one</span>", node, false, true, 1, 0, 1);
-					
-					TestUtility.CheckStyle(node.Children.ElementAt(0).Styles.ElementAt(0), "color", "#fff");
+
+                    node.Children.ElementAt(0).CheckStyle(0, "color", "#fff");
 				}
 				
 				node = node.Next;
@@ -1242,7 +1244,7 @@
 					Assert.AreEqual(0, node.Styles.Count);
 					
 					TestUtility.AnalyzeNode(node.Children.ElementAt(0), "span", "one", "<span>one</span>", node, false, true, 1, 0, 1);
-					TestUtility.CheckStyle(node.Children.ElementAt(0).Styles.ElementAt(0), "color", "#fff");
+                    node.Children.ElementAt(0).CheckStyle(0, "color", "#fff");
 					
 					TestUtility.AnalyzeNode(node.Children.ElementAt(1), "#text", "this is a test", "this is a test", node, false, false, 0, 0, 0);
 				}

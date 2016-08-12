@@ -23,13 +23,16 @@
         private HtmlNode next;
         private Dictionary<string, string> attributes;
         private Dictionary<string, string> styles;
+        private Dictionary<string, string> inheritedStyles;
         private List<HtmlStyle> htmlStyles;
+        private List<HtmlStyle> inheritedHtmlStyles;
 
         private HtmlNode(
             string tag,
             HtmlNode parent,
             HtmlContext context,
             List<HtmlStyle> htmlStyles,
+            List<HtmlStyle> inheritedStyles,
             bool isText,
             int htmlStart,
             int textStart,
@@ -107,6 +110,7 @@
             this.context = context;
             this.parent = parent;
             htmlStyles = new List<HtmlStyle>();
+            inheritedHtmlStyles = new List<HtmlStyle>();
             isText = tag == HtmlTag.TEXT;
 
             if (parent != null)
@@ -135,6 +139,14 @@
             get
             {
                 return htmlStyles;
+            }
+        }
+
+        internal List<HtmlStyle> InheritedHtmlStyles
+        {
+            get
+            {
+                return inheritedHtmlStyles;
             }
         }
 
@@ -310,6 +322,31 @@
             }
         }
 
+        internal void ImportInheritedStyles(List<HtmlStyle> styles)
+        {
+            inheritedHtmlStyles = new List<HtmlStyle>();
+
+            foreach(HtmlStyle style in styles)
+            {
+                inheritedHtmlStyles.Add(style.Clone());
+            }
+        }
+
+        internal void UpdateInheritedStyles(HtmlStyle style)
+        {
+            foreach(HtmlStyle inheritedStyle in inheritedHtmlStyles)
+            {
+                if(style.Name.CompareOrdinalIgnoreCase(inheritedStyle.Name))
+                {
+                    inheritedStyle.ModifyStyle(style.Value);
+                    return;
+                }
+            }
+
+            //If style found in the inheritedStyles, control will return without hit this statment.
+            inheritedHtmlStyles.Add(style.Clone());
+        }
+
         /// <summary>
         /// Html tag of the node.
         /// </summary>
@@ -466,6 +503,27 @@
             }
         }
 
+        public Dictionary<string, string> InheritedStyles
+        {
+            get
+            {
+                if (inheritedStyles == null || (inheritedStyles != null && inheritedHtmlStyles.Count != inheritedStyles.Count))
+                {
+                    inheritedStyles = new Dictionary<string, string>();
+
+                    foreach (HtmlStyle style in inheritedHtmlStyles)
+                    {
+                        if (!inheritedStyles.ContainsKey(style.Name))
+                        {
+                            inheritedStyles.Add(style.Name, style.Value);
+                        }
+                    }
+                }
+
+                return inheritedStyles;
+            }
+        }
+
         public IHtmlNode Clone()
         {
             return new HtmlNode(
@@ -473,6 +531,7 @@
                 this.parent,
                 this.context,
                 this.htmlStyles,
+                this.inheritedHtmlStyles,
                 this.isText,
                 this.htmlStart,
                 this.textStart,

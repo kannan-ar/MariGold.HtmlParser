@@ -289,7 +289,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "one", "<div class=\"cls\">one</div>", body, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "blue");
+            node.CheckStyle(0, "color", "blue");
         }
 
         [Test]
@@ -325,7 +325,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "one", "<div class=\"cls\">one</div>", body, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "gray");
+            node.CheckStyle(0, "color", "gray");
         }
 
         [Test]
@@ -361,7 +361,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "one", "<div id=\"dv\" class=\"cls\">one</div>", body, false, true, 1, 2, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "red");
+            node.CheckStyle(0, "color", "red");
 
             node = node.Next;
 
@@ -369,7 +369,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "two", "<div class=\"cls\">two</div>", body, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "blue");
+            node.CheckStyle(0, "color", "blue");
         }
 
         [Test]
@@ -405,7 +405,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "div", "one", "<div>one</div>", body, false, true, 1, 0, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "red");
+            node.CheckStyle(0, "color", "red");
 
             node = node.Next;
 
@@ -416,7 +416,7 @@
 
             IHtmlNode p = node.Children.ElementAt(0);
             TestUtility.AnalyzeNode(p, "p", "two", "<p>two</p>", node, false, true, 1, 0, 1);
-            TestUtility.CheckStyle(p.Styles.ElementAt(0), "color", "blue");
+            p.CheckStyle(0, "color", "blue");
         }
 
         [Test]
@@ -463,7 +463,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "h2", "one", "<h2 class=\"heading\">one</h2>", div, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "color", "red");
+            node.CheckStyle(0, "color", "red");
         }
 
         [Test]
@@ -517,7 +517,7 @@
                 node = node.Next;
 
             TestUtility.AnalyzeNode(node, "span", "two", "<span class=\"text\">two</span>", div, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(node.Styles.ElementAt(0), "background-color", "transparent");
+            node.CheckStyle(0, "background-color", "transparent");
         }
 
         [Test]

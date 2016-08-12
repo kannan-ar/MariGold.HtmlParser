@@ -381,7 +381,7 @@
             Assert.IsNotNull(parser.Current);
             TestUtility.AnalyzeNode(parser.Current, "div", "test", "<div style='color:#fff;color:#000;'>test</div>",
                 null, false, true, 1, 1, 1);
-            TestUtility.CheckStyle(parser.Current.Styles.ElementAt(0), "color", "#fff");
+            parser.Current.CheckStyle(0, "color", "#fff");
         }
 	}
 }

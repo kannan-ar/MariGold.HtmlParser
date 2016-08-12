@@ -18,7 +18,8 @@
 
                 if (!child.HasStyle(backgroundColor) && !child.HasStyle(background))
                 {
-                    child.HtmlStyles.Add(new HtmlStyle(parentStyle.Name, parentStyle.Value, false));
+                    //child.HtmlStyles.Add(new HtmlStyle(parentStyle.Name, parentStyle.Value, false));
+                    child.UpdateInheritedStyles(parentStyle);
                 }
                 else if ((child.TryGetStyle(background, out style) || child.TryGetStyle(backgroundColor, out style)) &&
                     style.Value.CompareInvariantCultureIgnoreCase(transparent))
