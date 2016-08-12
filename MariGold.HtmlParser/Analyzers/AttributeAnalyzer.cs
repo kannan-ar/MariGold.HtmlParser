@@ -158,12 +158,7 @@
                 Clear();
             }
         }
-        /*
-        protected override void Finalize(int position, ref HtmlNode node)
-        {
-            FinalizeNode(position, ref node);
-        }
-        */
+       
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             if (analyze != null)

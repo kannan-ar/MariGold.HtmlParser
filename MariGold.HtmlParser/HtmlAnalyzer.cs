@@ -5,20 +5,10 @@
 
     internal abstract class HtmlAnalyzer
     {
-      //  private Dictionary<string, HtmlAnalyzer> subAnalyzers;
-
         protected readonly IAnalyzerContext context;
 
         internal event Action<string> OnTagCreate;
-        /*
-        protected bool QuoteOpened
-        {
-            get
-            {
-                return quote == HtmlTag.singleQuote || quote == HtmlTag.doubleQuote;
-            }
-        }
-        */
+        
         protected bool IsOpenTag(int position, out IOpenTag openTag)
         {
             openTag = null;
@@ -116,31 +106,7 @@
         }
 
         protected abstract bool ProcessHtml(int position, ref HtmlNode node);
-       // protected abstract void Finalize(int position, ref HtmlNode node);
-        /*
-        protected void AddAnalyzer(string name, HtmlAnalyzer analyzer)
-        {
-            if (subAnalyzers == null)
-            {
-                subAnalyzers = new Dictionary<string, HtmlAnalyzer>();
-            }
-
-            subAnalyzers.Add(name, analyzer);
-        }
-
-        protected void FinalizeSubAnalyzers(int position, ref HtmlNode node)
-        {
-            if (subAnalyzers != null)
-            {
-                foreach (var subAnalyzer in subAnalyzers)
-                {
-                    subAnalyzer.Value.Finalize(position, ref node);
-                }
-
-                subAnalyzers = null;
-            }
-        }
-        */
+       
         protected void TagCreated(string tag)
         {
             if (OnTagCreate != null)
@@ -160,34 +126,11 @@
             //Closed a row of nodes. So current node assigned as previous node.
             context.PreviousNode = currentNode;
         }
-        /*
-        protected void ProcessQuote(char letter)
-        {
-            if (letter == HtmlTag.singleQuote || letter == HtmlTag.doubleQuote)
-            {
-                if (quote == char.MinValue)
-                {
-                    quote = letter;
-                }
-                else if (quote == letter)
-                {
-                    quote = char.MinValue;
-                }
-            }
-        }
-        */
+       
         public bool Process(int position, ref HtmlNode node)
         {
             bool tagCreated = ProcessHtml(position, ref node);
-            /*
-            if (subAnalyzers != null)
-            {
-                foreach (var subAnalyzer in subAnalyzers)
-                {
-                    subAnalyzer.Value.Process(position, ref node);
-                }
-            }
-            */
+            
             return tagCreated;
         }
     }

@@ -46,11 +46,8 @@
             {
                 ExtractTag(position - 1);
 
-                //this.AddAnalyzer("attributeAnalyzer", new AttributeAnalyzer(context));
                 attributeAnalyzer = new AttributeAnalyzer(context);
             }
-
-           // ProcessQuote(letter);
 
             if (!IsQuotedValueSeek() && letter == HtmlTag.closeAngle)
             {
@@ -67,7 +64,6 @@
 					node.SetSelfClosing(true);
                 }
 
-                //this.FinalizeSubAnalyzers(position, ref node);
                 if (attributeAnalyzer != null)
                 {
                     attributeAnalyzer.Finalize(position, ref node);
@@ -86,11 +82,7 @@
 
             return tagCreated;
         }
-        /*
-        protected override void Finalize(int position, ref HtmlNode node)
-        {
-        }
-        */
+        
         public bool IsOpenTag(int position, string html)
         {
             if (position + 2 >= context.EOF)

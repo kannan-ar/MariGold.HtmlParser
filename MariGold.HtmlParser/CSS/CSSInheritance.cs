@@ -88,38 +88,11 @@
 
                 if (!found)
                 {
-                    //node.HtmlStyles.Add(parentStyle.Clone());
                     node.UpdateInheritedStyles(parentStyle);
                 }
             }
         }
-        /*
-        private void CopyStyles(HtmlNode node, List<HtmlStyle> styles)
-        {
-            foreach (HtmlStyle style in node.HtmlStyles)
-            {
-                if (CanInherit(style.Name))
-                {
-                    bool found = false;
-
-                    for (int i = 0; styles.Count > i; i++)
-                    {
-                        if (string.Compare(style.Name, styles[i].Name, StringComparison.InvariantCultureIgnoreCase) == 0)
-                        {
-                            found = true;
-                            styles[i].ModifyStyle(style.Value);
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        styles.Add(style.Clone());
-                    }
-                }
-            }
-        }
-        */
+       
         private string FindParentStyle(HtmlNode node, string styleName)
         {
             string value = string.Empty;
@@ -201,10 +174,6 @@
                 InheritFromParent(node, parent);
             }
 
-            //List<HtmlStyle> newStyles = CloneStyles(styles);
-
-            //CopyStyles(node, newStyles);
-
             foreach (HtmlNode child in node.GetChildren())
             {
                 ApplyToChildren(child, node);
@@ -218,8 +187,6 @@
 
         internal void Apply(HtmlNode node)
         {
-            //List<HtmlStyle> styles = new List<HtmlStyle>();
-
             ApplyToChildren(node, null);
         }
     }

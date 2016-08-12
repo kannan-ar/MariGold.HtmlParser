@@ -24,11 +24,7 @@
         {
             this.parent = parent;
         }
-        /*
-        protected override void Finalize(int position, ref HtmlNode node)
-        {
-        }
-        */
+        
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             bool tagCreated = false;

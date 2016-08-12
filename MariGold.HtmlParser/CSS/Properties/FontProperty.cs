@@ -321,7 +321,6 @@
                 {
                     if (!child.HasStyle(style.Key))
                     {
-                        //child.HtmlStyles.Add(new HtmlStyle(style.Key, style.Value, false));
                         child.UpdateInheritedStyles(new HtmlStyle(style.Key, style.Value, false));
                     }
                 }
@@ -332,7 +331,6 @@
         {
             if (!child.HasStyle(fontFamily) && !child.HasStyle(font))
             {
-                //child.HtmlStyles.Add(parentStyle.Clone());
                 child.UpdateInheritedStyles(parentStyle);
             }
         }

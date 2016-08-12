@@ -98,7 +98,6 @@
                 return false;
             }
 
-
             return (childrenCount - position) + 1 == nodeIndex;
         }
 

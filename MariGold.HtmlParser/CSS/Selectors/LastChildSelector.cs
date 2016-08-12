@@ -29,27 +29,7 @@
             this.context = context;
             regex = new Regex("^(:last-child)|(:last-of-type)");
         }
-        /*
-        private void ApplyToLastChild(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (node.HasChildren)
-            {
-                //Finds the last child
-                HtmlNode child = node.GetChild(node.GetChildren().Count - 1);
-
-                //Loop to skip empty text children
-                while (child != null && child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
-                {
-                    child = child.GetPrevious();
-                }
-
-                if (child != null)
-                {
-                    ApplyStyle(child, htmlStyles);
-                }
-            }
-        }
-        */
+        
         internal override bool Prepare(string selector)
         {
             Match match = regex.Match(selector);

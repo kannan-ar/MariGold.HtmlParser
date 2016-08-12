@@ -212,7 +212,6 @@
 
             if (!child.HasStyle(fontSize))
             {
-                //child.HtmlStyles.Add(new HtmlStyle(parentStyle.Name, parentStyle.Value, false));
                 child.UpdateInheritedStyles(parentStyle);
                 return PROCESSED;
             }
@@ -237,65 +236,6 @@
             }
 
             return PROCESSED;
-
-            /*
-            decimal parentFontSize = ConvertParentFontSize(parentFontSizeValue);
-
-            if (parentFontSize == 0)
-            {
-                return PROCESSED;
-            }
-
-            decimal childFont = ConvertChildFontSize(childFontSizeValue, parentFontSize);
-
-            if (childFont == 0)
-            {
-                return PROCESSED;
-            }
-
-            childFontSize.ModifyStyle(string.Concat(childFont.ToString("G29"), "px"));
-            */
-
-            /*
-            childFontSizeValue = childFontSizeValue.Replace("%", string.Empty).Trim();
-            decimal decChildFontSize;
-
-            if (!decimal.TryParse(childFontSizeValue, out decChildFontSize))
-            {
-                return true;
-            }
-
-            string namedFontSize;
-
-            if (parentFontSizeValue.Contains("%"))
-            {
-                parentFontSizeValue = parentFontSizeValue.Replace("%", string.Empty);
-                decimal decParentFontSize;
-
-                if (decimal.TryParse(parentFontSizeValue, out decParentFontSize))
-                {
-                    childFontSize.ModifyStyle(
-                        string.Concat(decimal.Round((decParentFontSize / 100) * decChildFontSize).ToString(), "%"));
-                }
-
-                return true;
-            }
-            else if (ExtractNamedFontSize(parentFontSizeValue, out namedFontSize))
-            {
-                parentFontSizeValue = namedFontSize;
-            }
-
-            Match match = Regex.Match(parentFontSizeValue, "^(\\.)?\\d+(\\.?\\d+)?");
-            decimal decParentFontStyle;
-
-            if (match.Success && decimal.TryParse(match.Value, out decParentFontStyle))
-            {
-                decParentFontStyle = decimal.Round(decParentFontStyle * (decChildFontSize / 100));
-
-                childFontSize.ModifyStyle(string.Concat(decParentFontStyle,
-                    parentFontSizeValue.Length > match.Length ? parentFontSizeValue.Substring(match.Length) : string.Empty));
-            }
-            */
         }
 
         internal override void ParseStyle(HtmlNode node)

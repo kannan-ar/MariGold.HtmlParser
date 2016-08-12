@@ -6,9 +6,7 @@
     {
         public static decimal CalculateRelativeChildFontSize(string parentFontSize,string childFontSize)
         {
-            FontSizeProperty fontSize = new FontSizeProperty();
-
-            return fontSize.CalculateChildNodeFontSize(parentFontSize, childFontSize);
+            return new FontSizeProperty().CalculateChildNodeFontSize(parentFontSize, childFontSize);
         }
     }
 }

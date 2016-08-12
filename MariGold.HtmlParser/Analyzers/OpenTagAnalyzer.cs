@@ -48,7 +48,6 @@
 
             context.SetPosition(position + 1);
 
-            //this.FinalizeSubAnalyzers(position, ref node);
             if (attributeAnalyzer != null)
             {
                 attributeAnalyzer.Finalize(position, ref node);
@@ -89,11 +88,7 @@
 
             return analyzer;
         }
-        /*
-        protected override void Finalize(int position, ref HtmlNode node)
-        {
-        }
-        */
+      
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             IOpenTag openTag;
@@ -112,11 +107,8 @@
                 InvalidTagHandler invalidTag = new InvalidTagHandler();
                 invalidTag.CloseNonNestedParents(startPosition, tag, context, ref parent);
 
-                //this.AddAnalyzer("attributeAnalyzer", new AttributeAnalyzer(context));
                 attributeAnalyzer = new AttributeAnalyzer(context);
             }
-
-            // ProcessQuote(letter);
 
             if (!IsQuotedValueSeek() && IsOpenTag(position, out openTag))
             {
@@ -152,7 +144,6 @@
                     InnerTagOpened(node);
                 }
 
-                //this.FinalizeSubAnalyzers(position, ref node);
                 if (attributeAnalyzer != null)
                 {
                     attributeAnalyzer.Finalize(position, ref node);

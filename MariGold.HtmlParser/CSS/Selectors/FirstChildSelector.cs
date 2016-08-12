@@ -130,36 +130,11 @@
 
         bool IAttachedSelector.IsValidNode(HtmlNode node)
         {
-            /*if (node == null)
-            {
-                return false;
-            }
-			
-            bool isValid = false;
-			
-            foreach (HtmlNode  child in node.Children)
-            {
-                if (child.Tag != HtmlTag.TEXT)
-                {
-                    isValid = true;
-                    break;
-                }
-            }
-			
-            return isValid;*/
             return IsValidNode(node);
         }
 
         void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            /*if (string.IsNullOrEmpty(this.selectorText))
-            {
-                ApplyToFirstChild(node, htmlStyles);
-            }
-            else
-            {
-                context.ParseBehavior(this.selectorText, node, htmlStyles);
-            }*/
             Parse(node, htmlStyles);
         }
     }
