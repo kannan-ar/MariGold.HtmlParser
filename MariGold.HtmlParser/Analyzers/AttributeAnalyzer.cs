@@ -138,7 +138,7 @@
             }
             else if (start > -1 &&
                 ((!IsValidHtmlLetter(letter) && quote == char.MinValue) ||
-                letter == quote || (letter == HtmlTag.closeAngle && quote == char.MinValue)) && position > start)
+                letter == quote || (letter == HtmlTag.closeAngle && quote == char.MinValue)) && position >= start)
             {
                 if (letter != HtmlTag.closeAngle)
                 {

@@ -383,5 +383,16 @@
                 null, false, true, 1, 1, 1);
             parser.Current.CheckStyle(0, "color", "#fff");
         }
+
+        [Test]
+        public void InputOnly()
+        {
+            string html = "<input />";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            Assert.IsTrue(parser.Parse());
+            Assert.IsNotNull(parser.Current);
+            parser.Current.AnalyzeNode("input", "<input />", html, null, true, false, 0, 0, 0);
+        }
 	}
 }
