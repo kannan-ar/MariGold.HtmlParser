@@ -77,16 +77,21 @@
 
         internal void OverWrite(HtmlStyle htmlStyle)
         {
-            if (string.Compare(name, htmlStyle.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+            CSSPropertyParser propertyParser = new CSSPropertyParser();
+
+            //if (string.Compare(name, htmlStyle.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+            if (propertyParser.StyleContains(this, htmlStyle))
             {
                 if (!important && htmlStyle.Important)
                 {
+                    name = htmlStyle.Name;
                     value = htmlStyle.Value;
                     important = htmlStyle.Important;
                     specificity = htmlStyle.Specificity;
                 }
                 else if (htmlStyle.Specificity >= specificity && (!important || (important && htmlStyle.Important)))
                 {
+                    name = htmlStyle.Name;
                     value = htmlStyle.Value;
                 }
             }

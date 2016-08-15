@@ -259,5 +259,52 @@
             node.CheckInheritedStyle(0, "background", "blue");
         }
 
+        [Test]
+        public void BackgroundColorSpecifity()
+        {
+            string path = TestUtility.GetFolderPath("Html\\backgroundcolorspecificity.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseStyles();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "html")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "ul")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "li")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "a")
+                node = node.Next;
+
+            Assert.AreEqual(1, node.Styles.Count);
+            node.CheckStyle(0, "background-color", "red");
+
+            Assert.AreEqual(1, node.InheritedStyles.Count);
+            node.CheckInheritedStyle(0, "background-color", "red");
+        }
     }
 }
