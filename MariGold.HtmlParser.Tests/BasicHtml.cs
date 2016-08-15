@@ -291,7 +291,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.AreEqual(true, parser.Traverse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 			Assert.IsNotNull(parser.Current);
 			TestUtility.AreEqual(parser.Current, "div", "this is a test", html);
 			Assert.AreEqual(false, parser.Current.IsText);
@@ -376,7 +376,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
             TestUtility.AnalyzeNode(parser.Current, "div", "test", "<div style='color:#fff;color:#000;'>test</div>",

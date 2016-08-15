@@ -23,7 +23,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.AreEqual(true, parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 
@@ -54,7 +54,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.AreEqual(true, parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 
@@ -80,7 +80,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.AreEqual(true, parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 
@@ -107,7 +107,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.AreEqual(true, parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 
@@ -126,7 +126,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.AreEqual(true, parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 
@@ -164,7 +164,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.AreEqual(true, parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 

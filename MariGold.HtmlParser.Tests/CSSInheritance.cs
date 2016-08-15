@@ -17,7 +17,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -40,7 +40,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -67,7 +67,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -95,7 +95,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -126,7 +126,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -158,7 +158,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -200,7 +200,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -237,7 +237,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -276,7 +276,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -297,7 +297,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -320,7 +320,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -351,7 +351,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -385,7 +385,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -430,7 +430,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -476,7 +476,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -521,7 +521,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 
@@ -553,7 +553,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 
@@ -585,7 +585,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 
@@ -616,7 +616,7 @@
             string html = "<div style='background: #fff'><div>Test</div></div>";
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -637,7 +637,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -661,7 +661,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -682,7 +682,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -703,7 +703,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -724,7 +724,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -744,7 +744,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -764,7 +764,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -784,7 +784,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -804,7 +804,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -828,7 +828,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -851,7 +851,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -873,7 +873,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -894,7 +894,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -916,7 +916,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -938,7 +938,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -960,7 +960,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -972,6 +972,39 @@
             node = node.Children.ElementAt(0);
             node.AnalyzeNode("h1", "test", "<h1 style=\"font-size:30px\">test</h1>", parent, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "30px");
+        }
+
+        [Test]
+        public void BackgroundAndBackgroundColorInheritance()
+        {
+            string html = "<div><div style=\"background-color: #FFF\"><div style=\"background: #437dcc;\">test</div></div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseStyles();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "<div style=\"background-color: #FFF\"><div style=\"background: #437dcc;\">test</div></div>", html, null, false, true, 1, 0, 0);
+
+            IHtmlNode parent = node;
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "<div style=\"background: #437dcc;\">test</div>",
+                "<div style=\"background-color: #FFF\"><div style=\"background: #437dcc;\">test</div></div>",
+                parent, false, true, 1, 1, 1);
+            Assert.AreEqual(1, node.InheritedStyles.Count);
+            node.CheckStyle(0, "background-color", "#FFF");
+            node.CheckInheritedStyle(0, "background-color", "#FFF");
+
+            parent = node;
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style=\"background: #437dcc;\">test</div>", parent, false,
+                true, 1, 1, 1);
+            Assert.AreEqual(1, node.InheritedStyles.Count);
+            node.CheckStyle(0, "background", "#437dcc");
+            node.CheckInheritedStyle(0, "background-color", "#437dcc");
         }
     }
 }

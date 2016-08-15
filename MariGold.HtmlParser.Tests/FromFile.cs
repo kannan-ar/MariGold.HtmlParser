@@ -196,7 +196,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current.Children.ElementAt(0);
 
@@ -215,5 +215,49 @@
             node.AnalyzeNode("div", "test", "<div id=\"gray\">test</div>", node.Parent, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "background-color", "#eee");
         }
+
+        [Test]
+        public void BackgroundInheritance()
+        {
+            string path = TestUtility.GetFolderPath("Html\\backgroundinheritance.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseStyles();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "html")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "a")
+                node = node.Next;
+
+            Assert.AreEqual(1, node.Styles.Count);
+            node.CheckStyle(0, "background", "blue");
+
+            Assert.AreEqual(1, node.InheritedStyles.Count);
+            node.CheckInheritedStyle(0, "background", "blue");
+        }
+
     }
 }

@@ -29,7 +29,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.AreEqual(true, parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
             Assert.IsNotNull(parser.Current);
             parser.Current.AnalyzeNode("div", "test", html, null, false, true, 1, 1, 1);
         }
@@ -42,7 +42,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.AreEqual(true, parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);

@@ -86,6 +86,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Html\backgroundinheritance.htm" />
     <Content Include="Html\basic.htm" />
     <Content Include="Html\basicwithattributes.htm" />
     <Content Include="Html\commentwithmediaquery.htm" />

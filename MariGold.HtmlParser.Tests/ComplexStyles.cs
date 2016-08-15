@@ -23,7 +23,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -61,7 +61,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -99,7 +99,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -135,7 +135,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -170,7 +170,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -211,7 +211,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -249,7 +249,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -291,7 +291,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -345,7 +345,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -399,7 +399,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -466,7 +466,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -532,7 +532,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -566,7 +566,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.IsTrue(parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 
 			Assert.IsNotNull(parser.Current);
 			
@@ -599,7 +599,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -634,7 +634,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -670,7 +670,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -705,7 +705,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 
@@ -738,7 +738,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             Assert.IsNotNull(parser.Current);
 

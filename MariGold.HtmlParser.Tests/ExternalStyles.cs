@@ -23,7 +23,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.AreEqual(true, parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 			
 			Assert.IsNotNull(parser.Current);
             
@@ -57,7 +57,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.AreEqual(true, parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 			
 			Assert.IsNotNull(parser.Current);
             
@@ -92,7 +92,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.AreEqual(true, parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 			
 			Assert.IsNotNull(parser.Current);
             
@@ -127,7 +127,7 @@
 			HtmlParser parser = new HtmlTextParser(html);
 
 			Assert.AreEqual(true, parser.Parse());
-			parser.ParseCSS();
+			parser.ParseStyles();
 			
 			Assert.IsNotNull(parser.Current);
             

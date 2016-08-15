@@ -17,7 +17,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -39,7 +39,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -65,7 +65,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -93,7 +93,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -115,7 +115,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -142,7 +142,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -170,7 +170,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -200,7 +200,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -232,7 +232,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -267,7 +267,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -302,7 +302,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -331,7 +331,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -359,7 +359,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -389,7 +389,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);
@@ -421,7 +421,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.IsTrue(parser.Parse());
-            parser.ParseCSS();
+            parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
             Assert.IsNotNull(node);

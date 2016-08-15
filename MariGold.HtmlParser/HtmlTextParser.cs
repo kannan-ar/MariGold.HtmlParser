@@ -150,7 +150,7 @@
 			return canTraverse;
 		}
 
-		public override void ParseCSS()
+		public override void ParseStyles()
 		{
 			if (current != null)
 			{

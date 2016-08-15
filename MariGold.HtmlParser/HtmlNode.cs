@@ -186,6 +186,8 @@
 
         internal void CopyHtmlStyles(List<HtmlStyle> newStyles, Specificity specificity)
         {
+            CSSPropertyParser propertyParser = new CSSPropertyParser();
+
             foreach (HtmlStyle newStyle in newStyles)
             {
                 bool found = false;
@@ -194,11 +196,16 @@
 
                 foreach (HtmlStyle style in htmlStyles)
                 {
-                    if (string.Compare(newStyle.Name, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    if (propertyParser.StyleContains(newStyle, style))
                     {
                         found = true;
                         style.OverWrite(newStyle);
                     }
+                    /*if (string.Compare(newStyle.Name, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    {
+                        found = true;
+                        style.OverWrite(newStyle);
+                    }*/
                 }
 
                 if (!found)
@@ -334,9 +341,11 @@
 
         internal void UpdateInheritedStyles(HtmlStyle style)
         {
+            CSSPropertyParser propertyParser = new CSSPropertyParser();
+
             foreach(HtmlStyle inheritedStyle in inheritedHtmlStyles)
             {
-                if(style.Name.CompareOrdinalIgnoreCase(inheritedStyle.Name))
+                if (propertyParser.StyleContains(style, inheritedStyle))
                 {
                     inheritedStyle.ModifyStyle(style.Value);
                     return;

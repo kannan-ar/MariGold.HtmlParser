@@ -5,56 +5,6 @@
 
     internal sealed class CSSInheritance
     {
-        private string[][] tags;
-
-        internal CSSInheritance()
-        {
-            Init();
-        }
-
-        private void Init()
-        {
-            tags = new string[][] {
-                new string[]{CSSProperty.font},
-				new string[]{CSSProperty.fontFamily},
-				new string[]{CSSProperty.fontSize},
-				new string[]{CSSProperty.color},
-				new string[]{CSSProperty.fontWeight},
-				new string[]{CSSProperty.textDecoration},
-				new string[]{CSSProperty.fontStyle},
-                new string[]{CSSProperty.lineHeight},
-                new string[]{CSSProperty.fontVariant},
-                new string[]{CSSProperty.textAlign},
-                new string[]{CSSProperty.backgroundColor, CSSProperty.background}
-			};
-        }
-
-        private bool CanInherit(string tag)
-        {
-            foreach (string[] array in tags)
-            {
-                if (HtmlStringComparer.Contains(array, tag))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private bool StyleContains(HtmlStyle parentStyle, HtmlStyle childStyle)
-        {
-            foreach (string[] array in tags)
-            {
-                if (HtmlStringComparer.Contains(array, parentStyle.Name) && HtmlStringComparer.Contains(array, childStyle.Name))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         private bool HasPropertyProcessed(HtmlStyle parentStyle, HtmlNode child)
         {
             CSSPropertyParser propertyParser = new CSSPropertyParser();
@@ -63,9 +13,11 @@
 
         private void AppendStyles(HtmlNode node, HtmlNode parent)
         {
+            CSSPropertyParser propertyParser = new CSSPropertyParser();
+
             foreach (HtmlStyle parentStyle in parent.HtmlStyles)
             {
-                if(!CanInherit(parentStyle.Name))
+                if (!propertyParser.CanInherit(parentStyle.Name))
                 {
                     continue;
                 }
@@ -79,7 +31,7 @@
 
                 foreach (HtmlStyle childStyle in node.HtmlStyles)
                 {
-                    if (StyleContains(parentStyle, childStyle))
+                    if (propertyParser.StyleContains(parentStyle, childStyle))
                     {
                         found = true;
                         break;
@@ -145,9 +97,11 @@
 
         private void UpdateCurrentNodeInheritedStyles(HtmlNode node)
         {
+            CSSPropertyParser propertyParser = new CSSPropertyParser();
+
             foreach(HtmlStyle style in node.HtmlStyles)
             {
-                if(!CanInherit(style.Name))
+                if (!propertyParser.CanInherit(style.Name))
                 {
                     continue;
                 }

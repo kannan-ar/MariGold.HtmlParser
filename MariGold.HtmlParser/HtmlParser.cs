@@ -47,7 +47,7 @@
         /// <summary>
         /// Parse and assign CSS properties of all processed HtmlNode(s) and its children
         /// </summary>
-        public abstract void ParseCSS();
+        public abstract void ParseStyles();
 
         /// <summary>
         /// Travel through html document elements. Upon each travel, the method will parse next element along with its children.
