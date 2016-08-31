@@ -535,5 +535,56 @@
             Assert.IsNotNull(node);
             TestUtility.AnalyzeNode(node, "a", "test", "<a href='http://google.com'>test</a>", null, false,true, 1, 1, 1);
         }
+
+        [Test]
+        public void InheritedFontSizeParse()
+        {
+            string path = TestUtility.GetFolderPath("Html\\inheritedfontsizeparse.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseStyles();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "html")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            Assert.AreEqual(1, node.Styles.Count);
+            node.CheckStyle(0, "font-size", "62.5%");
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "article")
+                node = node.Next;
+
+            Assert.AreEqual(1, node.InheritedStyles.Count);
+            node.CheckInheritedStyle(0, "font-size", "62.5%");
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "p")
+                node = node.Next;
+
+            Assert.AreEqual(1, node.Styles.Count);
+            node.CheckStyle(0, "font-size", "16px");
+        }
     }
 }

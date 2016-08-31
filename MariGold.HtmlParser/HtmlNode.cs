@@ -317,6 +317,27 @@
             return false;
         }
 
+        internal bool TryGetInheritedStyle(string styleName, out HtmlStyle htmlStyle)
+        {
+            htmlStyle = null;
+
+            if (inheritedHtmlStyles == null || inheritedHtmlStyles.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (HtmlStyle style in inheritedHtmlStyles)
+            {
+                if (string.Compare(styleName, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    htmlStyle = style;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal void RemoveStyle(string styleName)
         {
             for (int i = 0; htmlStyles.Count > i; i++)
@@ -333,7 +354,7 @@
         {
             inheritedHtmlStyles = new List<HtmlStyle>();
 
-            foreach(HtmlStyle style in styles)
+            foreach (HtmlStyle style in styles)
             {
                 inheritedHtmlStyles.Add(style.Clone());
             }
@@ -343,7 +364,7 @@
         {
             CSSPropertyParser propertyParser = new CSSPropertyParser();
 
-            foreach(HtmlStyle inheritedStyle in inheritedHtmlStyles)
+            foreach (HtmlStyle inheritedStyle in inheritedHtmlStyles)
             {
                 if (propertyParser.StyleContains(style, inheritedStyle))
                 {

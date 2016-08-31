@@ -5,12 +5,13 @@
 
     internal sealed class CSSInheritance
     {
+        /*
         private bool HasPropertyProcessed(HtmlStyle parentStyle, HtmlNode child)
         {
             CSSPropertyParser propertyParser = new CSSPropertyParser();
             return propertyParser.InheritStyle(parentStyle, child);
         }
-
+        */
         private void AppendStyles(HtmlNode node, HtmlNode parent)
         {
             CSSPropertyParser propertyParser = new CSSPropertyParser();
@@ -24,7 +25,7 @@
 
                 bool found = false;
 
-                if (HasPropertyProcessed(parentStyle, node))
+                if (propertyParser.InheritStyle(parentStyle, node))
                 {
                     continue;
                 }
@@ -42,6 +43,21 @@
                 {
                     node.UpdateInheritedStyles(parentStyle);
                 }
+            }
+
+            foreach (HtmlStyle parentStyle in parent.InheritedHtmlStyles)
+            {
+                if (!propertyParser.CanInherit(parentStyle.Name))
+                {
+                    continue;
+                }
+
+                if(parent.HasStyle(parentStyle.Name))
+                {
+                    continue;
+                }
+
+                propertyParser.InheritStyle(parentStyle, node);
             }
         }
        

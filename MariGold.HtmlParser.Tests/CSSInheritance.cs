@@ -1006,5 +1006,25 @@
             node.CheckStyle(0, "background", "#437dcc");
             node.CheckInheritedStyle(0, "background-color", "#437dcc");
         }
+
+        [Test]
+        public void MultiLevelFontSizeInheritance()
+        {
+            string html = "<div style=\"font-size:10px\"><div><div><div>test</div></div></div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+            parser.Parse();
+            parser.ParseStyles();
+
+            IHtmlNode node = parser.Current;
+
+            node = node.Children.ElementAt(0);
+            node = node.Children.ElementAt(0);
+            IHtmlNode parent = node;
+            node = node.Children.ElementAt(0);
+
+            node.AnalyzeNode("div", "test", "<div>test</div>", parent, false, true, 1, 0, 0);
+            Assert.AreEqual(1, node.InheritedStyles.Count);
+        }
     }
 }

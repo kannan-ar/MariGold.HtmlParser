@@ -215,7 +215,8 @@
                 child.UpdateInheritedStyles(parentStyle);
                 return PROCESSED;
             }
-            else if (!child.TryGetStyle(fontSize, out childFontSize))
+            else if (!child.TryGetStyle(fontSize, out childFontSize) &&
+                !child.TryGetInheritedStyle(fontSize, out childFontSize))
             {
                 return PROCESSED;
             }
