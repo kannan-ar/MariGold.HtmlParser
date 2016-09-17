@@ -5,13 +5,6 @@
 
     internal sealed class CSSInheritance
     {
-        /*
-        private bool HasPropertyProcessed(HtmlStyle parentStyle, HtmlNode child)
-        {
-            CSSPropertyParser propertyParser = new CSSPropertyParser();
-            return propertyParser.InheritStyle(parentStyle, child);
-        }
-        */
         private void AppendStyles(HtmlNode node, HtmlNode parent)
         {
             CSSPropertyParser propertyParser = new CSSPropertyParser();

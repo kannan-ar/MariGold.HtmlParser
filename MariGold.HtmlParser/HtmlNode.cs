@@ -201,11 +201,6 @@
                         found = true;
                         style.OverWrite(newStyle);
                     }
-                    /*if (string.Compare(newStyle.Name, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
-                    {
-                        found = true;
-                        style.OverWrite(newStyle);
-                    }*/
                 }
 
                 if (!found)
