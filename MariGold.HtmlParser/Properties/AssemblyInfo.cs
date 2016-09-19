@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MariGold.HtmlParser")]
-[assembly: AssemblyDescription("A utility to traverse through html documents. Builds a hierarchy of html nodes on each iteration.")]
+[assembly: AssemblyDescription("A utility to convert html document into a tree of HtmlNode elements. It can also parse the css styles and apply to the html elements")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MariGold")]
 [assembly: AssemblyProduct("MariGold Framework")]
@@ -32,5 +32,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.1")]
+[assembly: AssemblyFileVersion("1.0.1")]
+[assembly: AssemblyInformationalVersion("1.0.1")]
