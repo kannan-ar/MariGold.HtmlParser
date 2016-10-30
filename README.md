@@ -64,7 +64,7 @@ if (parser.Parse())
 	IHtmlNode node = parser.Current;
 }
 ```
-To resolve the protocol free or relative url of any external stylesheets, use the UriSchema and BaseURL properties.
+To resolve any protocol free or relative url of external style sheets, use the UriSchema and BaseURL properties.
 ```csharp
 parser.UriSchema = Uri.UriSchemeHttp;
 parser.BaseURL = "http://site.com";
