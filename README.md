@@ -8,6 +8,9 @@ In Package Manager Console, enter the following command:
 Install-Package MariGold.HtmlParser
 ```
 
+###Usage
+MariGold.HtmlParser can be used to parse both HTML and CSS of an HTML document.
+
 ####Traverse through html elements
 In the following example, the first loop iteration will parse the first div and the following div in the second and final iteration.
 ```csharp
@@ -46,7 +49,7 @@ By default parsing HTML will not parse the CSS styles. The ParseStyles method wi
 ```csharp
 HtmlParser parser = new HtmlTextParser(@"<html>
 		<head>
-			<style type='text\css'>
+			<style type='text/css'>
                             .cls
                             {
                                 font-size:10px;
@@ -55,7 +58,7 @@ HtmlParser parser = new HtmlTextParser(@"<html>
 		</head>
 		<body>
 			<div class='cls' style='font-family:Arial'>sample</div>
-		<body>
+		</body>
 	</html>");
 
 if (parser.Parse())
