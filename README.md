@@ -30,6 +30,17 @@ if (parser.Parse())
 }
 ```
 
+####Travel through IHtmlNode collection
+Use Next and Previous properties to travel through the IHtmlNode collection. Use Children property to access the descendant elements.
+```csharp
+IHtmlNode node = parser.Current;
+            
+while (node != null)
+{
+	node = node.Next;
+}
+```
+
 ####Parse CSS styles
 By default parsing HTML will not parse the CSS styles. ParseStyles will parse any external and inline styles in the document. It will also process styles of every element in the document.
 ```csharp
@@ -52,4 +63,9 @@ if (parser.Parse())
 	parser.ParseStyles();
 	IHtmlNode node = parser.Current;
 }
+```
+To resolve the protocol free or relative url of any external stylesheets, use the UriSchema and BaseURL properties.
+```csharp
+parser.UriSchema = Uri.UriSchemeHttp;
+parser.BaseURL = "http://site.com";
 ```
