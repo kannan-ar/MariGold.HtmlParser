@@ -45,7 +45,7 @@ while (node != null)
 ```
 
 ####Parse CSS styles
-By default parsing HTML will not parse the CSS styles. The ParseStyles method will parse any external or inline styles in the document. The parsed styles can be access using the Styles and InheritedStyles properties of IHtmlNode.
+By default parsing HTML will not parse the CSS styles. The ParseStyles method will parse any external or inline styles in the document. The parsed styles can be accessed using the Styles and InheritedStyles properties of IHtmlNode.
 ```csharp
 HtmlParser parser = new HtmlTextParser(@"<html>
 		<head>
