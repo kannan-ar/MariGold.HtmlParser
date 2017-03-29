@@ -1,17 +1,17 @@
-##MariGold.HtmlParser
+## MariGold.HtmlParser
 MariGold.HtmlParser is a utility to parse the HTML documents into a collection of IHtmlNode type instances. You can either traverse through the document by parsing every root elements one by one or parse the entire document at once. Once an HTML element parsed, it will recursively parse all the child elements.
 
-###Installing via NuGet
+### Installing via NuGet
 
 In Package Manager Console, enter the following command:
 ```
 Install-Package MariGold.HtmlParser
 ```
 
-###Usage
+### Usage
 MariGold.HtmlParser can be used to parse both HTML and CSS of an HTML document.
 
-####Traverse through html elements
+#### Traverse through html elements
 In the following example, the first loop iteration will parse the first div and the following div in the second and final iteration.
 ```csharp
 using MariGold.HtmlParser;
@@ -24,7 +24,7 @@ while (parser.Traverse())
 }
 ```
 
-####Parse the HTML document
+#### Parse the HTML document
 To parse the entire document at once, use Parse method. It will parse all the HTML elements in the given document and Current property will point to the first root element
 ```csharp
 if (parser.Parse())
@@ -33,7 +33,7 @@ if (parser.Parse())
 }
 ```
 
-####Travel through IHtmlNode collection
+#### Travel through IHtmlNode collection
 Use Next and Previous properties to travel through the IHtmlNode collection. Use the Children property to access the descendant elements.
 ```csharp
 IHtmlNode node = parser.Current;
@@ -44,7 +44,7 @@ while (node != null)
 }
 ```
 
-####Parse CSS styles
+#### Parse CSS styles
 By default parsing HTML will not parse the CSS styles. The ParseStyles method will parse any external or inline styles in the document. The parsed styles can be accessed using the Styles and InheritedStyles properties of IHtmlNode.
 ```csharp
 HtmlParser parser = new HtmlTextParser(@"<html>
