@@ -101,6 +101,7 @@
     <Content Include="Html\identityoverclass.htm" />
     <Content Include="Html\elementfirstchildchain.htm" />
     <Content Include="Html\inheritedfontsizeparse.htm" />
+    <Content Include="Html\innerspanrelativefontsize.htm" />
     <Content Include="Html\level3specificity.htm" />
     <Content Include="Html\mediaprintstyle.htm" />
     <Content Include="Html\mediaprintwithnospace.htm" />

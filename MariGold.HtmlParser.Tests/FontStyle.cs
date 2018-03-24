@@ -4,7 +4,7 @@
     using System.Linq;
     using NUnit.Framework;
     using MariGold.HtmlParser;
-    using System.Linq;
+    using System.IO;
 
     [TestFixture]
     public class FontStyle
@@ -434,6 +434,72 @@
             Assert.IsNotNull(node);
             node.AnalyzeNode("div", "test", "<div style=\"font-size:2em\">test</div>", parent, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "20px");
+        }
+
+        [Test]
+        public void InnerSpanRelativeFontSize()
+        {
+            string path = TestUtility.GetFolderPath("Html\\innerspanrelativefontsize.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseStyles();
+
+            IHtmlNode node = parser.Current;
+
+            while (node.Tag != "html")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "div")
+                node = node.Next;
+
+            node = node.Children.ElementAt(0);
+
+            node.CheckStyle(0, "font-size", "50px");
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "span")
+                node = node.Next;
+
+            node.CheckStyle(0, "font-size", "25px");
+        }
+
+        [Test]
+        public void FiftyPercentageEM()
+        {
+            string html = "<div style=\"font-size:10px\"><div style=\"font-size:0.50em\">test</div></div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.IsTrue(parser.Parse());
+            parser.ParseStyles();
+
+            IHtmlNode node = parser.Current;
+            Assert.IsNotNull(node);
+
+            node.AnalyzeNode("div", "<div style=\"font-size:0.50em\">test</div>", html, null, false, true, 1, 1, 1);
+            node.CheckStyle(0, "font-size", "10px");
+            IHtmlNode parent = node;
+
+            node = node.Children.ElementAt(0);
+            Assert.IsNotNull(node);
+            node.AnalyzeNode("div", "test", "<div style=\"font-size:0.50em\">test</div>", parent, false, true, 1, 1, 1);
+            node.CheckStyle(0, "font-size", "5px");
         }
     }
 }
