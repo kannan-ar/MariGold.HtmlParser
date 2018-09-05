@@ -9,7 +9,7 @@
     <Copyright>Copyright © MariGold 2015</Copyright>
     <PackageProjectUrl>https://github.com/kannan-ar/MariGold.HtmlParser</PackageProjectUrl>
     <PackageTags>MariGold Html Parser</PackageTags>
-    <PackageReleaseNotes>migrated to .net standard 1.1</PackageReleaseNotes>
+    <PackageReleaseNotes>migrated to .net standard 2.0</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>MariGold</Authors>
   </PropertyGroup>
