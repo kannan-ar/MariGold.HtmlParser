@@ -86,7 +86,7 @@
 
                 foreach (string name in names)
                 {
-                    if (string.Compare(currentSelector, name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    if (string.Equals(currentSelector, name, StringComparison.OrdinalIgnoreCase))
                     {
                         isValid = true;
                     }

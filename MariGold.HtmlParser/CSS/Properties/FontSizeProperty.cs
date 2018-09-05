@@ -203,7 +203,7 @@
                 return NOT_PROCESSED;
             }
 
-            if (!parentStyle.Name.CompareInvariantCultureIgnoreCase(fontSize))
+            if (!parentStyle.Name.CompareOrdinalIgnoreCase(fontSize))
             {
                 return NOT_PROCESSED;
             }

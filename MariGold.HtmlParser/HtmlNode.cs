@@ -274,7 +274,7 @@
         {
             foreach (KeyValuePair<string, string> attribute in attributes)
             {
-                if (string.Compare(attributeName, attribute.Key, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Equals(attributeName, attribute.Key, StringComparison.OrdinalIgnoreCase))
                 {
                     return attribute.Value;
                 }
@@ -287,7 +287,7 @@
         {
             foreach (HtmlStyle style in htmlStyles)
             {
-                if (string.Compare(styleName, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Equals(styleName, style.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -302,7 +302,7 @@
 
             foreach (HtmlStyle style in htmlStyles)
             {
-                if (string.Compare(styleName, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Equals(styleName, style.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     htmlStyle = style;
                     return true;
@@ -323,7 +323,7 @@
 
             foreach (HtmlStyle style in inheritedHtmlStyles)
             {
-                if (string.Compare(styleName, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Equals(styleName, style.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     htmlStyle = style;
                     return true;
@@ -337,7 +337,7 @@
         {
             for (int i = 0; htmlStyles.Count > i; i++)
             {
-                if (string.Compare(styleName, htmlStyles[i].Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Equals(styleName, htmlStyles[i].Name, StringComparison.OrdinalIgnoreCase))
                 {
                     htmlStyles.RemoveAt(i);
                     break;

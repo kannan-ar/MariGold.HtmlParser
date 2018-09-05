@@ -1,107 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B83067EE-0BBA-472C-BCE9-19FC4DCC51A7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MariGold.HtmlParser</RootNamespace>
-    <AssemblyName>MariGold.HtmlParser</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.1.0</Version>
+    <Company>MariGold</Company>
+    <Product>MariGold Framework</Product>
+    <Description>A utility to convert html document into a tree of HtmlNode elements. It can also parse the css styles and apply to the html elements</Description>
+    <Copyright>Copyright © MariGold 2015</Copyright>
+    <PackageProjectUrl>https://github.com/kannan-ar/MariGold.HtmlParser</PackageProjectUrl>
+    <PackageTags>MariGold Html Parser</PackageTags>
+    <PackageReleaseNotes>migrated to .net standard 1.1</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>MariGold</Authors>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AnalyzerContext.cs" />
-    <Compile Include="Analyzers\AttributeAnalyzer.cs" />
-    <Compile Include="Analyzers\CloseTagAnalyzer.cs" />
-    <Compile Include="Analyzers\CommentAnalyzer.cs" />
-    <Compile Include="Analyzers\MetaTagAnalyzer.cs" />
-    <Compile Include="Analyzers\OpenTagAnalyzer.cs" />
-    <Compile Include="Analyzers\TextAnalyzer.cs" />
-    <Compile Include="CSSUtility.cs" />
-    <Compile Include="CSS\Behaviors\ApplyAllChildren.cs" />
-    <Compile Include="CSS\Behaviors\ApplyAllNextElement.cs" />
-    <Compile Include="CSS\Behaviors\ApplyImmediateChildren.cs" />
-    <Compile Include="CSS\Behaviors\ApplyNextElement.cs" />
-    <Compile Include="CSS\CSSElement.cs" />
-    <Compile Include="CSS\CSSInheritance.cs" />
-    <Compile Include="CSS\CSSParser.cs" />
-    <Compile Include="CSS\CSSProperty.cs" />
-    <Compile Include="CSS\CSSPropertyParser.cs" />
-    <Compile Include="CSS\CSSTokenizer.cs" />
-    <Compile Include="CSS\IAttachedSelector.cs" />
-    <Compile Include="CSS\MediaQuery.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CSS\Properties\BackgroundProperty.cs" />
-    <Compile Include="CSS\Properties\FontProperty.cs" />
-    <Compile Include="CSS\Properties\FontSizeProperty.cs" />
-    <Compile Include="CSS\SelectorContext.cs" />
-    <Compile Include="CSS\CSSBehavior.cs" />
-    <Compile Include="CSS\ISelectorContext.cs" />
-    <Compile Include="CSS\Selectors\AttributeSelector.cs" />
-    <Compile Include="CSS\Selectors\ElementSelector.cs" />
-    <Compile Include="CSS\Selectors\FirstChildSelector.cs" />
-    <Compile Include="CSS\Selectors\GlobalSelector.cs" />
-    <Compile Include="CSS\CSSTracker.cs" />
-    <Compile Include="CSS\CSSelector.cs" />
-    <Compile Include="CSS\Selectors\ClassSelector.cs" />
-    <Compile Include="CSS\Selectors\IdentitySelector.cs" />
-    <Compile Include="CSS\Selectors\LastChildSelector.cs" />
-    <Compile Include="CSS\Selectors\NotSelector.cs" />
-    <Compile Include="CSS\Selectors\NthChildSelector.cs" />
-    <Compile Include="CSS\Selectors\NthLastChildSelector.cs" />
-    <Compile Include="CSS\Selectors\OnlyChildSelector.cs" />
-    <Compile Include="CSS\SelectorType.cs" />
-    <Compile Include="CSS\Specificity.cs" />
-    <Compile Include="CSS\StyleSheet.cs" />
-    <Compile Include="InvalidTagHandler.cs" />
-    <Compile Include="HtmlAnalyzer.cs" />
-    <Compile Include="HtmlContext.cs" />
-    <Compile Include="HtmlNode.cs" />
-    <Compile Include="HtmlParser.cs" />
-    <Compile Include="CSS\HtmlStyle.cs" />
-    <Compile Include="HtmlTag.cs" />
-    <Compile Include="HtmlTextParser.cs" />
-    <Compile Include="IAnalyzerContext.cs" />
-    <Compile Include="ICloseTag.cs" />
-    <Compile Include="IHtmlNode.cs" />
-    <Compile Include="IOpenTag.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchAnalyzerContext.cs" />
-    <Compile Include="HtmlStringComparer.cs" />
-    <Compile Include="WebManager.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

@@ -5,16 +5,6 @@
 
     internal static class HtmlStringComparer
     {
-        internal static bool CompareInvariantCultureIgnoreCase(this string source, string value)
-        {
-            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(value))
-            {
-                return false;
-            }
-
-            return string.Compare(source, value, StringComparison.InvariantCultureIgnoreCase) == 0;
-        }
-
         internal static bool CompareOrdinalIgnoreCase(this string source, string value)
         {
             if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(value))
@@ -22,16 +12,14 @@
                 return false;
             }
 
-            return string.Compare(source, value, StringComparison.OrdinalIgnoreCase) == 0;
+            return string.Equals(source, value, StringComparison.OrdinalIgnoreCase);
         }
 
         internal static bool Contains(string[] array, string value)
         {
-            StringComparer stringComparer = StringComparer.Create(CultureInfo.InvariantCulture, true);
-
             foreach (string item in array)
             {
-                if (stringComparer.Compare(item, value) == 0)
+                if (string.Equals(item, value, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }

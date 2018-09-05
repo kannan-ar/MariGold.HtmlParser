@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MariGold.HtmlParser.Tests</RootNamespace>
     <AssemblyName>MariGold.HtmlParser.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
@@ -69,12 +72,6 @@
     <Compile Include="TwoElements.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MariGold.HtmlParser\MariGold.HtmlParser.csproj">
-      <Project>{b83067ee-0bba-472c-bce9-19fc4dcc51a7}</Project>
-      <Name>MariGold.HtmlParser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Html\atagwithstyle.htm" />
     <None Include="Html\basicexternalstyle.htm" />
     <None Include="Html\basicstyle.css" />
@@ -109,9 +106,16 @@
     <Content Include="Html\multilevelstyles.htm" />
     <Content Include="Html\nthchildpriority.htm" />
     <Content Include="Html\overrideglobalstyle.htm" />
+    <Content Include="Html\remotestylesheet.htm" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MariGold.HtmlParser\MariGold.HtmlParser.csproj">
+      <Project>{0823efb5-02a8-4c1c-809a-1a96a537650e}</Project>
+      <Name>MariGold.HtmlParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

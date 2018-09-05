@@ -1,66 +1,38 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
-    using System.Net;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
 
     internal sealed class CSSTracker
     {
         private const string rel = "stylesheet";
 
-        private string uriSchema;
-        private string baseUrl;
+        internal string UriSchema { get; set; }
 
-        internal string UriSchema
-        {
-            get
-            {
-                return uriSchema;
-            }
-
-            set
-            {
-                uriSchema = value;
-            }
-        }
-
-        internal string BaseURL
-        {
-            get
-            {
-                return baseUrl;
-            }
-
-            set
-            {
-                baseUrl = value;
-            }
-        }
+        internal string BaseURL { get; set; }
 
         private void TraverseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
         {
             string style = string.Empty;
 
-            if (string.Compare(node.Tag, HtmlTag.STYLE, StringComparison.InvariantCultureIgnoreCase) == 0)
+            if (string.Equals(node.Tag, HtmlTag.STYLE, StringComparison.OrdinalIgnoreCase))
             {
                 style = node.InnerHtml == null ? string.Empty : node.InnerHtml.Trim();
             }
-            else if (string.Compare(node.Tag, HtmlTag.LINK, StringComparison.InvariantCultureIgnoreCase) == 0)
+            else if (string.Equals(node.Tag, HtmlTag.LINK, StringComparison.OrdinalIgnoreCase))
             {
                 string relValue = node.ExtractAttributeValue("rel");
                 string media = node.ExtractAttributeValue("media");
 
-                if (string.Compare(rel, relValue, StringComparison.InvariantCultureIgnoreCase) == 0 &&
-                    (string.IsNullOrEmpty(media) || media.CompareInvariantCultureIgnoreCase("screen")
-                    || media.CompareInvariantCultureIgnoreCase("all")))
+                if (string.Equals(rel, relValue, StringComparison.OrdinalIgnoreCase) &&
+                    (string.IsNullOrEmpty(media) || media.CompareOrdinalIgnoreCase("screen")
+                    || media.CompareOrdinalIgnoreCase("all")))
                 {
                     string url = node.ExtractAttributeValue("href");
 
                     if (!string.IsNullOrEmpty(url))
                     {
-                        WebManager web = new WebManager(uriSchema, baseUrl);
+                        WebManager web = new WebManager(UriSchema, BaseURL);
                         style = web.ExtractStylesFromLink(url);
                     }
                 }

@@ -8,15 +8,13 @@
     {
         const char space = ' ';
         const char slash = '/';
-        static string[] styles = { "normal", "initial", "inherit" };
+        static readonly string[] styles = { "normal", "initial", "inherit" };
 
         private bool Contains(string[] array, string value)
         {
-            StringComparer stringComparer = StringComparer.Create(CultureInfo.InvariantCulture, true);
-
             foreach (string item in array)
             {
-                if (stringComparer.Compare(item, value) == 0)
+                if (string.Equals(item, value, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -103,10 +101,7 @@
         {
             string[] fontStyles = { "italic", "oblique" };
 
-            int index;
-            string value;
-
-            if (!ExtractProperty(font, new char[] { space }, 0, out index, out value))
+            if (!ExtractProperty(font, new char[] { space }, 0, out int index, out string value))
             {
                 return false;
             }
@@ -136,10 +131,8 @@
             KeyValuePair<Stack<string>, Stack<string>> styleStack)
         {
             string[] fontStyles = { "small-caps" };
-            int index;
-            string value;
 
-            if (!ExtractProperty(font, new char[] { space }, startIndex, out index, out value))
+            if (!ExtractProperty(font, new char[] { space }, startIndex, out int index, out string value))
             {
                 return false;
             }
@@ -170,17 +163,13 @@
             KeyValuePair<Stack<string>, Stack<string>> styleStack)
         {
             string[] fontStyles = { "bold", "bolder", "lighter" };
-            int index;
-            string value;
 
-            if (!ExtractProperty(font, new char[] { space }, startIndex, out index, out value))
+            if (!ExtractProperty(font, new char[] { space }, startIndex, out int index, out string value))
             {
                 return false;
             }
 
-            int weight;
-
-            if (Contains(fontStyles, value) || Int32.TryParse(value, out weight))
+            if (Contains(fontStyles, value) || Int32.TryParse(value, out int weight))
             {
                 ProcessNormalValues(styleList, styleStack);
                 styleList.Add(fontWeight, value);
@@ -207,10 +196,8 @@
         {
             string[] fontStyles = { "medium", "xx-small", "x-small", "small", "large", "x-large", "xx-large", "smaller", "larger" };
             string[] lengthTypes = { "px", "pt", "em", "cm", "in" };
-            int index;
-            string value;
 
-            if (!ExtractProperty(font, new char[] { slash, space }, startIndex, out index, out value))
+            if (!ExtractProperty(font, new char[] { slash, space }, startIndex, out int index, out string value))
             {
                 return false;
             }
@@ -247,10 +234,8 @@
         {
             string[] fontStyles = { "medium", "xx-small", "x-small", "small", "large", "x-large", "xx-large", "smaller", "larger" };
             string[] lengthTypes = { "px", "pt", "em", "cm", "in" };
-            string value;
-            int index;
 
-            if (ExtractProperty(font, new char[] { space }, startIndex, out index, out value))
+            if (ExtractProperty(font, new char[] { space }, startIndex, out int index, out string value))
             {
                 if (Contains(fontStyles, value))
                 {
@@ -342,12 +327,12 @@
                 return false;
             }
 
-            if (parentStyle.Name.CompareInvariantCultureIgnoreCase(fontFamily))
+            if (parentStyle.Name.CompareOrdinalIgnoreCase(fontFamily))
             {
                 ProcessFontFamily(parentStyle, child);
                 return true;
             }
-            else if (parentStyle.Name.CompareInvariantCultureIgnoreCase(font))
+            else if (parentStyle.Name.CompareOrdinalIgnoreCase(font))
             {
                 ProcessFont(parentStyle, child);
                 return true;
@@ -358,13 +343,11 @@
 
         internal override void ParseStyle(HtmlNode node)
         {
-            HtmlStyle value;
-
             Dictionary<string, string> styles = new Dictionary<string, string>();
             KeyValuePair<Stack<string>, Stack<string>> styleStack =
                 new KeyValuePair<Stack<string>, Stack<string>>(new Stack<string>(), new Stack<string>());
 
-            if (node.TryGetStyle(font, out value))
+            if (node.TryGetStyle(font, out HtmlStyle value))
             {
                 if (ProcessFontStyle(value.Value, styles, styleStack))
                 {

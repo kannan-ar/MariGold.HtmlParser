@@ -61,7 +61,7 @@
 
             foreach (HtmlStyle style in node.HtmlStyles)
             {
-                if (string.Compare(styleName, style.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Equals(styleName, style.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     found = true;
                     value = style.Value;
@@ -80,7 +80,7 @@
         {
             foreach (HtmlStyle style in node.HtmlStyles)
             {
-                if (string.Compare(style.Value, "inherit", StringComparison.InvariantCultureIgnoreCase) == 0 && node.Parent != null)
+                if (string.Equals(style.Value, "inherit", StringComparison.OrdinalIgnoreCase) && node.Parent != null)
                 {
                     string value = FindParentStyle(parent, style.Name);
 

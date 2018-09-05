@@ -11,8 +11,8 @@
                 return false;
             }
 
-            if (parentStyle.Name.CompareInvariantCultureIgnoreCase(backgroundColor) ||
-                parentStyle.Name.CompareInvariantCultureIgnoreCase(background))
+            if (parentStyle.Name.CompareOrdinalIgnoreCase(backgroundColor) ||
+                parentStyle.Name.CompareOrdinalIgnoreCase(background))
             {
                 HtmlStyle style;
 
@@ -22,12 +22,12 @@
                     child.UpdateInheritedStyles(parentStyle);
                 }
                 else if ((child.TryGetStyle(background, out style) || child.TryGetStyle(backgroundColor, out style)) &&
-                    style.Value.CompareInvariantCultureIgnoreCase(transparent))
+                    style.Value.CompareOrdinalIgnoreCase(transparent))
                 {
                     string styleValue = parentStyle.Value;
                     
-                    if (parentStyle.Name.CompareInvariantCultureIgnoreCase(background) &&
-                        style.Name.CompareInvariantCultureIgnoreCase(backgroundColor))
+                    if (parentStyle.Name.CompareOrdinalIgnoreCase(background) &&
+                        style.Name.CompareOrdinalIgnoreCase(backgroundColor))
                     {
                         int index = styleValue.IndexOf(' ');
 

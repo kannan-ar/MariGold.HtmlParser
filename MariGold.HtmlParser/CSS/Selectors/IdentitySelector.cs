@@ -68,7 +68,7 @@
 
             if (node.Attributes.TryGetValue(key, out id))
             {
-                if (string.Compare(currentSelector, id, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Equals(currentSelector, id, StringComparison.OrdinalIgnoreCase))
                 {
                     isValid = true;
                 }
@@ -95,12 +95,11 @@
 
             if (node.Attributes.TryGetValue(key, out id))
             {
-                if (string.Compare(currentSelector, id, StringComparison.InvariantCultureIgnoreCase) == 0)
+                if (string.Equals(currentSelector, id, StringComparison.OrdinalIgnoreCase))
                 {
                     node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Identity));
                 }
             }
-
         }
 
         internal override CSSelector Clone()

@@ -154,5 +154,39 @@
 			node.Styles.CheckKeyValuePair(1, "text-decoration", "none");
 			
 		}
-	}
+
+        [Test]
+        public void RemoteStyleSheet()
+        {
+            string path = TestUtility.GetFolderPath("Html\\remotestylesheet.htm");
+            string html = string.Empty;
+
+            using (StreamReader sr = new StreamReader(path))
+            {
+                html = sr.ReadToEnd();
+            }
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Parse());
+            parser.ParseStyles();
+
+            Assert.IsNotNull(parser.Current);
+
+            IHtmlNode node = parser.Current.Children.ElementAt(0);
+
+            while (node.Tag != "body")
+                node = node.Next;
+
+            IHtmlNode body = node;
+
+            node = node.Children.ElementAt(0);
+
+            while (node.Tag != "p")
+                node = node.Next;
+
+            node.AnalyzeNode("p", "test", "<p class=\"well\">test</p>", body, false, true, 1, 1);
+            Assert.Less(0, node.Styles.Count);
+        }
+    }
 }

@@ -55,7 +55,7 @@
 
                 foreach (HtmlNode child in node.GetParent().GetChildren())
                 {
-                    if (string.Compare(node.Tag, child.Tag, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    if (string.Equals(node.Tag, child.Tag, StringComparison.OrdinalIgnoreCase))
                     {
                         lastChild = child;
                     }

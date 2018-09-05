@@ -7,7 +7,21 @@
 	
 	public static class TestExtensions
 	{
-		public static void AnalyzeNode(
+        public static void AnalyzeNode(
+            this IHtmlNode node,
+            string tag,
+            string text,
+            string html,
+            IHtmlNode parent,
+            bool selfClosing,
+            bool hasChildren,
+            int childrenCount,
+            int attributeCount)
+        {
+            TestUtility.AnalyzeNode(node, tag, text, html, parent, selfClosing, hasChildren, childrenCount, attributeCount);
+        }
+
+        public static void AnalyzeNode(
 			this IHtmlNode node,
 			string tag,
 			string text,

@@ -49,7 +49,7 @@
 
         private bool EqualTo(string selectorValue, string attributeValue)
         {
-            return string.Compare(selectorValue, attributeValue, StringComparison.InvariantCultureIgnoreCase) == 0;
+            return string.Equals(selectorValue, attributeValue, StringComparison.OrdinalIgnoreCase);
         }
 
         private bool StartsWith(string selectorValue, string attributeValue)

@@ -44,7 +44,7 @@
         {
             foreach (var item in specialTags)
             {
-                if (selector.StartsWith(item.Key, true, CultureInfo.InvariantCulture))
+                if (selector.StartsWith(item.Key, StringComparison.OrdinalIgnoreCase))
                 {
                     this.currentSelector = item.Value();
                     this.selectorText = selector.Substring(item.Key.Length);
@@ -103,7 +103,7 @@
 
             bool isValid = false;
 
-            if (string.Compare(node.Tag, currentSelector, StringComparison.InvariantCultureIgnoreCase) == 0)
+            if (string.Equals(node.Tag, currentSelector, StringComparison.OrdinalIgnoreCase))
             {
                 isValid = true;
             }

@@ -22,7 +22,7 @@
 
             if (current != null)
             {
-                if (string.Compare(current.Tag, closeTag, StringComparison.InvariantCultureIgnoreCase) == 0 && current.IsOpened)
+                if (string.Equals(current.Tag, closeTag, StringComparison.OrdinalIgnoreCase) && current.IsOpened)
                 {
                     current.SetBoundary(textEnd, htmlEnd);
                     newNode = current;
@@ -89,7 +89,7 @@
 
                     if (current != null)
                     {
-                        ignoreTag = string.Compare(current.Tag, tag, StringComparison.InvariantCultureIgnoreCase) != 0;
+                        ignoreTag = !string.Equals(current.Tag, tag, StringComparison.OrdinalIgnoreCase);
                     }
                 }
             }

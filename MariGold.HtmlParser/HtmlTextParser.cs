@@ -118,7 +118,7 @@
 							searchAnalyzer = openTag.GetAnalyzer(index, null);
 							invalidTag = false;
 							searchAnalyzer.OnTagCreate += (t) => {
-								if (string.Compare(t, tag, StringComparison.InvariantCultureIgnoreCase) != 0)
+								if (!string.Equals(t, tag, StringComparison.OrdinalIgnoreCase))
 								{
 									invalidTag = true;
 								}
