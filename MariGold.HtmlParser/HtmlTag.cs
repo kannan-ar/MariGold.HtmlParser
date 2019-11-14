@@ -4,7 +4,7 @@
 
     internal static class HtmlTag
     {
-        private static string[] nonContainerTags = { "br", "img", "input", "link", "meta" };
+        private static string[] nonContainerTags = { "br", "img", "input", "link", "meta", "hr" };
 
         public const char openAngle = '<';
         public const char closeAngle = '>';

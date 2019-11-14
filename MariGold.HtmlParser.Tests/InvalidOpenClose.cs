@@ -791,5 +791,34 @@
             td.AnalyzeNode("td", "4", "<td>4</td>", tr, false, true, 1, 0, 0);
             td.Children.ElementAt(0).AnalyzeNode("#text", "4", "4", td, false, false, 0, 0, 0);
         }
+
+        [Test]
+        public void InvalidHrClose()
+        {
+            string html = "<hr><div>test</div>";
+
+            HtmlParser parser = new HtmlTextParser(html);
+
+            Assert.AreEqual(true, parser.Traverse());
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AreEqual(parser.Current, "hr", "<hr>", "<hr>");
+            Assert.IsNull(parser.Current.Parent);
+            Assert.AreEqual(0, parser.Current.Children.Count());
+            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.AreEqual(true, parser.Current.SelfClosing);
+            Assert.AreEqual(0, parser.Current.Attributes.Count);
+
+            Assert.AreEqual(true, parser.Traverse());
+            Assert.IsNotNull(parser.Current);
+            TestUtility.AreEqual(parser.Current, "div", "test", "<div>test</div>");
+            Assert.IsNull(parser.Current.Parent);
+            Assert.AreEqual(1, parser.Current.Children.Count());
+            Assert.AreEqual(true, parser.Current.HasChildren);
+            Assert.AreEqual(false, parser.Current.SelfClosing);
+            Assert.AreEqual(0, parser.Current.Attributes.Count);
+
+            Assert.AreEqual(false, parser.Traverse());
+            Assert.IsNull(parser.Current);
+        }
     }
 }
