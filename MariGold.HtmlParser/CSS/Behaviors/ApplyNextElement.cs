@@ -12,12 +12,8 @@
 
         internal ApplyNextElement(ISelectorContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            this.context = context ?? throw new ArgumentNullException("context");
 
-            this.context = context;
             regex = new Regex(@"^\s*\+\s*");
         }
 
@@ -49,16 +45,14 @@
 
                 if (temp != null)
                 {
-                    CSSelector nextSelector;
-			
-					if (context.ParseSelector(this.selectorText, out nextSelector))
-					{
-						if (nextSelector != null && nextSelector.IsValidNode(temp))
-						{
+                    if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
+                    {
+                        if (nextSelector != null && nextSelector.IsValidNode(temp))
+                        {
                             nextSelector.AddSpecificity(specificity);
-							nextSelector.Parse(temp, htmlStyles);
-						}
-					}
+                            nextSelector.Parse(temp, htmlStyles);
+                        }
+                    }
                 }
             }
         }

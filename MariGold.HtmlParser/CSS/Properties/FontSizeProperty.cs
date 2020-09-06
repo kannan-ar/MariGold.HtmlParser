@@ -13,8 +13,7 @@
         private readonly Dictionary<string, decimal> defaultFontSizes;
         private readonly Dictionary<string, decimal> absoluteNamedFontSizes;
         private readonly Dictionary<string, decimal> relativeNamedFontSizes;
-
-        Regex decimalValue;
+        private readonly Regex decimalValue;
 
         private void Init()
         {
@@ -53,11 +52,9 @@
 
         private decimal ParseFontSize(string value)
         {
-            decimal fontSize;
-
             Match match = decimalValue.Match(value);
 
-            if (match.Success && decimal.TryParse(match.Value, out fontSize))
+            if (match.Success && decimal.TryParse(match.Value, out decimal fontSize))
             {
                 return fontSize;
             }
@@ -99,10 +96,8 @@
                 return 0;
             }
 
-            decimal fontSize = 0;
-
             if (fontSizeValue.Contains("%") &&
-                decimal.TryParse(fontSizeValue.Replace("%", ""), out fontSize))
+                decimal.TryParse(fontSizeValue.Replace("%", ""), out decimal fontSize))
             {
                 fontSize = defaultFontSize / 100 * fontSize;
             }
@@ -241,7 +236,6 @@
 
         internal override void ParseStyle(HtmlNode node)
         {
-
         }
     }
 }

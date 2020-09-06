@@ -1,7 +1,5 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
-
     internal abstract class CSSProperty
     {
         internal const string fontFamily = "font-family";

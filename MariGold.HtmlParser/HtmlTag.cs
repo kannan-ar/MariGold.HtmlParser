@@ -1,10 +1,8 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
-
     internal static class HtmlTag
     {
-        private static string[] nonContainerTags = { "br", "img", "input", "link", "meta", "hr" };
+        private static readonly string[] nonContainerTags = { "br", "img", "input", "link", "meta", "hr" };
 
         public const char openAngle = '<';
         public const char closeAngle = '>';

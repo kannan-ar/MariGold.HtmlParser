@@ -78,9 +78,7 @@
 
             bool isValid = false;
 
-            string className;
-
-            if (node.Attributes.TryGetValue(key, out className))
+            if (node.Attributes.TryGetValue(key, out string className))
             {
                 string[] names = className.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 

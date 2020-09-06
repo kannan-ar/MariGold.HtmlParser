@@ -1,7 +1,5 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
-
     internal static class CSSTokenizer
     {
         internal const char openBrace = '{';

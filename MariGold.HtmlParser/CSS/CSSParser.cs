@@ -161,12 +161,9 @@
 
             while (position < eof)
             {
-                string selectorText;
+                int bracePosition = ParseSelector(position, style, out string selectorText);
 
-                int bracePosition = ParseSelector(position, style, out selectorText);
-                int commentPosition;
-
-                if (HasComment(position, bracePosition, eof, style, out commentPosition))
+                if (HasComment(position, bracePosition, eof, style, out int commentPosition))
                 {
                     position = commentPosition;
                     continue;
@@ -174,12 +171,10 @@
 
                 if (bracePosition > position && selectorText != string.Empty)
                 {
-                    List<HtmlStyle> htmlStyles;
-
                     if (!mediaQuery.Process(selectorText, style, mediaQuries, ref bracePosition))
                     {
                         //Returning close brace index
-                        bracePosition = ParseHtmlStyles(bracePosition, style, out htmlStyles);
+                        bracePosition = ParseHtmlStyles(bracePosition, style, out List<HtmlStyle> htmlStyles);
 
                         foreach (string selector in selectorText.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                         {

@@ -12,12 +12,7 @@
 
         internal ApplyAllNextElement(ISelectorContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            this.context = context;
+            this.context = context ?? throw new ArgumentNullException("context");
 
             regex = new Regex(@"^\s*~\s*");
         }
@@ -52,15 +47,13 @@
 
         internal override void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles)
         {
-            CSSelector nextSelector;
-			
-			if (context.ParseSelector(this.selectorText, out nextSelector))
-			{
-				if (nextSelector != null)
-				{
+            if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
+            {
+                if (nextSelector != null)
+                {
                     ApplyStyle(nextSelector, specificity, node, htmlStyles);
-				}
-			}
+                }
+            }
         }
     }
 }

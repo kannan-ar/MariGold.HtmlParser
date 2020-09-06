@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
-    using System.Globalization;
 
     internal sealed class ElementSelector : CSSelector
     {
@@ -15,12 +14,7 @@
 
         private ElementSelector(ISelectorContext context, string currentSelector, string selectorText, Specificity specificity)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            this.context = context;
+            this.context = context ?? throw new ArgumentNullException("context");
             regex = new Regex(@"^([a-zA-Z]+[0-9]*)+");
             this.currentSelector = currentSelector;
             this.selectorText = selectorText;
@@ -36,8 +30,10 @@
 
         private void FillSpecialTags()
         {
-            specialTags = new Dictionary<string, Func<string>>();
-            specialTags.Add("a:link", () => { return "a"; });
+            specialTags = new Dictionary<string, Func<string>>
+            {
+                { "a:link", () => { return "a"; } }
+            };
         }
 
         private bool IsSpecialTag(string selector)

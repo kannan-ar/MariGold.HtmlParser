@@ -13,12 +13,7 @@
 
 		internal ApplyAllChildren(ISelectorContext context)
 		{
-			if (context == null)
-			{
-				throw new ArgumentNullException("context");
-			}
-
-			this.context = context;
+			this.context = context ?? throw new ArgumentNullException("context");
 
 			//Atleast one space should occur preceeded by an occurance of an element selector
 			isValid = new Regex(@"^\s+[^\s]+");
@@ -59,16 +54,14 @@
 
         internal override void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles)
 		{
-			CSSelector nextSelector;
-			
-			if (context.ParseSelector(this.selectorText, out nextSelector))
+			if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
 			{
 				if (nextSelector != null)
 				{
 					foreach (HtmlNode child in node.GetChildren())
 					{
-                        CSSelector clone = nextSelector.Clone();
-                        ApplyStyle(clone, specificity, child, htmlStyles);
+						CSSelector clone = nextSelector.Clone();
+						ApplyStyle(clone, specificity, child, htmlStyles);
 					}
 				}
 			}

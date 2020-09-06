@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
 
     internal sealed class FontProperty : CSSProperty
     {
@@ -169,7 +168,7 @@
                 return false;
             }
 
-            if (Contains(fontStyles, value) || Int32.TryParse(value, out int weight))
+            if (Contains(fontStyles, value) || Int32.TryParse(value, out _))
             {
                 ProcessNormalValues(styleList, styleStack);
                 styleList.Add(fontWeight, value);
@@ -272,12 +271,9 @@
                 return false;
             }
 
-            int index = -1;
-
             foreach (string fontProperty in fontProperties)
             {
-                index = value.IndexOf(fontProperty);
-
+                int index = value.IndexOf(fontProperty);
                 if (index != -1)
                 {
                     value = value.Remove(index).Trim();

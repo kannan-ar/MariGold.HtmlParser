@@ -146,9 +146,10 @@
 
         private AttributeElements PrepareElement(string selector, Match match)
         {
-            AttributeElements elm = new AttributeElements();
-
-            elm.SelectorText = selector.Substring(match.Value.Length);
+            AttributeElements elm = new AttributeElements
+            {
+                SelectorText = selector.Substring(match.Value.Length)
+            };
 
             FillAttributeElements(SplitSelector(match.Value), elm);
 
@@ -183,9 +184,7 @@
 
                 if (element.HasValue)
                 {
-                    string value;
-
-                    valid = node.Attributes.TryGetValue(element.AttributeName, out value);
+                    valid = node.Attributes.TryGetValue(element.AttributeName, out string value);
 
                     if (valid)
                     {

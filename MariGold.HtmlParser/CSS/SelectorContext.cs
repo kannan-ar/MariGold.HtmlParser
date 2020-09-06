@@ -1,27 +1,21 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
     using System.Collections.Generic;
 
     internal sealed class SelectorContext : ISelectorContext
     {
-        private readonly List<IAttachedSelector> attachedSelectors;
-
-        private List<CSSelector> selectors;
-        private List<CSSBehavior> behaviors;
-
         internal SelectorContext()
         {
-            attachedSelectors = new List<IAttachedSelector>();
+            AttachedSelectors = new List<IAttachedSelector>();
 
-            behaviors = new List<CSSBehavior>() {
+            CSSBehaviors = new List<CSSBehavior>() {
 				new ApplyImmediateChildren(this),
 				new ApplyNextElement(this),
 				new ApplyAllNextElement(this),
 				new ApplyAllChildren(this)
 			};
 
-            selectors = new List<CSSelector>() {
+            Selectors = new List<CSSelector>() {
 				new IdentitySelector(this),
 				new ClassSelector(this),
 				new AttributeSelector(this),
@@ -36,35 +30,17 @@
 			};
         }
 
-        public List<CSSBehavior> CSSBehaviors
-        {
-            get
-            {
-                return behaviors;
-            }
-        }
+        public List<CSSBehavior> CSSBehaviors { get; }
 
-        public List<CSSelector> Selectors
-        {
-            get
-            {
-                return selectors;
-            }
-        }
+        public List<CSSelector> Selectors { get; }
 
-        public List<IAttachedSelector> AttachedSelectors
-        {
-            get
-            {
-                return attachedSelectors;
-            }
-        }
+        public List<IAttachedSelector> AttachedSelectors { get; }
 
         public void AddAttachedSelector(IAttachedSelector selector)
         {
-            if (!attachedSelectors.Contains(selector))
+            if (!AttachedSelectors.Contains(selector))
             {
-                attachedSelectors.Add(selector);
+                AttachedSelectors.Add(selector);
             }
         }
 
@@ -72,7 +48,7 @@
         {
             selector = null;
 
-            foreach (CSSelector item in selectors)
+            foreach (CSSelector item in Selectors)
             {
                 if (item.Prepare(selectorText))
                 {
@@ -108,7 +84,7 @@
         {
             bool found = false;
 
-            foreach (IAttachedSelector selector in attachedSelectors)
+            foreach (IAttachedSelector selector in AttachedSelectors)
             {
                 if (selector.Prepare(selectorText))
                 {

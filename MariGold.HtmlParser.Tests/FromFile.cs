@@ -1,6 +1,5 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System;
     using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.IO;

@@ -5,104 +5,49 @@
 
     internal sealed class SearchAnalyzerContext : IAnalyzerContext
     {
-        private readonly string html;
-        private readonly int eof;
-        private readonly IList<IOpenTag> openTags;
-        private readonly IList<ICloseTag> closeTags;
-        private readonly HtmlContext htmlContext;
-
-        private HtmlNode previousNode;
-
         public event Action<HtmlAnalyzer> OnAnalyzerChange;
         public event Action<int> OnPositionChange;
 
-        public string Html
-        {
-            get
-            {
-                return html;
-            }
-        }
+        public string Html { get; }
 
-        public int EOF
-        {
-            get
-            {
-                return eof;
-            }
-        }
+        public int EOF { get; }
 
-        public IList<IOpenTag> OpenTags
-        {
-            get
-            {
-                return openTags;
-            }
-        }
+        public IList<IOpenTag> OpenTags { get; }
 
-        public IList<ICloseTag> CloseTags 
-        {
-            get
-            {
-                return closeTags;
-            }
-        }
+        public IList<ICloseTag> CloseTags { get; }
 
-        public HtmlContext HtmlContext
-        {
-            get
-            {
-                return htmlContext;
-            }
-        }
+        public HtmlContext HtmlContext { get; }
 
-        public HtmlNode PreviousNode
-        {
-            get
-            {
-                return previousNode;
-            }
-
-            set
-            {
-                previousNode = value;
-            }
-        }
+        public HtmlNode PreviousNode { get; set; }
 
         public SearchAnalyzerContext(string html)
         {
-            this.html = html;
-            this.eof = html.Length;
+            this.Html = html;
+            this.EOF = html.Length;
 
-            this.openTags = new List<IOpenTag>()
+            this.OpenTags = new List<IOpenTag>()
             {
                 new OpenTagAnalyzer(this),
                 new MetaTagAnalyzer(this),
                 new CommentAnalyzer(this)
             };
 
-            this.closeTags = new List<ICloseTag>()
+            this.CloseTags = new List<ICloseTag>()
             {
                 new CloseTagAnalyzer(this)
             };
 
-            htmlContext = new HtmlContext(html);
+            HtmlContext = new HtmlContext(html);
         }
 
         public void SetAnalyzer(HtmlAnalyzer analyzer)
         {
-            if (OnAnalyzerChange != null)
-            {
-                OnAnalyzerChange(analyzer);
-            }
+            OnAnalyzerChange?.Invoke(analyzer);
         }
 
         public void SetPosition(int position)
         {
-            if (OnPositionChange != null)
-            {
-                OnPositionChange(position);
-            }
+            OnPositionChange?.Invoke(position);
         }
 
         public HtmlAnalyzer GetTextAnalyzer(int position)

@@ -1,7 +1,5 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
-
     internal sealed class BackgroundProperty : CSSProperty
     {
         internal override bool AppendStyle(HtmlStyle parentStyle, HtmlNode child)
@@ -14,18 +12,15 @@
             if (parentStyle.Name.CompareOrdinalIgnoreCase(backgroundColor) ||
                 parentStyle.Name.CompareOrdinalIgnoreCase(background))
             {
-                HtmlStyle style;
-
                 if (!child.HasStyle(backgroundColor) && !child.HasStyle(background))
                 {
-                    //child.HtmlStyles.Add(new HtmlStyle(parentStyle.Name, parentStyle.Value, false));
                     child.UpdateInheritedStyles(parentStyle);
                 }
-                else if ((child.TryGetStyle(background, out style) || child.TryGetStyle(backgroundColor, out style)) &&
+                else if ((child.TryGetStyle(background, out HtmlStyle style) || child.TryGetStyle(backgroundColor, out style)) &&
                     style.Value.CompareOrdinalIgnoreCase(transparent))
                 {
                     string styleValue = parentStyle.Value;
-                    
+
                     if (parentStyle.Name.CompareOrdinalIgnoreCase(background) &&
                         style.Name.CompareOrdinalIgnoreCase(backgroundColor))
                     {
@@ -36,7 +31,7 @@
                             styleValue = styleValue.Remove(index);
                         }
                     }
-                    
+
                     style.ModifyStyle(styleValue);
                 }
 

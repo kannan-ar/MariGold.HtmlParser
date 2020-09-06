@@ -17,12 +17,7 @@
 
         internal GlobalSelector(ISelectorContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            this.context = context;
+            this.context = context ?? throw new ArgumentNullException("context");
         }
 
         internal override bool Prepare(string selector)

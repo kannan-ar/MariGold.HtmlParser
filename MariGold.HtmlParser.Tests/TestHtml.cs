@@ -1,9 +1,9 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-	using System;
-	using System.Linq;
-	using NUnit.Framework;
-	using MariGold.HtmlParser;
+    using System;
+    using System.Linq;
+    using NUnit.Framework;
+    using MariGold.HtmlParser;
 
 	internal class TestHtml
 	{
@@ -11,12 +11,7 @@
 
 		internal TestHtml(IHtmlNode node)
 		{
-			if (node == null)
-			{
-				throw new ArgumentNullException("node");
-			}
-
-			this.node = node;
+			this.node = node ?? throw new ArgumentNullException("node");
 		}
 
 		internal TestHtml IsNotNull()

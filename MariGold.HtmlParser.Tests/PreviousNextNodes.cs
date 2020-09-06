@@ -1,6 +1,5 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-	using System;
 	using System.Linq;
 	using NUnit.Framework;
 	using MariGold.HtmlParser;
@@ -226,10 +225,10 @@
 			TestUtility.AreEqual(parser.Current, "table", "<tr><td>one</td><td>two</td></tr>", html);
 			Assert.IsNull(parser.Current.Next);
 			Assert.IsNull(parser.Current.Previous);
-            
+
 			Assert.AreEqual(1, parser.Current.Children.Count());
 			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
-			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "tr", "<td>one</td><td>two</td>", 
+			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "tr", "<td>one</td><td>two</td>",
 				"<tr><td>one</td><td>two</td></tr>");
 			Assert.IsNull(parser.Current.Children.ElementAt(0).Next);
 			Assert.IsNull(parser.Current.Children.ElementAt(0).Previous);
@@ -345,35 +344,35 @@
 			Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(1).Previous);
 			Assert.AreEqual(parser.Current.Children.ElementAt(1), parser.Current.Children.ElementAt(0).Next);
 		}
-        
+
 		[Test]
 		public void HtmlHeadBody()
 		{
 			string html = "<html><head></head><body></body></html>";
-			
+
 			HtmlParser parser = new HtmlTextParser(html);
 
 			parser.Parse();
-			
+
 			IHtmlNode node = parser.Current;
-			
+
 			node.AnalyzeNode("html", "<head></head><body></body>", "<html><head></head><body></body></html>", null, false, true, 2, 0, 0);
 			Assert.IsNull(node.Previous);
 			Assert.IsNull(node.Next);
-			
+
 			IHtmlNode hnode = node;
-			
+
 			node = node.Children.ElementAt(0);
-			
+
 			node.AnalyzeNode("head", "", "<head></head>", hnode, false, false, 0, 0, 0);
 			Assert.IsNull(node.Previous);
 			Assert.IsNotNull(node.Next);
-			
+
 			node = node.Next;
 			node.AnalyzeNode("body", "", "<body></body>", hnode, false, false, 0, 0, 0);
 			Assert.IsNotNull(node.Previous);
 			Assert.IsNull(node.Next);
-			
+
 		}
 	}
 }

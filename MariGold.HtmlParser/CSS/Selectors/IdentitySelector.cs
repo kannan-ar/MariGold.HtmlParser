@@ -64,9 +64,8 @@
             }
 
             bool isValid = false;
-            string id;
 
-            if (node.Attributes.TryGetValue(key, out id))
+            if (node.Attributes.TryGetValue(key, out string id))
             {
                 if (string.Equals(currentSelector, id, StringComparison.OrdinalIgnoreCase))
                 {
@@ -91,9 +90,7 @@
 
         internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
         {
-            string id;
-
-            if (node.Attributes.TryGetValue(key, out id))
+            if (node.Attributes.TryGetValue(key, out string id))
             {
                 if (string.Equals(currentSelector, id, StringComparison.OrdinalIgnoreCase))
                 {

@@ -75,7 +75,7 @@
 
         public static void CheckStyle(this IHtmlNode node, int index, string styleName, string styleValue)
         {
-            Assert.True(index < node.Styles.Count,"No style at position " + index.ToString());
+            Assert.True(index < node.Styles.Count, "No style at position " + index.ToString());
             KeyValuePair<string, string> style = node.Styles.ElementAt(index);
             Assert.AreEqual(styleName, style.Key);
             Assert.AreEqual(styleValue, style.Value);

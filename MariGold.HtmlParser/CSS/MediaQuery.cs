@@ -1,14 +1,13 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
     internal sealed class MediaQuery
     {
         private readonly Regex mediaRegex;
-        private string selector;
-        private List<CSSElement> elements;
+        private readonly string selector;
+        private readonly List<CSSElement> elements;
 
         internal MediaQuery()
         {
@@ -39,8 +38,7 @@
                 return false;
             }
 
-            int closeBraceIndex = 0;
-            string style = CSSTokenizer.FindOpenCloseBraceArea(styleText, position + 1, out closeBraceIndex);
+            string style = CSSTokenizer.FindOpenCloseBraceArea(styleText, position + 1, out int closeBraceIndex);
 
             if (closeBraceIndex > position)
             {

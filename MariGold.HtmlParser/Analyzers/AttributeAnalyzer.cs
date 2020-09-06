@@ -161,10 +161,7 @@
        
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
-            if (analyze != null)
-            {
-                analyze(position, node);
-            }
+            analyze?.Invoke(position, node);
 
             return false;
         }

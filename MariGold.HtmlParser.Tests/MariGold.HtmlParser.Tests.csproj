@@ -1,128 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DC2B12AD-1306-41BC-8552-4DAA014A5C82}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MariGold.HtmlParser.Tests</RootNamespace>
-    <AssemblyName>MariGold.HtmlParser.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="BasicHtml.cs" />
-    <Compile Include="BasicStyle.cs" />
-    <Compile Include="CaseSensitiveTags.cs" />
-    <Compile Include="Comments.cs" />
-    <Compile Include="ComplexStyles.cs" />
-    <Compile Include="ComplexStylesLevel1.cs" />
-    <Compile Include="ComplextStylesLevel2.cs" />
-    <Compile Include="CSSComments.cs" />
-    <Compile Include="CSSelectorTypePriority.cs" />
-    <Compile Include="CSSInheritance.cs" />
-    <Compile Include="ExternalStyles.cs" />
-    <Compile Include="FindTag.cs" />
-    <Compile Include="FontStyle.cs" />
-    <Compile Include="FromFile.cs" />
-    <Compile Include="HtmlAttributes.cs" />
-    <Compile Include="InvalidHtml.cs" />
-    <Compile Include="InvalidMultiElements.cs" />
-    <Compile Include="InvalidOpenClose.cs" />
-    <Compile Include="OneLevelHierarchy.cs" />
-    <Compile Include="ParseMethod.cs" />
-    <Compile Include="PreviousNextNodes.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelfClosing.cs" />
-    <Compile Include="SpecialTags.cs" />
-    <Compile Include="Tables.cs" />
-    <Compile Include="TestExtensions.cs" />
-    <Compile Include="TestHtml.cs" />
-    <Compile Include="TestUtility.cs" />
-    <Compile Include="ThreeElements.cs" />
-    <Compile Include="TwoElements.cs" />
+    <ProjectReference Include="..\MariGold.HtmlParser\MariGold.HtmlParser.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Html\atagwithstyle.htm" />
-    <None Include="Html\basicexternalstyle.htm" />
-    <None Include="Html\basicstyle.css" />
-    <None Include="Html\basicstyleimportant.html" />
-    <None Include="Html\basicstylewithtwoelements.html" />
-    <None Include="Html\stylewithimportant.css" />
-    <None Include="Html\stylewithtwoelements.css" />
-    <None Include="Html\trnthchild.htm" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Html\backgroundcolorspecificity.htm" />
-    <Content Include="Html\backgroundinheritance.htm" />
-    <Content Include="Html\basic.htm" />
-    <Content Include="Html\basicwithattributes.htm" />
-    <Content Include="Html\commentwithmediaquery.htm" />
-    <Content Include="Html\complexcsschain.htm" />
-    <Content Include="Html\csschain10classes.htm" />
-    <Content Include="Html\cssspecificity.htm" />
-    <Content Include="Html\elementidentity.htm" />
-    <Content Include="Html\emptymediaprint.htm" />
-    <Content Include="Html\globalselectors.htm" />
-    <Content Include="Html\globalstylechain.htm" />
-    <Content Include="Html\identityoverclass.htm" />
-    <Content Include="Html\elementfirstchildchain.htm" />
-    <Content Include="Html\inheritedfontsizeparse.htm" />
-    <Content Include="Html\innerspanrelativefontsize.htm" />
-    <Content Include="Html\level3specificity.htm" />
-    <Content Include="Html\mediaprintstyle.htm" />
-    <Content Include="Html\mediaprintwithnospace.htm" />
-    <Content Include="Html\mediaqueryatfirst.htm" />
-    <Content Include="Html\multilevelstyles.htm" />
-    <Content Include="Html\nthchildpriority.htm" />
-    <Content Include="Html\overrideglobalstyle.htm" />
-    <Content Include="Html\remotestylesheet.htm" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MariGold.HtmlParser\MariGold.HtmlParser.csproj">
-      <Project>{0823efb5-02a8-4c1c-809a-1a96a537650e}</Project>
-      <Name>MariGold.HtmlParser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

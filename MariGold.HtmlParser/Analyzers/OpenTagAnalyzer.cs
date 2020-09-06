@@ -34,9 +34,7 @@
 
         private bool OnSelfClose(int position, ref HtmlNode node)
         {
-            bool tagCreated = false;
-
-            tagCreated = CreateTag(tag, startPosition, startPosition, position + 2, position + 2,
+            var tagCreated = CreateTag(tag, startPosition, startPosition, position + 2, position + 2,
                     parent, out node);
 
             node.SetSelfClosing(true);
@@ -79,19 +77,19 @@
                 throw new ArgumentOutOfRangeException("position");
             }
 
-            OpenTagAnalyzer analyzer = new OpenTagAnalyzer(context);
-
-            analyzer.startPosition = position;
-            analyzer.parent = parent;
-            analyzer.tagStart = -1;
-            analyzer.tag = string.Empty;
+            OpenTagAnalyzer analyzer = new OpenTagAnalyzer(context)
+            {
+                startPosition = position,
+                parent = parent,
+                tagStart = -1,
+                tag = string.Empty
+            };
 
             return analyzer;
         }
       
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
-            IOpenTag openTag;
             bool tagCreated = false;
             char letter = context.Html[position];
 
@@ -110,7 +108,7 @@
                 attributeAnalyzer = new AttributeAnalyzer(context);
             }
 
-            if (!IsQuotedValueSeek() && IsOpenTag(position, out openTag))
+            if (!IsQuotedValueSeek() && IsOpenTag(position, out IOpenTag openTag))
             {
                 context.SetAnalyzer(openTag.GetAnalyzer(position, parent));
             }

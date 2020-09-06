@@ -34,31 +34,6 @@
             regex = new Regex("^:nth-child\\(\\d+\\)");
         }
 
-        private void ApplyToChild(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (node == null)
-            {
-                return;
-            }
-
-            if (!node.HasChildren)
-            {
-                return;
-            }
-
-            if (node.GetChildren().Count < this.position)
-            {
-                return;
-            }
-
-            HtmlNode pNode = GetNodeAtPosition(position, node);
-
-            if (pNode != null)
-            {
-                ApplyStyle(pNode, htmlStyles);
-            }
-        }
-
         private HtmlNode GetNodeAtPosition(int position, HtmlNode parent)
         {
             HtmlNode node = null;
@@ -92,9 +67,7 @@
             {
                 this.selectorText = selector.Substring(match.Value.Length);
 
-                int value;
-
-                if (int.TryParse(new Regex("\\d+").Match(match.Value).Value, out value))
+                if (int.TryParse(new Regex("\\d+").Match(match.Value).Value, out int value))
                 {
                     this.position = value;
                 }

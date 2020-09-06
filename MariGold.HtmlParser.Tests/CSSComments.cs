@@ -1,6 +1,5 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System;
     using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.Linq;
@@ -35,7 +34,7 @@
             while (node.Tag != "body")
                 node = node.Next;
 
-            IHtmlNode body=node;
+            IHtmlNode body = node;
 
             node = node.Children.ElementAt(0);
 

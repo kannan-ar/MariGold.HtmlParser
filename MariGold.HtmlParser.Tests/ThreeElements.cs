@@ -1,6 +1,5 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System;
     using NUnit.Framework;
     using MariGold.HtmlParser;
 
@@ -105,7 +104,7 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            
+
             if (parser.Traverse())
             {
                 Assert.IsNotNull(parser.Current);

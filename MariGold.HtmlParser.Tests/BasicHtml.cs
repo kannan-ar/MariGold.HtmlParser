@@ -1,9 +1,9 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-	using System;
-	using System.Linq;
-	using NUnit.Framework;
-	using MariGold.HtmlParser;
+    using System;
+    using System.Linq;
+    using NUnit.Framework;
+    using MariGold.HtmlParser;
 
 	[TestFixture]
 	public class BasicHtml
@@ -46,7 +46,7 @@
 			string html = "<";
 
 			HtmlParser parser = new HtmlTextParser(html);
-            
+
 			Assert.AreEqual(true, parser.Traverse());
 			Assert.IsNotNull(parser.Current);
 			TestUtility.AreEqual(parser.Current, "#text", "<", "<");
@@ -95,7 +95,7 @@
 			Assert.AreEqual(false, parser.Current.SelfClosing);
 			Assert.AreEqual(true, parser.Current.HasChildren);
 			Assert.AreEqual(1, parser.Current.Children.Count());
-            
+
 			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
 			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "this is a test", "this is a test");
 			Assert.AreEqual(true, parser.Current.Children.ElementAt(0).IsText);
@@ -274,7 +274,7 @@
 			Assert.AreEqual(true, parser.Current.HasChildren);
 			Assert.AreEqual(1, parser.Current.Children.Count());
 			Assert.AreEqual(false, parser.Current.IsText);
-			
+
 			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "this is a test", "this is a test");
 			Assert.AreEqual(true, parser.Current.Children.ElementAt(0).IsText);
 			Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
@@ -282,7 +282,7 @@
 			Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
 			Assert.AreEqual(false, parser.Traverse());
 		}
-		
+
 		[Test]
 		public void CloneNode()
 		{
@@ -301,7 +301,7 @@
 			Assert.AreEqual(1, parser.Current.Children.Count());
 			Assert.AreEqual(1, parser.Current.Styles.Count);
 			Assert.AreEqual(2, parser.Current.Attributes.Count);
-			
+
 			Assert.IsNotNull(parser.Current.Children.ElementAt(0));
 			TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "this is a test", "this is a test");
 			Assert.AreEqual(true, parser.Current.Children.ElementAt(0).IsText);
@@ -310,7 +310,7 @@
 			Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
 			Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
 			Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
-			
+
 			IHtmlNode clone = parser.Current.Clone();
 			Assert.IsNotNull(clone);
 			Assert.AreEqual(parser.Current.Tag, clone.Tag);
@@ -318,81 +318,81 @@
 			Assert.AreEqual(parser.Current.Html, clone.Html);
 			Assert.AreEqual(parser.Current.Parent, clone.Parent);
 			Assert.AreEqual(parser.Current.Children.Count(), clone.Children.Count());
-			
+
 			for (int i = 0; parser.Current.Children.Count() > i; i++)
 			{
 				Assert.AreEqual(parser.Current.Children.ElementAt(i), clone.Children.ElementAt(i));
 			}
-			
+
 			Assert.AreEqual(parser.Current.Previous, clone.Previous);
 			Assert.AreEqual(parser.Current.Next, clone.Next);
 			Assert.AreEqual(parser.Current.HasChildren, clone.HasChildren);
 			Assert.AreEqual(parser.Current.SelfClosing, clone.SelfClosing);
 			Assert.AreEqual(parser.Current.IsText, clone.IsText);
-			
+
 			Assert.AreEqual(parser.Current.Attributes.Count, clone.Attributes.Count);
-			
+
 			for (int i = 0; parser.Current.Attributes.Count() > i; i++)
 			{
 				Assert.AreEqual(parser.Current.Attributes.ElementAt(i).Key, clone.Attributes.ElementAt(i).Key);
 				Assert.AreEqual(parser.Current.Attributes.ElementAt(i).Value, clone.Attributes.ElementAt(i).Value);
 			}
-			
+
 			Assert.AreEqual(parser.Current.Styles.Count, clone.Styles.Count);
-			
+
 			for (int i = 0; parser.Current.Styles.Count() > i; i++)
 			{
 				Assert.AreEqual(parser.Current.Styles.ElementAt(i).Key, clone.Styles.ElementAt(i).Key);
 				Assert.AreEqual(parser.Current.Styles.ElementAt(i).Value, clone.Styles.ElementAt(i).Value);
 			}
-			
+
 			Assert.AreEqual(parser.Traverse(), false);
 		}
 
-        [Test]
-        public void TwoLi()
-        {
-            string html = "<ul><li>1</li><li>2</li></ul>";
+		[Test]
+		public void TwoLi()
+		{
+			string html = "<ul><li>1</li><li>2</li></ul>";
 
-            HtmlParser parser = new HtmlTextParser(html);
-            Assert.IsTrue(parser.Traverse());
+			HtmlParser parser = new HtmlTextParser(html);
+			Assert.IsTrue(parser.Traverse());
 
-            Assert.IsNotNull(parser.Current);
-            parser.Current.AnalyzeNode("ul", "<li>1</li><li>2</li>", html, null, false, true, 2, 0, 0);
+			Assert.IsNotNull(parser.Current);
+			parser.Current.AnalyzeNode("ul", "<li>1</li><li>2</li>", html, null, false, true, 2, 0, 0);
 
-            IHtmlNode node = parser.Current.Children.ElementAt(0);
-            Assert.IsNotNull(node);
-            node.AnalyzeNode("li", "1", "<li>1</li>", parser.Current, false, true, 1, 0, 0);
+			IHtmlNode node = parser.Current.Children.ElementAt(0);
+			Assert.IsNotNull(node);
+			node.AnalyzeNode("li", "1", "<li>1</li>", parser.Current, false, true, 1, 0, 0);
 
-            node = parser.Current.Children.ElementAt(1);
-            Assert.IsNotNull(node);
-            node.AnalyzeNode("li", "2", "<li>2</li>", parser.Current, false, true, 1, 0, 0);
-        }
+			node = parser.Current.Children.ElementAt(1);
+			Assert.IsNotNull(node);
+			node.AnalyzeNode("li", "2", "<li>2</li>", parser.Current, false, true, 1, 0, 0);
+		}
 
-        [Test]
-        public void DuplicateStyle()
-        {
-            string html = "<div style='color:#fff;color:#000;'>test</div>";
+		[Test]
+		public void DuplicateStyle()
+		{
+			string html = "<div style='color:#fff;color:#000;'>test</div>";
 
-            HtmlParser parser = new HtmlTextParser(html);
-            Assert.IsTrue(parser.Parse());
-            parser.ParseStyles();
+			HtmlParser parser = new HtmlTextParser(html);
+			Assert.IsTrue(parser.Parse());
+			parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
-            TestUtility.AnalyzeNode(parser.Current, "div", "test", "<div style='color:#fff;color:#000;'>test</div>",
-                null, false, true, 1, 1, 1);
-            parser.Current.CheckStyle(0, "color", "#fff");
-        }
+			Assert.IsNotNull(parser.Current);
+			TestUtility.AnalyzeNode(parser.Current, "div", "test", "<div style='color:#fff;color:#000;'>test</div>",
+				null, false, true, 1, 1, 1);
+			parser.Current.CheckStyle(0, "color", "#fff");
+		}
 
-        [Test]
-        public void InputOnly()
-        {
-            string html = "<input />";
+		[Test]
+		public void InputOnly()
+		{
+			string html = "<input />";
 
-            HtmlParser parser = new HtmlTextParser(html);
-            Assert.IsTrue(parser.Parse());
-            Assert.IsNotNull(parser.Current);
-            parser.Current.AnalyzeNode("input", "<input />", html, null, true, false, 0, 0, 0);
-        }
+			HtmlParser parser = new HtmlTextParser(html);
+			Assert.IsTrue(parser.Parse());
+			Assert.IsNotNull(parser.Current);
+			parser.Current.AnalyzeNode("input", "<input />", html, null, true, false, 0, 0, 0);
+		}
 	}
 }

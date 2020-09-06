@@ -45,9 +45,7 @@
             {
                 this.selectorText = selector.Substring(match.Value.Length);
 
-                int value;
-
-                if (int.TryParse(new Regex("\\d+").Match(match.Value).Value, out value))
+                if (int.TryParse(new Regex("\\d+").Match(match.Value).Value, out int value))
                 {
                     this.position = value;
                 }

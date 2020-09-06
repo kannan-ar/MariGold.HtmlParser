@@ -1,12 +1,11 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System;
-	using System.Linq;
+    using System.Linq;
     using NUnit.Framework;
     using MariGold.HtmlParser;
 
     [TestFixture]
-    class InvalidOpenClose
+    public class InvalidOpenClose
     {
         [Test]
         public void DivP()
@@ -92,7 +91,7 @@
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
         }
-        
+
         [Test]
         public void DivInvalidSpanClose()
         {
@@ -254,7 +253,7 @@
             Assert.AreEqual(0, parser.Current.Attributes.Count);
 
             Assert.IsNotNull(parser.Current.Children.ElementAt(0));
-            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "<span>test</span></span>", 
+            TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "<span>test</span></span>",
                 "<p><span>test</span></span>");
             Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
             Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
@@ -275,7 +274,7 @@
             Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0), "#text", "test", "test");
             Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), 
+            Assert.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0),
                 parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Parent);
             Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).Children.Count());
             Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.ElementAt(0).HasChildren);
@@ -401,7 +400,7 @@
             HtmlParser parser = new HtmlTextParser(html);
 
             Assert.AreEqual(true, parser.Traverse());
-            
+
             Assert.IsNotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<p>test", html);
             Assert.IsNull(parser.Current.Parent);
@@ -626,7 +625,7 @@
             string html = "<a><b></a><c>c1</c>";
 
             HtmlParser parser = new HtmlTextParser(html);
-            
+
             parser.Parse();
 
             Assert.IsNotNull(parser.Current);
@@ -742,7 +741,7 @@
 
             Assert.IsNotNull(parser.Current);
             parser.Current.AnalyzeNode("ul", "<li>1<li>2</li>", html, null, false, true, 2, 0, 0);
-            
+
             IHtmlNode node = parser.Current.Children.ElementAt(0);
             Assert.IsNotNull(node);
             node.AnalyzeNode("li", "1", "<li>1", parser.Current, false, true, 1, 0, 0);

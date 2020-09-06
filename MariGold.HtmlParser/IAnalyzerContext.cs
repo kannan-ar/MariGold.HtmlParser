@@ -1,6 +1,5 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
     using System.Collections.Generic;
 
     internal interface IAnalyzerContext

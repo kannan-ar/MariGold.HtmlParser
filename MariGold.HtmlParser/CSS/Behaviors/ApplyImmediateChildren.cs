@@ -12,12 +12,7 @@
 
         internal ApplyImmediateChildren(ISelectorContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            this.context = context;
+            this.context = context ?? throw new ArgumentNullException("context");
 
             regex = new Regex(@"^\s*>\s*");
         }
@@ -40,22 +35,20 @@
         {
             if (node.HasChildren)
             {
-                CSSelector nextSelector;
-			
-				if (context.ParseSelector(this.selectorText, out nextSelector))
-				{
-					if (nextSelector != null)
-					{
-						foreach (HtmlNode child in node.GetChildren())
-						{
-							if (nextSelector.IsValidNode(child))
-							{
+                if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
+                {
+                    if (nextSelector != null)
+                    {
+                        foreach (HtmlNode child in node.GetChildren())
+                        {
+                            if (nextSelector.IsValidNode(child))
+                            {
                                 nextSelector.AddSpecificity(specificity);
-								nextSelector.Parse(child, htmlStyles);
-							}
-						}
-					}
-				}
+                                nextSelector.Parse(child, htmlStyles);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

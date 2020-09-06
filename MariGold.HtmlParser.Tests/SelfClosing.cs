@@ -1,6 +1,5 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System;
     using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.Linq;
@@ -157,7 +156,7 @@
             Assert.AreEqual(false, parser.Current.HasChildren);
             Assert.AreEqual(0, parser.Current.Children.Count());
             Assert.AreEqual(false, parser.Current.SelfClosing);
-           
+
             Assert.AreEqual(false, parser.Traverse());
             Assert.IsNull(parser.Current);
         }

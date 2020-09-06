@@ -1,7 +1,6 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
-    using System.Collections.Generic;
 
     internal abstract class HtmlAnalyzer
     {
@@ -76,16 +75,14 @@
 
         protected bool AssignNextAnalyzer(int position, HtmlNode node)
         {
-            IOpenTag openTag;
-            ICloseTag closeTag;
             bool assigned = false;
 
-            if (IsOpenTag(position, out openTag))
+            if (IsOpenTag(position, out IOpenTag openTag))
             {
                 context.SetAnalyzer(openTag.GetAnalyzer(position, node));
                 assigned = true;
             }
-            else if (IsCloseTag(position, out closeTag))
+            else if (IsCloseTag(position, out ICloseTag closeTag))
             {
                 closeTag.Init(position, node);
                 context.SetAnalyzer(closeTag.GetAnalyzer());
@@ -97,22 +94,14 @@
 
         protected HtmlAnalyzer(IAnalyzerContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            this.context = context;
+            this.context = context ?? throw new ArgumentNullException("context");
         }
 
         protected abstract bool ProcessHtml(int position, ref HtmlNode node);
        
         protected void TagCreated(string tag)
         {
-            if (OnTagCreate != null)
-            {
-                OnTagCreate(tag);
-            }
+            OnTagCreate?.Invoke(tag);
         }
 
         protected void InnerTagOpened(HtmlNode parentNode)

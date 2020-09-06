@@ -72,7 +72,7 @@
 				return false;
 			}
 
-			bool canTraverse = false;
+			bool canTraverse;
 
 			while (index < eof)
 			{
@@ -154,10 +154,11 @@
 		{
 			if (current != null)
 			{
-				CSSTracker cssTracker = new CSSTracker();
-
-                cssTracker.UriSchema = uriSchema;
-                cssTracker.BaseURL = baseUrl;
+				CSSTracker cssTracker = new CSSTracker
+				{
+					UriSchema = uriSchema,
+					BaseURL = baseUrl
+				};
 
 				StyleSheet styleSheet = cssTracker.TrackCSS(current);
                 styleSheet.ApplyStyles(current);

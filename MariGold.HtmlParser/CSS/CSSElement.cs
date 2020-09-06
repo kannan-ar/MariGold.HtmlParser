@@ -1,33 +1,17 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
     using System.Collections.Generic;
 
     internal sealed class CSSElement
     {
-        private readonly string selector;
-        private readonly List<HtmlStyle> htmlStyles;
+        internal string Selector { get; }
 
-        internal string Selector
-        {
-            get
-            {
-                return selector;
-            }
-        }
-
-        internal List<HtmlStyle> HtmlStyles
-        {
-            get
-            {
-                return htmlStyles;
-            }
-        }
+        internal List<HtmlStyle> HtmlStyles { get; }
 
         internal CSSElement(string selector, List<HtmlStyle> htmlStyles)
         {
-            this.selector = selector;
-            this.htmlStyles = htmlStyles;
+            this.Selector = selector;
+            this.HtmlStyles = htmlStyles;
         }
     }
 }

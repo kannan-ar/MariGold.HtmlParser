@@ -90,8 +90,6 @@
                 return false;
             }
 
-            char plus2 = html[position + 2];
-
             return html[position] == HtmlTag.openAngle && html[position + 1] == HtmlTag.exclamation;
         }
 
@@ -102,12 +100,13 @@
                 throw new ArgumentOutOfRangeException("position");
             }
 
-            MetaTagAnalyzer analyzer = new MetaTagAnalyzer(context);
-
-            analyzer.startPosition = position;
-            analyzer.parent = parent;
-            analyzer.tagStart = -1;
-            analyzer.tag = string.Empty;
+            MetaTagAnalyzer analyzer = new MetaTagAnalyzer(context)
+            {
+                startPosition = position,
+                parent = parent,
+                tagStart = -1,
+                tag = string.Empty
+            };
 
             return analyzer;
         }

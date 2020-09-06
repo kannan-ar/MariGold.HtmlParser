@@ -1,6 +1,5 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System;
     using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.Linq;
@@ -533,7 +532,7 @@
             IHtmlNode node = parser.Current.Next;
 
             Assert.IsNotNull(node);
-            TestUtility.AnalyzeNode(node, "a", "test", "<a href='http://google.com'>test</a>", null, false,true, 1, 1, 1);
+            TestUtility.AnalyzeNode(node, "a", "test", "<a href='http://google.com'>test</a>", null, false, true, 1, 1, 1);
         }
 
         [Test]

@@ -1,11 +1,10 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-	using System;
 	using NUnit.Framework;
 	using MariGold.HtmlParser;
 	using System.Linq;
 	using System.IO;
-	
+
 	[TestFixture]
 	public class ExternalStyles
 	{
@@ -24,25 +23,25 @@
 
 			Assert.AreEqual(true, parser.Parse());
 			parser.ParseStyles();
-			
+
 			Assert.IsNotNull(parser.Current);
-            
+
 			IHtmlNode node = parser.Current.Children.ElementAt(0);
-			
+
 			while (node.Tag != "body")
 				node = node.Next;
-			
+
 			IHtmlNode body = node;
-			
+
 			node = node.Children.ElementAt(0);
-			
+
 			while (node.Tag != "p")
 				node = node.Next;
-			
+
 			node.AnalyzeNode("p", "test", "<p>test</p>", body, false, true, 1, 0, 1);
 			node.Styles.CheckKeyValuePair(0, "font-size", "20px");
 		}
-		
+
 		[Test]
 		public void BasicExternalStyleSheetWithImportant()
 		{
@@ -58,26 +57,26 @@
 
 			Assert.AreEqual(true, parser.Parse());
 			parser.ParseStyles();
-			
+
 			Assert.IsNotNull(parser.Current);
-            
+
 			IHtmlNode node = parser.Current.Children.ElementAt(0);
-			
+
 			while (node.Tag != "body")
 				node = node.Next;
-			
+
 			IHtmlNode body = node;
-			
+
 			node = node.Children.ElementAt(0);
-			
+
 			while (node.Tag != "div")
 				node = node.Next;
-			
+
 			node.AnalyzeNode("div", "test", "<div class=\"cls\">test</div>", body, false, true, 1, 1, 1);
 			node.Attributes.CheckKeyValuePair(0, "class", "cls");
 			node.Styles.CheckKeyValuePair(0, "font-size", "10px");
 		}
-		
+
 		[Test]
 		public void BasicExternalStyleSheetWithTwoElements()
 		{
@@ -93,26 +92,26 @@
 
 			Assert.AreEqual(true, parser.Parse());
 			parser.ParseStyles();
-			
+
 			Assert.IsNotNull(parser.Current);
-            
+
 			IHtmlNode node = parser.Current.Children.ElementAt(0);
-			
+
 			while (node.Tag != "body")
 				node = node.Next;
-			
+
 			IHtmlNode body = node;
-			
+
 			node = node.Children.ElementAt(0);
-			
+
 			while (node.Tag != "div")
 				node = node.Next;
-			
+
 			node.AnalyzeNode("div", "test", "<div class=\"cls\">test</div>", body, false, true, 1, 1, 1);
 			node.Attributes.CheckKeyValuePair(0, "class", "cls");
 			node.Styles.CheckKeyValuePair(0, "font-size", "10px");
 		}
-		
+
 		[Test]
 		public void ATagWithStyle()
 		{
@@ -128,65 +127,65 @@
 
 			Assert.AreEqual(true, parser.Parse());
 			parser.ParseStyles();
-			
+
 			Assert.IsNotNull(parser.Current);
-            
+
 			IHtmlNode node = parser.Current;
-			
+
 			while (node.Tag != "html")
 				node = node.Next;
-			
+
 			node = node.Children.ElementAt(0);
-			
+
 			while (node.Tag != "body")
 				node = node.Next;
-			
+
 			IHtmlNode body = node;
-			
+
 			node = node.Children.ElementAt(0);
-			
+
 			while (node.Tag != "a")
 				node = node.Next;
-			
+
 			node.AnalyzeNode("a", "google", "<a href=\"http://google.com\">google</a>", body, false, true, 1, 1, 2);
 			node.Attributes.CheckKeyValuePair(0, "href", "http://google.com");
 			node.Styles.CheckKeyValuePair(0, "color", "#a21f1f");
 			node.Styles.CheckKeyValuePair(1, "text-decoration", "none");
-			
+
 		}
 
-        [Test]
-        public void RemoteStyleSheet()
-        {
-            string path = TestUtility.GetFolderPath("Html\\remotestylesheet.htm");
-            string html = string.Empty;
+		[Test]
+		public void RemoteStyleSheet()
+		{
+			string path = TestUtility.GetFolderPath("Html\\remotestylesheet.htm");
+			string html = string.Empty;
 
-            using (StreamReader sr = new StreamReader(path))
-            {
-                html = sr.ReadToEnd();
-            }
+			using (StreamReader sr = new StreamReader(path))
+			{
+				html = sr.ReadToEnd();
+			}
 
-            HtmlParser parser = new HtmlTextParser(html);
+			HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
-            parser.ParseStyles();
+			Assert.AreEqual(true, parser.Parse());
+			parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+			Assert.IsNotNull(parser.Current);
 
-            IHtmlNode node = parser.Current.Children.ElementAt(0);
+			IHtmlNode node = parser.Current.Children.ElementAt(0);
 
-            while (node.Tag != "body")
-                node = node.Next;
+			while (node.Tag != "body")
+				node = node.Next;
 
-            IHtmlNode body = node;
+			IHtmlNode body = node;
 
-            node = node.Children.ElementAt(0);
+			node = node.Children.ElementAt(0);
 
-            while (node.Tag != "p")
-                node = node.Next;
+			while (node.Tag != "p")
+				node = node.Next;
 
-            node.AnalyzeNode("p", "test", "<p class=\"well\">test</p>", body, false, true, 1, 1);
-            Assert.Less(0, node.Styles.Count);
-        }
-    }
+			node.AnalyzeNode("p", "test", "<p class=\"well\">test</p>", body, false, true, 1, 1);
+			Assert.Less(0, node.Styles.Count);
+		}
+	}
 }

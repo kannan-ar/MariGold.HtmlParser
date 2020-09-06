@@ -1,7 +1,5 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
-
     internal interface ICloseTag
     {
         bool IsCloseTag(int position, string html);

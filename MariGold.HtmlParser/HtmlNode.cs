@@ -8,24 +8,19 @@
     /// </summary>
     public sealed class HtmlNode : IHtmlNode
     {
-        private readonly string tag;
         private readonly HtmlNode parent;
         private readonly HtmlContext context;
-        private readonly bool isText;
-
-        private int htmlStart;
-        private int textStart;
+        private readonly int htmlStart;
+        private readonly int textStart;
         private int textEnd;
         private int htmlEnd;
-        private bool selfClosing;
         private List<HtmlNode> children;
         private HtmlNode previous;
         private HtmlNode next;
         private Dictionary<string, string> attributes;
         private Dictionary<string, string> styles;
         private Dictionary<string, string> inheritedStyles;
-        private List<HtmlStyle> htmlStyles;
-        private List<HtmlStyle> inheritedHtmlStyles;
+        private readonly List<HtmlStyle> htmlStyles;
 
         private HtmlNode(
             string tag,
@@ -45,16 +40,16 @@
             Dictionary<string, string> attributes,
             Dictionary<string, string> styles)
         {
-            this.tag = tag;
+            this.Tag = tag;
             this.parent = parent;
             this.context = context;
             this.htmlStyles = htmlStyles;
-            this.isText = isText;
+            this.IsText = isText;
             this.htmlStart = htmlStart;
             this.textStart = textStart;
             this.textEnd = textEnd;
             this.htmlEnd = htmlEnd;
-            this.selfClosing = selfClosing;
+            this.SelfClosing = selfClosing;
 
             if (children != null)
             {
@@ -102,7 +97,7 @@
                 throw new ArgumentNullException("context");
             }
 
-            this.tag = tag;
+            this.Tag = tag;
             this.htmlStart = htmlStart;
             this.textStart = textStart;
             this.textEnd = -1;
@@ -110,8 +105,8 @@
             this.context = context;
             this.parent = parent;
             htmlStyles = new List<HtmlStyle>();
-            inheritedHtmlStyles = new List<HtmlStyle>();
-            isText = tag == HtmlTag.TEXT;
+            InheritedHtmlStyles = new List<HtmlStyle>();
+            IsText = tag == HtmlTag.TEXT;
 
             if (parent != null)
             {
@@ -142,13 +137,7 @@
             }
         }
 
-        internal List<HtmlStyle> InheritedHtmlStyles
-        {
-            get
-            {
-                return inheritedHtmlStyles;
-            }
-        }
+        internal List<HtmlStyle> InheritedHtmlStyles { get; private set; }
 
         internal void SetBoundary(int textEnd, int htmlEnd)
         {
@@ -222,7 +211,7 @@
 
         internal void SetSelfClosing(bool isClosing)
         {
-            selfClosing = isClosing;
+            SelfClosing = isClosing;
         }
 
         internal HtmlNode GetParent()
@@ -316,12 +305,12 @@
         {
             htmlStyle = null;
 
-            if (inheritedHtmlStyles == null || inheritedHtmlStyles.Count == 0)
+            if (InheritedHtmlStyles == null || InheritedHtmlStyles.Count == 0)
             {
                 return false;
             }
 
-            foreach (HtmlStyle style in inheritedHtmlStyles)
+            foreach (HtmlStyle style in InheritedHtmlStyles)
             {
                 if (string.Equals(styleName, style.Name, StringComparison.OrdinalIgnoreCase))
                 {
@@ -347,11 +336,11 @@
 
         internal void ImportInheritedStyles(List<HtmlStyle> styles)
         {
-            inheritedHtmlStyles = new List<HtmlStyle>();
+            InheritedHtmlStyles = new List<HtmlStyle>();
 
             foreach (HtmlStyle style in styles)
             {
-                inheritedHtmlStyles.Add(style.Clone());
+                InheritedHtmlStyles.Add(style.Clone());
             }
         }
 
@@ -359,7 +348,7 @@
         {
             CSSPropertyParser propertyParser = new CSSPropertyParser();
 
-            foreach (HtmlStyle inheritedStyle in inheritedHtmlStyles)
+            foreach (HtmlStyle inheritedStyle in InheritedHtmlStyles)
             {
                 if (propertyParser.StyleContains(style, inheritedStyle))
                 {
@@ -369,19 +358,13 @@
             }
 
             //If style found in the inheritedStyles, control will return without hit this statment.
-            inheritedHtmlStyles.Add(style.Clone());
+            InheritedHtmlStyles.Add(style.Clone());
         }
 
         /// <summary>
         /// Html tag of the node.
         /// </summary>
-        public string Tag
-        {
-            get
-            {
-                return tag;
-            }
-        }
+        public string Tag { get; }
 
         /// <summary>
         /// Inner Html string of the node
@@ -469,24 +452,12 @@
         /// <summary>
         /// Returns true if the html element is self closing
         /// </summary>
-        public bool SelfClosing
-        {
-            get
-            {
-                return selfClosing;
-            }
-        }
+        public bool SelfClosing { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool IsText
-        {
-            get
-            {
-                return isText;
-            }
-        }
+        public bool IsText { get; }
 
         /// <summary>
         /// Dictionary of html attributes
@@ -532,11 +503,11 @@
         {
             get
             {
-                if (inheritedStyles == null || (inheritedStyles != null && inheritedHtmlStyles.Count != inheritedStyles.Count))
+                if (inheritedStyles == null || (inheritedStyles != null && InheritedHtmlStyles.Count != inheritedStyles.Count))
                 {
                     inheritedStyles = new Dictionary<string, string>();
 
-                    foreach (HtmlStyle style in inheritedHtmlStyles)
+                    foreach (HtmlStyle style in InheritedHtmlStyles)
                     {
                         if (!inheritedStyles.ContainsKey(style.Name))
                         {
@@ -552,17 +523,17 @@
         public IHtmlNode Clone()
         {
             return new HtmlNode(
-                this.tag,
+                this.Tag,
                 this.parent,
                 this.context,
                 this.htmlStyles,
-                this.inheritedHtmlStyles,
-                this.isText,
+                this.InheritedHtmlStyles,
+                this.IsText,
                 this.htmlStart,
                 this.textStart,
                 this.textEnd,
                 this.htmlEnd,
-                this.selfClosing,
+                this.SelfClosing,
                 this.children,
                 previous,
                 next,

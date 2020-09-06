@@ -1,6 +1,5 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
     using System.Collections.Generic;
 
     internal class InvalidTagHandler
@@ -9,11 +8,12 @@
 
         static InvalidTagHandler()
         {
-            nonNestedTags = new Dictionary<string, List<string>>();
-
-            nonNestedTags.Add("li", new List<string> { "li" });
-            nonNestedTags.Add("td", new List<string> { "td" });
-            nonNestedTags.Add("tr", new List<string> { "tr" });
+            nonNestedTags = new Dictionary<string, List<string>>
+            {
+                { "li", new List<string> { "li" } },
+                { "td", new List<string> { "td" } },
+                { "tr", new List<string> { "tr" } }
+            };
         }
 
         internal void CloseNonNestedParents(int htmlStart, string tag, IAnalyzerContext context, ref HtmlNode parent)
@@ -28,9 +28,7 @@
                 return;
             }
 
-            List<string> parentTags;
-
-            if (nonNestedTags.TryGetValue(tag.Trim().ToLower(), out parentTags))
+            if (nonNestedTags.TryGetValue(tag.Trim().ToLower(), out List<string> parentTags))
             {
                 if (parentTags.Contains(parent.Tag.Trim().ToLower()))
                 {

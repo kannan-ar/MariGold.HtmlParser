@@ -1,7 +1,6 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
-    using System.Globalization;
 
     internal static class HtmlStringComparer
     {

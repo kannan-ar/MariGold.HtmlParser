@@ -1,7 +1,6 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
-    using System.Collections.Generic;
 
     internal sealed class TextAnalyzer : HtmlAnalyzer
     {
@@ -28,10 +27,8 @@
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             bool tagCreated = false;
-            IOpenTag openTag;
-            ICloseTag closeTag;
 
-            if (IsOpenTag(position, out openTag))
+            if (IsOpenTag(position, out IOpenTag openTag))
             {
                 //+1 is required because the Html is zero based array so the position is always -1 of total length.
                 tagCreated = CreateTag(HtmlTag.TEXT, startPosition, startPosition, position,
@@ -39,7 +36,7 @@
 
                 context.SetAnalyzer(openTag.GetAnalyzer(position, parent));
             }
-            else if (IsCloseTag(position, out closeTag))
+            else if (IsCloseTag(position, out ICloseTag closeTag))
             {
                 tagCreated = CreateTag(HtmlTag.TEXT, startPosition, startPosition, position,
                     position, parent, out node);

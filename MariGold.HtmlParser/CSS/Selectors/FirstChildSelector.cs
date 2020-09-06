@@ -31,25 +31,6 @@
             regex = new Regex("^:first-child");
         }
 
-        private void ApplyToFirstChild(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (node.HasChildren)
-            {
-                HtmlNode child = node.GetChild(0);
-
-                //Loop to skip empty text children
-                while (child != null && child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
-                {
-                    child = child.GetNext();
-                }
-
-                if (child != null)
-                {
-                    ApplyStyle(child, htmlStyles);
-                }
-            }
-        }
-
         internal override bool Prepare(string selector)
         {
             Match match = regex.Match(selector);

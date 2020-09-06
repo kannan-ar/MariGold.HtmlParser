@@ -92,18 +92,6 @@
             }
         }
 
-        private List<HtmlStyle> CloneStyles(List<HtmlStyle> styles)
-        {
-            List<HtmlStyle> newStyles = new List<HtmlStyle>();
-
-            foreach (HtmlStyle style in styles)
-            {
-                newStyles.Add(style.Clone());
-            }
-
-            return newStyles;
-        }
-
         private void UpdateCurrentNodeInheritedStyles(HtmlNode node)
         {
             CSSPropertyParser propertyParser = new CSSPropertyParser();

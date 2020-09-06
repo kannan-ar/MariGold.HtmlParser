@@ -1,7 +1,5 @@
 ﻿namespace MariGold.HtmlParser
 {
-	using System;
-
 	internal enum SelectorType
 	{
 		Global,

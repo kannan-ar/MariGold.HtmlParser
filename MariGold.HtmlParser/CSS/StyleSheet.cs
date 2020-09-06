@@ -1,13 +1,12 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
     using System.Collections.Generic;
 
     internal sealed class StyleSheet
     {
-        private ISelectorContext context;
-        private List<CSSElement> styles;
-        private List<MediaQuery> mediaQueries;
+        private readonly ISelectorContext context;
+        private readonly List<CSSElement> styles;
+        private readonly List<MediaQuery> mediaQueries;
 
         private List<HtmlStyle> CloneStyles(List<HtmlStyle> styles)
         {
@@ -23,11 +22,9 @@
 
         private void InterpretStyles(HtmlNode htmlNode)
         {
-            string style;
-
             if (!HtmlStyle.IsNonStyleElement(htmlNode.Tag))
             {
-                if (htmlNode.Attributes.TryGetValue("style", out style))
+                if (htmlNode.Attributes.TryGetValue("style", out string style))
                 {
                     CSSParser cssParser = new CSSParser();
                     htmlNode.AddStyles(cssParser.ParseRules(style, SelectorType.Inline));

@@ -1,83 +1,34 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
     using System.Collections.Generic;
 
     internal sealed class AnalyzerContext : IAnalyzerContext
     {
-        private readonly string html;
         private readonly HtmlParser parser;
-        private readonly int eof;
-        private readonly IList<IOpenTag> openTags;
-        private readonly IList<ICloseTag> closeTags;
-        private readonly HtmlContext htmlContext;
-        
-        private HtmlNode previousNode;
 
-        public string Html
-        {
-            get
-            {
-                return html;
-            }
-        }
+        public string Html { get; }
 
-        public int EOF
-        {
-            get
-            {
-                return eof;
-            }
-        }
+        public int EOF { get; }
 
-        public IList<IOpenTag> OpenTags
-        {
-            get
-            {
-                return openTags;
-            }
-        }
+        public IList<IOpenTag> OpenTags { get; }
 
-        public IList<ICloseTag> CloseTags
-        {
-            get
-            {
-                return closeTags;
-            }
-        }
+        public IList<ICloseTag> CloseTags { get; }
 
-        public HtmlContext HtmlContext
-        {
-            get
-            {
-                return htmlContext;
-            }
-        }
+        public HtmlContext HtmlContext { get; }
 
-        public HtmlNode PreviousNode
-        {
-            get
-            {
-                return previousNode;
-            }
-
-            set
-            {
-                previousNode = value;
-            }
-        }
+        public HtmlNode PreviousNode { get; set; }
 
         public AnalyzerContext(string html, HtmlParser parser)
         {
-            this.html = html;
+            this.Html = html;
             this.parser = parser;
-            this.eof = html.Length;
+            this.EOF = html.Length;
 
-            this.openTags = CreateOpenTags();
-            this.closeTags = CreateCloseTags();
+            this.OpenTags = CreateOpenTags();
+            this.CloseTags = CreateCloseTags();
 
             //If parent is not null, we can use that html context
-            htmlContext = new HtmlContext(html);
+            HtmlContext = new HtmlContext(html);
         }
 
         private IList<IOpenTag> CreateOpenTags()
