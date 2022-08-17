@@ -43,7 +43,7 @@
 
             return tagCreated;
         }
-        
+
         public bool IsOpenTag(int position, string html)
         {
             return position + 4 <= context.EOF && html.Substring(position, 4) == start;

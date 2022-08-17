@@ -23,7 +23,7 @@
         {
             this.parent = parent;
         }
-        
+
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             bool tagCreated = false;

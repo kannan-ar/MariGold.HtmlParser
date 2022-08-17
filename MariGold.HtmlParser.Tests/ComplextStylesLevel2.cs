@@ -1,14 +1,13 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.Linq;
     using System.IO;
+    using Xunit;
 
-    [TestFixture]
     public partial class ComplexStyles
     {
-        [Test]
+        [Fact]
         public void AttributeImmediateChildrenClassIdentity()
         {
             string html = @"<style>
@@ -21,10 +20,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -50,7 +49,7 @@
 
         }
 
-        [Test]
+        [Fact]
         public void AttributeImmediateChildrenClassIdentityNthChild()
         {
             string html = @"<style>
@@ -63,10 +62,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -92,7 +91,7 @@
 
         }
 
-        [Test]
+        [Fact]
         public void AttributeImmediateChildrenClassIdentitySpanFirstChild()
         {
             string html = @"<style>
@@ -105,10 +104,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -139,7 +138,7 @@
 
         }
 
-        [Test]
+        [Fact]
         public void FirstChildIdentity()
         {
             string html = @"<style>
@@ -152,10 +151,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -182,7 +181,7 @@
             node.Children.ElementAt(1).AnalyzeNode("div", "3", "<div>3</div>", node, false, true, 1, 0, 0);
         }
 
-        [Test]
+        [Fact]
         public void DivNthChildNextElement()
         {
             string html = @"<style>
@@ -195,10 +194,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -218,7 +217,7 @@
             node.Children.ElementAt(2).AnalyzeNode("div", "3", "<div>3</div>", node, false, true, 1, 0, 0);
         }
 
-        [Test]
+        [Fact]
         public void DivNthChildAllNextElement()
         {
             string html = @"<style>
@@ -231,10 +230,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -255,7 +254,7 @@
             node.Children.ElementAt(1).Styles.CheckKeyValuePair(0, "background-color", "red");
         }
 
-        [Test]
+        [Fact]
         public void OverrideGlobalStyle()
         {
             string path = TestUtility.GetFolderPath("Html\\overrideglobalstyle.htm");
@@ -268,7 +267,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -291,7 +290,7 @@
             node.CheckStyle(0, "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void GlobalStyleChain()
         {
             string path = TestUtility.GetFolderPath("Html\\globalstylechain.htm");
@@ -304,7 +303,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -327,7 +326,7 @@
             node.CheckStyle(0, "color", "gray");
         }
 
-        [Test]
+        [Fact]
         public void IdentityOverClass()
         {
             string path = TestUtility.GetFolderPath("Html\\identityoverclass.htm");
@@ -340,7 +339,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -371,7 +370,7 @@
             node.CheckStyle(0, "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void ElementFirstChildChain()
         {
             string path = TestUtility.GetFolderPath("Html\\elementfirstchildchain.htm");
@@ -384,7 +383,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -418,7 +417,7 @@
             p.CheckStyle(0, "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void ComplextCSSChain()
         {
             string path = TestUtility.GetFolderPath("Html\\complexcsschain.htm");
@@ -431,7 +430,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -465,7 +464,7 @@
             node.CheckStyle(0, "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void Level3Specificity()
         {
             string path = TestUtility.GetFolderPath("Html\\level3specificity.htm");
@@ -478,7 +477,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -519,23 +518,23 @@
             node.CheckStyle(0, "background-color", "transparent");
         }
 
-        [Test]
+        [Fact]
         public void ALink()
         {
             string html = @"<style>a:link{color:#333;}</style><a href='http://google.com'>test</a>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current.Next;
 
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             TestUtility.AnalyzeNode(node, "a", "test", "<a href='http://google.com'>test</a>", null, false, true, 1, 1, 1);
         }
 
-        [Test]
+        [Fact]
         public void InheritedFontSizeParse()
         {
             string path = TestUtility.GetFolderPath("Html\\inheritedfontsizeparse.htm");
@@ -548,7 +547,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -566,7 +565,7 @@
             while (node.Tag != "div")
                 node = node.Next;
 
-            Assert.AreEqual(1, node.Styles.Count);
+            Assert.Single(node.Styles);
             node.CheckStyle(0, "font-size", "62.5%");
 
             node = node.Children.ElementAt(0);
@@ -574,7 +573,7 @@
             while (node.Tag != "article")
                 node = node.Next;
 
-            Assert.AreEqual(1, node.InheritedStyles.Count);
+            Assert.Single(node.InheritedStyles);
             node.CheckInheritedStyle(0, "font-size", "62.5%");
 
             node = node.Children.ElementAt(0);
@@ -582,7 +581,7 @@
             while (node.Tag != "p")
                 node = node.Next;
 
-            Assert.AreEqual(1, node.Styles.Count);
+            Assert.Single(node.Styles);
             node.CheckStyle(0, "font-size", "16px");
         }
     }

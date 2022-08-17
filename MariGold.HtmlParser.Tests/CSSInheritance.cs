@@ -1,24 +1,23 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.Linq;
     using System.IO;
+    using Xunit;
 
-    [TestFixture]
-    public class CSSInheritance
+    public class CssInheritance
     {
-        [Test]
+        [Fact]
         public void BasicInheritance()
         {
             string html = "<div style='font-family:arial'><div>test</div></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -27,21 +26,21 @@
             node.Styles.CheckKeyValuePair(0, "font-family", "arial");
 
             node.Children.ElementAt(0).AnalyzeNode("div", "test", "<div>test</div>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).InheritedStyles.CheckKeyValuePair(0, "font-family", "arial");
         }
 
-        [Test]
+        [Fact]
         public void MultiLayerInheritance()
         {
             string html = "<div style='font-family:arial'><div><span>test</span></div></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -50,25 +49,25 @@
             node.Styles.CheckKeyValuePair(0, "font-family", "arial");
 
             node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span>", "<div><span>test</span></div>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
 
             node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
         }
 
-        [Test]
+        [Fact]
         public void MultiLayerWithNoInheritance()
         {
             string html = "<div style='font-family:arial;width:10px'><div><span>test</span></div></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -78,25 +77,25 @@
             node.Styles.CheckKeyValuePair(1, "width", "10px");
 
             node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span>", "<div><span>test</span></div>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
 
             node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
         }
 
-        [Test]
+        [Fact]
         public void MultiLevelInheritance()
         {
             string html = "<div style='font-family:arial'><div>one</div><span>two</span><p>three</p></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -105,29 +104,29 @@
             node.Styles.CheckKeyValuePair(0, "font-family", "arial");
 
             node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
 
             node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(1).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(1).InheritedStyles);
             node.Children.ElementAt(1).CheckInheritedStyle(0, "font-family", "arial");
 
             node.Children.ElementAt(2).AnalyzeNode("p", "three", "<p>three</p>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(2).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(2).InheritedStyles);
             node.Children.ElementAt(2).CheckInheritedStyle(0, "font-family", "arial");
         }
 
-        [Test]
+        [Fact]
         public void MultiLevelWithNoInheritance()
         {
             string html = "<div style='font-family:arial;margin:20px'><div>one</div><span>two</span><p>three</p></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -137,29 +136,29 @@
             node.Styles.CheckKeyValuePair(1, "margin", "20px");
 
             node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "arial");
 
             node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(1).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(1).InheritedStyles);
             node.Children.ElementAt(1).CheckInheritedStyle(0, "font-family", "arial");
 
             node.Children.ElementAt(2).AnalyzeNode("p", "three", "<p>three</p>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(2).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(2).InheritedStyles);
             node.Children.ElementAt(2).CheckInheritedStyle(0, "font-family", "arial");
         }
 
-        [Test]
+        [Fact]
         public void MultiLevelAndLayerInheritance()
         {
             string html = "<div style='font-family:arial'><div style='font-family:verdana'><b>one</b></div><span>two</span><p>three</p></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -172,19 +171,19 @@
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-family", "verdana");
 
             node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("b", "one", "<b>one</b>", node.Children.ElementAt(0), false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-family", "verdana");
 
             node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(1).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(1).InheritedStyles);
             node.Children.ElementAt(1).CheckInheritedStyle(0, "font-family", "arial");
 
             node.Children.ElementAt(2).AnalyzeNode("p", "three", "<p>three</p>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(2).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(2).InheritedStyles);
             node.Children.ElementAt(2).CheckInheritedStyle(0, "font-family", "arial");
         }
 
-        [Test]
+        [Fact]
         public void ClassChildrenInheritance()
         {
             string html = @"<style>
@@ -198,10 +197,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -216,12 +215,12 @@
             node.Styles.CheckKeyValuePair(1, "background-color", "#000");
 
             TestUtility.AnalyzeNode(node.Children.ElementAt(0), "div", "one", "<div>one</div>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(2, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Equal(2, node.Children.ElementAt(0).InheritedStyles.Count);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "color", "#fff");
             node.Children.ElementAt(0).CheckInheritedStyle(1, "background-color", "#000");
         }
 
-        [Test]
+        [Fact]
         public void ClassChildrenMultiLevelInheritance()
         {
             string html = @"<style>
@@ -235,10 +234,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -253,12 +252,12 @@
             node.Styles.CheckKeyValuePair(1, "background-color", "#000");
 
             node.Children.ElementAt(0).AnalyzeNode("div", "one", "<div>one</div>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(2, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Equal(2, node.Children.ElementAt(0).InheritedStyles.Count);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "color", "#fff");
             node.Children.ElementAt(0).CheckInheritedStyle(1, "background-color", "#000");
 
             node.Children.ElementAt(1).AnalyzeNode("span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(2, node.Children.ElementAt(1).InheritedStyles.Count);
+            Assert.Equal(2, node.Children.ElementAt(1).InheritedStyles.Count);
             node.Children.ElementAt(1).CheckInheritedStyle(0, "color", "#fff");
             node.Children.ElementAt(1).CheckInheritedStyle(1, "background-color", "#000");
 
@@ -267,17 +266,17 @@
             node.AnalyzeNode("div", "three", "<div>three</div>", null, false, true, 1, 0, 0);
         }
 
-        [Test]
+        [Fact]
         public void BasicNonInheritance()
         {
             string html = "<div style='width:10px'><div>test</div></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -288,17 +287,17 @@
             node.Children.ElementAt(0).AnalyzeNode("div", "test", "<div>test</div>", node, false, true, 1, 0, 0);
         }
 
-        [Test]
+        [Fact]
         public void InheritKeyWord()
         {
             string html = "<div style='width:10px'><div style='width:inherit'>test</div></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -311,17 +310,17 @@
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "width", "10px");
         }
 
-        [Test]
+        [Fact]
         public void InheritKeyWordMultiLevel()
         {
             string html = "<div style='font-size:10px'><div style='font-size:inherit'><span>test</span><p>one</p></div></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -334,25 +333,25 @@
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(0, "font-size", "10px");
 
             node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
             node.Children.ElementAt(0).Children.ElementAt(1).AnalyzeNode("p", "one", "<p>one</p>", node.Children.ElementAt(0), false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(1).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).Children.ElementAt(1).InheritedStyles);
             node.Children.ElementAt(0).Children.ElementAt(1).CheckInheritedStyle(0, "font-size", "10px");
         }
 
-        [Test]
+        [Fact]
         public void InheritKeyWordMultiLevelTwoStyle()
         {
             string html = "<div style='font-size:10px;width:20px'><div style='width:inherit'><span>test</span><p>one</p></div></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -364,29 +363,29 @@
             node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span><p>one</p>", "<div style='width:inherit'><span>test</span><p>one</p></div>", node, false, true, 2, 1, 1);
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "width:inherit");
             node.Children.ElementAt(0).CheckStyle(0, "width", "20px");
-            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
             node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
             node.Children.ElementAt(0).Children.ElementAt(1).AnalyzeNode("p", "one", "<p>one</p>", node.Children.ElementAt(0), false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(1).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).Children.ElementAt(1).InheritedStyles);
             node.Children.ElementAt(0).Children.ElementAt(1).CheckInheritedStyle(0, "font-size", "10px");
         }
 
-        [Test]
+        [Fact]
         public void InheritKeyWordMultiLevelLayerTwoStyle()
         {
             string html = "<div style='font-size:10px;width:20px'><div style='width:inherit'><span>test</span><p>one</p></div><div>last</div></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -398,23 +397,23 @@
             node.Children.ElementAt(0).AnalyzeNode("div", "<span>test</span><p>one</p>", "<div style='width:inherit'><span>test</span><p>one</p></div>", node, false, true, 2, 1, 1);
             node.Children.ElementAt(0).Attributes.CheckKeyValuePair(0, "style", "width:inherit");
             node.Children.ElementAt(0).CheckStyle(0, "width", "20px");
-            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
             node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "test", "<span>test</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-size", "10px");
 
             node.Children.ElementAt(0).Children.ElementAt(1).AnalyzeNode("p", "one", "<p>one</p>", node.Children.ElementAt(0), false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).Children.ElementAt(1).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).Children.ElementAt(1).InheritedStyles);
             node.Children.ElementAt(0).Children.ElementAt(1).CheckInheritedStyle(0, "font-size", "10px");
 
             node.Children.ElementAt(1).AnalyzeNode("div", "last", "<div>last</div>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(1).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(1).InheritedStyles);
             node.Children.ElementAt(1).CheckInheritedStyle(0, "font-size", "10px");
         }
 
-        [Test]
+        [Fact]
         public void CustomAttributeOnly()
         {
             string html = @"<style>
@@ -428,10 +427,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -454,13 +453,13 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
 
             node.Children.ElementAt(0).AnalyzeNode("p", "one", "<p>one</p>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "font-weight", "bold");
 
-            Assert.IsNull(node.Next);
+            Assert.Null(node.Next);
         }
 
-        [Test]
+        [Fact]
         public void CustomAttributeOnlyImmediateP()
         {
             string html = @"<style>
@@ -474,10 +473,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -504,10 +503,10 @@
             node.Children.ElementAt(0).Children.ElementAt(0).AnalyzeNode("span", "one", "<span>one</span>", node.Children.ElementAt(0), false, true, 1, 0, 0);
             node.Children.ElementAt(0).Children.ElementAt(0).CheckInheritedStyle(0, "font-weight", "bold");
 
-            Assert.IsNull(node.Next);
+            Assert.Null(node.Next);
         }
 
-        [Test]
+        [Fact]
         public void MultiLevelStyles()
         {
             string path = TestUtility.GetFolderPath("Html\\multilevelstyles.htm");
@@ -539,7 +538,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void CSSSpecificity()
         {
             string path = TestUtility.GetFolderPath("Html\\cssspecificity.htm");
@@ -571,7 +570,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void CSSChain10Classes()
         {
             string path = TestUtility.GetFolderPath("Html\\csschain10classes.htm");
@@ -609,7 +608,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void BackgroundInheritance()
         {
             string html = "<div style='background: #fff'><div>Test</div></div>";
@@ -618,18 +617,18 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "<div>Test</div>", html, null, false, true, 1, 1, 1);
             IHtmlNode head = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "Test", "<div>Test</div>", head, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.InheritedStyles.Count);
+            Assert.Single(node.InheritedStyles);
             node.CheckInheritedStyle(0, "background", "#fff");
         }
 
-        [Test]
+        [Fact]
         public void CSSFontAndFontFamily()
         {
             string html = "<div style='font:10px Arial'><div style='font-family:Verdana;'>test</div></div>";
@@ -639,21 +638,21 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style='font-family:Verdana;'>test</div>", html, null, false, true, 1, 1, 2);
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font-family:Verdana;'>test</div>", parent, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-family", "Verdana");
-            Assert.AreEqual(2, node.InheritedStyles.Count);
+            Assert.Equal(2, node.InheritedStyles.Count);
             node.CheckInheritedStyle(0, "font-size", "10px");
             node.CheckInheritedStyle(1, "font-family", "Verdana");
         }
 
-        [Test]
+        [Fact]
         public void OverrideBackgroundTransparent()
         {
             string html = "<div style='background-color:#000'><div style='background-color:transparent'>test</div></div>";
@@ -663,18 +662,18 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style='background-color:transparent'>test</div>", html, null, false, true, 1, 1, 1);
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style='background-color:transparent'>test</div>", parent, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "background-color", "#000");
         }
 
-        [Test]
+        [Fact]
         public void OverrideBackgroundColorTransparent()
         {
             string html = "<div style='background: #000 url(\"img.gif\") no-repeat fixed center;'><div style='background-color:transparent'>test</div></div>";
@@ -684,18 +683,18 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style='background-color:transparent'>test</div>", html, null, false, true, 1, 1, 1);
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style='background-color:transparent'>test</div>", parent, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "background-color", "#000");
         }
 
-        [Test]
+        [Fact]
         public void OverrideBackgroundColorBackgroundTransparent()
         {
             string html = "<div style='background-color: #000'><div style='background:transparent'>test</div></div>";
@@ -705,18 +704,18 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style='background:transparent'>test</div>", html, null, false, true, 1, 1, 1);
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style='background:transparent'>test</div>", parent, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "background", "#000");
         }
 
-        [Test]
+        [Fact]
         public void OverrideChildFontSizePercentage()
         {
             string html = "<div style='font-size:4em'><div style='font-size:100%'>test</div></div>";
@@ -726,7 +725,7 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "<div style='font-size:100%'>test</div>", html, null, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "font-size", "4em");
 
@@ -736,7 +735,7 @@
             node.Styles.CheckKeyValuePair(0, "font-size", "64px");
         }
 
-        [Test]
+        [Fact]
         public void OverrideChildFontSizeTwoHunderedPercentage()
         {
             string html = "<div style='font-size:4em'><div style='font-size:200%'>test</div></div>";
@@ -746,7 +745,7 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "<div style='font-size:200%'>test</div>", html, null, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "font-size", "4em");
 
@@ -756,7 +755,7 @@
             node.Styles.CheckKeyValuePair(0, "font-size", "128px");
         }
 
-        [Test]
+        [Fact]
         public void OverrideChildFontSizeAllPercentages()
         {
             string html = "<div style='font-size:200%'><div style='font-size:50%'>test</div></div>";
@@ -766,7 +765,7 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "<div style='font-size:50%'>test</div>", html, null, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "font-size", "200%");
 
@@ -776,7 +775,7 @@
             node.Styles.CheckKeyValuePair(0, "font-size", "16px");
         }
 
-        [Test]
+        [Fact]
         public void OverrideChildFontSizeWith120Percentage()
         {
             string html = "<div style='font-size:10px'><div style='font-size:120%'>test</div></div>";
@@ -786,7 +785,7 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "<div style='font-size:120%'>test</div>", html, null, false, true, 1, 1, 1);
             node.Styles.CheckKeyValuePair(0, "font-size", "10px");
 
@@ -796,7 +795,7 @@
             node.Styles.CheckKeyValuePair(0, "font-size", "12px");
         }
 
-        [Test]
+        [Fact]
         public void CSSFontPercentageAndFontFamily()
         {
             string html = "<div style='font:10px Arial'><div style='font-size:75%'>test</div></div>";
@@ -806,21 +805,21 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style='font-size:75%'>test</div>", html, null, false, true, 1, 1, 2);
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font-size:75%'>test</div>", parent, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "7.5px");
-            Assert.AreEqual(2, node.InheritedStyles.Count);
+            Assert.Equal(2, node.InheritedStyles.Count);
             node.CheckInheritedStyle(0, "font-family", "Arial");
             node.CheckInheritedStyle(1, "font-size", "7.5px");
         }
 
-        [Test]
+        [Fact]
         public void CSSFontPercentageInheritance()
         {
             string html = "<div style='font:10px Arial'><div style='font:50% Verdana'>test</div></div>";
@@ -830,29 +829,29 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style='font:50% Verdana'>test</div>", html, null, false, true, 1, 1, 2);
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font:50% Verdana'>test</div>", parent, false, true, 1, 1, 2);
             node.CheckStyle(0, "font-size", "5px");
             node.CheckStyle(1, "font-family", "Verdana");
         }
 
-        [Test]
+        [Fact]
         public void TextAlignInheritance()
         {
             string html = "<div style='text-align:center'><div>test</div></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -861,11 +860,11 @@
             node.Styles.CheckKeyValuePair(0, "text-align", "center");
 
             node.Children.ElementAt(0).AnalyzeNode("div", "test", "<div>test</div>", node, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.Children.ElementAt(0).InheritedStyles.Count);
+            Assert.Single(node.Children.ElementAt(0).InheritedStyles);
             node.Children.ElementAt(0).CheckInheritedStyle(0, "text-align", "center");
         }
 
-        [Test]
+        [Fact]
         public void CSSFontEmSizeInheritance()
         {
             string html = "<div style='font-size:2em'><div style='font-size:2em'>test</div></div>";
@@ -875,18 +874,18 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style='font-size:2em'>test</div>", html, null, false, true, 1, 1, 1);
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font-size:2em'>test</div>", parent, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "64px");
         }
 
-        [Test]
+        [Fact]
         public void CSSFontSizePercentageInheritance()
         {
             string html = "<div style='font-size:50%'><div style='font-size:75%'>test</div></div>";
@@ -896,19 +895,19 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style='font-size:75%'>test</div>", html, null, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "50%");
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font-size:75%'>test</div>", parent, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "6px");
         }
 
-        [Test]
+        [Fact]
         public void FontSizeParentPxtoChildPx()
         {
             string html = "<div style='font-size:15px'><div style='font-size:10px'>test</div></div>";
@@ -918,19 +917,19 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style='font-size:10px'>test</div>", html, null, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "15px");
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style='font-size:10px'>test</div>", parent, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "10px");
         }
 
-        [Test]
+        [Fact]
         public void FontSizeParent10PxtoChild2Em()
         {
             string html = "<div style=\"font-size:10px\"><div style=\"font-size:2em\">test</div></div>";
@@ -940,19 +939,19 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<div style=\"font-size:2em\">test</div>", html, null, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "10px");
             IHtmlNode parent = node;
 
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style=\"font-size:2em\">test</div>", parent, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "20px");
         }
 
-        [Test]
+        [Fact]
         public void Div10PxFontSizeH130PxFontSize()
         {
             string html = "<div style=\"font-size:10px\"><h1 style=\"font-size:30px\">test</h1></div>";
@@ -962,7 +961,7 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
 
             node.AnalyzeNode("div", "<h1 style=\"font-size:30px\">test</h1>", html, null, false, true, 1, 1, 1);
             node.CheckStyle(0, "font-size", "10px");
@@ -973,7 +972,7 @@
             node.CheckStyle(0, "font-size", "30px");
         }
 
-        [Test]
+        [Fact]
         public void BackgroundAndBackgroundColorInheritance()
         {
             string html = "<div><div style=\"background-color: #FFF\"><div style=\"background: #437dcc;\">test</div></div></div>";
@@ -983,30 +982,30 @@
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "<div style=\"background-color: #FFF\"><div style=\"background: #437dcc;\">test</div></div>", html, null, false, true, 1, 0, 0);
 
             IHtmlNode parent = node;
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "<div style=\"background: #437dcc;\">test</div>",
                 "<div style=\"background-color: #FFF\"><div style=\"background: #437dcc;\">test</div></div>",
                 parent, false, true, 1, 1, 1);
-            Assert.AreEqual(1, node.InheritedStyles.Count);
+            Assert.Single(node.InheritedStyles);
             node.CheckStyle(0, "background-color", "#FFF");
             node.CheckInheritedStyle(0, "background-color", "#FFF");
 
             parent = node;
             node = node.Children.ElementAt(0);
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             node.AnalyzeNode("div", "test", "<div style=\"background: #437dcc;\">test</div>", parent, false,
                 true, 1, 1, 1);
-            Assert.AreEqual(1, node.InheritedStyles.Count);
+            Assert.Single(node.InheritedStyles);
             node.CheckStyle(0, "background", "#437dcc");
             node.CheckInheritedStyle(0, "background-color", "#437dcc");
         }
 
-        [Test]
+        [Fact]
         public void MultiLevelFontSizeInheritance()
         {
             string html = "<div style=\"font-size:10px\"><div><div><div>test</div></div></div></div>";
@@ -1023,7 +1022,7 @@
             node = node.Children.ElementAt(0);
 
             node.AnalyzeNode("div", "test", "<div>test</div>", parent, false, true, 1, 0, 0);
-            Assert.AreEqual(1, node.InheritedStyles.Count);
+            Assert.Single(node.InheritedStyles);
         }
     }
 }

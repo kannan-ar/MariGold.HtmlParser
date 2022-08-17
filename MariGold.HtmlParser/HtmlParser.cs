@@ -1,7 +1,5 @@
 ﻿namespace MariGold.HtmlParser
 {
-    using System;
-
     /// <summary>
     /// An abstract base class for parse html documents.
     /// </summary>
@@ -43,7 +41,7 @@
         /// Last parsed HtmlNode.
         /// </summary>
         public abstract IHtmlNode Current { get; }
-        
+
         /// <summary>
         /// Parse and assign CSS properties of all processed HtmlNode(s) and its children
         /// </summary>
@@ -54,14 +52,14 @@
         /// </summary>
         /// <returns>Returns true if successfully parsed and html element</returns>
         public abstract bool Traverse();
-        
+
         /// <summary>
         /// Finds and loads the current HtmlNode using the first html element with the given html tag
         /// </summary>
         /// <param name="tag">The html tag to be find</param>
         /// <returns>Returns true if successfully finds an html element using the given tag</returns>
         public abstract bool FindFirst(string tag);
-        
+
         /// <summary>
         /// Parse all the html elements in the given html document.
         /// </summary>

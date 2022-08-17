@@ -29,7 +29,7 @@
             this.context = context;
             regex = new Regex("^(:last-child)|(:last-of-type)");
         }
-        
+
         internal override bool Prepare(string selector)
         {
             Match match = regex.Match(selector);

@@ -61,7 +61,7 @@
 
                 if (node != null)
                 {
-					node.SetSelfClosing(true);
+                    node.SetSelfClosing(true);
                 }
 
                 if (attributeAnalyzer != null)
@@ -82,7 +82,7 @@
 
             return tagCreated;
         }
-        
+
         public bool IsOpenTag(int position, string html)
         {
             if (position + 2 >= context.EOF)

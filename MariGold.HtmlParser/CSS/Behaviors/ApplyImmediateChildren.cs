@@ -7,7 +7,7 @@
     internal sealed class ApplyImmediateChildren : CSSBehavior
     {
         private readonly Regex regex;
-        
+
         private string selectorText;
 
         internal ApplyImmediateChildren(ISelectorContext context)
@@ -23,7 +23,7 @@
 
             Match match = regex.Match(selectorText);
 
-            if(match.Success)
+            if (match.Success)
             {
                 this.selectorText = selectorText.Substring(match.Value.Length);
             }

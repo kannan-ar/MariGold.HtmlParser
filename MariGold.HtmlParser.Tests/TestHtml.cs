@@ -2,10 +2,10 @@
 {
     using System;
     using System.Linq;
-    using NUnit.Framework;
     using MariGold.HtmlParser;
+    using Xunit;
 
-	internal class TestHtml
+    internal class TestHtml
 	{
 		private readonly IHtmlNode node;
 
@@ -16,23 +16,23 @@
 
 		internal TestHtml IsNotNull()
 		{
-			Assert.IsNotNull(node);
+			Assert.NotNull(node);
 
 			return new TestHtml(node);
 		}
 
 		internal TestHtml AreEqual(string tag, string text, string html)
 		{
-			Assert.AreEqual(tag, node.Tag);
-			Assert.AreEqual(text, node.InnerHtml);
-			Assert.AreEqual(html, node.Html);
+			Assert.Equal(tag, node.Tag);
+			Assert.Equal(text, node.InnerHtml);
+			Assert.Equal(html, node.Html);
 
 			return new TestHtml(node);
 		}
 
 		internal TestHtml IsNull()
 		{
-			Assert.IsNull(node);
+			Assert.Null(node);
 
 			return new TestHtml(node);
 		}
@@ -49,7 +49,7 @@
 
 		internal TestHtml HasChildrenCount(int count)
 		{
-			Assert.AreEqual(count, node.Children.Count());
+			Assert.Equal(count, node.Children.Count());
 
 			return new TestHtml(node);
 		}

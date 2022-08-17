@@ -1,91 +1,90 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System.Linq;
-    using NUnit.Framework;
     using MariGold.HtmlParser;
+    using System.Linq;
+    using Xunit;
 
-    [TestFixture]
     public class Comments
     {
-        [Test]
+        [Fact]
         public void EmptyComment()
         {
             string html = "<!---->";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "#comment", "<!---->", "<!---->");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.HasChildren);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void CommentWithText()
         {
             string html = "<!--test-->";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "#comment", "<!--test-->", "<!--test-->");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.HasChildren);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void CommentWithDiv()
         {
             string html = "<!--<div>test</div>-->";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "#comment", html, html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.HasChildren);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void CommentNextDiv()
         {
             string html = "<!--test--><div>test</div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "#comment", "<!--test-->", "<!--test-->");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.HasChildren);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AnalyzeNode(parser.Current, "div", "test", "<div>test</div>", null, false, true, 1, 0);
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
     }
 }

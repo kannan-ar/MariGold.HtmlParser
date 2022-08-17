@@ -33,7 +33,7 @@
                 return false;
             }
 
-            if(!match.Success)
+            if (!match.Success)
             {
                 return false;
             }
@@ -45,7 +45,7 @@
                 if (!string.IsNullOrEmpty(style))
                 {
                     cssParser.ParseCSS(style, elements, mediaQuries);
-                   
+
                     selectorText = selectorText.Substring(match.Length + 1);
                     mediaQuries.Add(new MediaQuery(selectorText, elements));
                 }

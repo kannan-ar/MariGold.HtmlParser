@@ -1,15 +1,14 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System;
-    using NUnit.Framework;
     using MariGold.HtmlParser;
-    using System.Linq;
+    using System;
     using System.IO;
+    using System.Linq;
+    using Xunit;
 
-    [TestFixture]
     public partial class ComplexStyles
     {
-        [Test]
+        [Fact]
         public void DivClassAllNextP()
         {
             string html = @"<style>
@@ -26,10 +25,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -58,7 +57,7 @@
                 {
                     ++pCount;
 
-                    Assert.AreEqual(1, node.Styles.Count);
+                    Assert.Single(node.Styles);
                     TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
                 }
 
@@ -81,7 +80,7 @@
             }
         }
 
-        [Test]
+        [Fact]
         public void DivClassImmediateP()
         {
             string html = @"<style>
@@ -94,10 +93,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -113,7 +112,7 @@
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Styles.ElementAt(0), "font-weight", "bold");
         }
 
-        [Test]
+        [Fact]
         public void DivClassFirstChild()
         {
             string html = @"<style>
@@ -126,10 +125,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -145,7 +144,7 @@
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(0).Attributes.ElementAt(0), "class", "cls");
         }
 
-        [Test]
+        [Fact]
         public void DivClassAttributeFirstChild()
         {
             string html = @"<style>
@@ -158,10 +157,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -179,7 +178,7 @@
             TestUtility.AnalyzeNode(node.Children.ElementAt(1), "div", "2", "<div>2</div>", node, false, true, 1, 0, 0);
         }
 
-        [Test]
+        [Fact]
         public void CustomAttributeOnly()
         {
             string html = @"<style>
@@ -193,10 +192,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -218,10 +217,10 @@
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "font-weight", "bold");
 
-            Assert.IsNull(node.Next);
+            Assert.Null(node.Next);
         }
 
-        [Test]
+        [Fact]
         public void CustomAttributeWithValueOnly()
         {
             string html = @"<style>
@@ -235,10 +234,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -261,10 +260,10 @@
             TestUtility.AnalyzeNode(node, "div", "", "<div attr></div>", null, false, false, 0, 1, 0);
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "attr", "");
 
-            Assert.IsNull(node.Next);
+            Assert.Null(node.Next);
         }
 
-        [Test]
+        [Fact]
         public void DivGlobalStyle()
         {
             string html = @"<style>
@@ -279,10 +278,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -315,7 +314,7 @@
             TestUtility.AnalyzeNode(node, "span", "four", "<span>four</span>", null, false, true, 1, 0, 0);
         }
 
-        [Test]
+        [Fact]
         public void IdentityLastChildP()
         {
             string html = @"<style>
@@ -328,10 +327,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -365,7 +364,7 @@
             TestUtility.AnalyzeNode(node.Children.ElementAt(1), "span", "two", "<span>two</span>", node, false, true, 1, 0, 0);
         }
 
-        [Test]
+        [Fact]
         public void AttributeImmediateChildrenClass()
         {
             string html = @"<style>
@@ -378,10 +377,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -402,7 +401,7 @@
 
         }
 
-        [Test]
+        [Fact]
         public void PDivSpan()
         {
             string html = @"<style>
@@ -415,10 +414,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -440,7 +439,7 @@
             node.Styles.CheckKeyValuePair(0, "background-color", "red");
         }
 
-        [Test]
+        [Fact]
         public void PDivWithImmediateChildrenSpan()
         {
             string html = @"<style>
@@ -453,10 +452,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -480,7 +479,7 @@
             node.AnalyzeNode("span", "3", "<span>3</span>", null, false, true, 1, 0, 0);
         }
 
-        [Test]
+        [Fact]
         public void StylesFromDivAndSpan()
         {
             string html = @"<style>
@@ -498,10 +497,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -517,7 +516,7 @@
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(1, "font-family", "arial");
         }
 
-        [Test]
+        [Fact]
         public void StylesFromDivAndSpanClass()
         {
             string html = @"<style>
@@ -540,10 +539,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -561,7 +560,7 @@
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-weight", "bold");
         }
 
-        [Test]
+        [Fact]
         public void StylesFromDivClassAndSpanClass()
         {
             string html = @"<style>
@@ -589,10 +588,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -613,7 +612,7 @@
 
         }
 
-        [Test]
+        [Fact]
         public void StylesFromInlineDivClassAndSpanClass()
         {
             string html = @"<style>
@@ -641,10 +640,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -665,7 +664,7 @@
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-family", "verdana");
         }
 
-        [Test]
+        [Fact]
         public void StylesFromInlineDivClassAndSpanInlineClass()
         {
             string html = @"<style>
@@ -693,10 +692,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -717,7 +716,7 @@
             node.Children.ElementAt(0).Styles.CheckKeyValuePair(2, "font-family", "arial");
         }
 
-        [Test]
+        [Fact]
         public void GlobalAndElementSelector()
         {
             string path = TestUtility.GetFolderPath("Html\\globalselectors.htm");
@@ -730,13 +729,13 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
 
-            Assert.IsNotNull(node);
-            Assert.AreEqual(true, node.HasChildren);
+            Assert.NotNull(node);
+            Assert.True(node.HasChildren);
 
             node = node.Children.ElementAt(0);
 

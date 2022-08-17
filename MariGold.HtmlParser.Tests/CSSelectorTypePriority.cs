@@ -1,14 +1,13 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using NUnit.Framework;
     using MariGold.HtmlParser;
-    using System.Linq;
     using System.IO;
+    using System.Linq;
+    using Xunit;
 
-    [TestFixture]
     public class CSSelectorTypePriority
     {
-        [Test]
+        [Fact]
         public void InlineIdentity()
         {
             string html = @"<style>
@@ -21,10 +20,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -39,7 +38,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "#000");
         }
 
-        [Test]
+        [Fact]
         public void ClassAttribute()
         {
             string html = @"<style>
@@ -57,10 +56,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -75,7 +74,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void AttributeClass()
         {
             string html = @"<style>
@@ -95,10 +94,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -113,7 +112,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void ElementClass()
         {
             string html = @"<style>
@@ -133,10 +132,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -150,7 +149,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void ClassElement()
         {
             string html = @"<style>
@@ -170,10 +169,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -187,7 +186,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void ClassIdentity()
         {
             string html = @"<style>
@@ -207,10 +206,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -225,7 +224,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void IdentityClass()
         {
             string html = @"<style>
@@ -245,10 +244,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -263,7 +262,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void GlobalClass()
         {
             string html = @"<style>
@@ -283,10 +282,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -300,7 +299,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void ClassImportantInline()
         {
             string html = @"<style>
@@ -315,10 +314,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -333,7 +332,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void ClassImportantInlineImportant()
         {
             string html = @"<style>
@@ -348,10 +347,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -366,7 +365,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void ElementImportantClassInline()
         {
             string html = @"<style>
@@ -386,10 +385,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -404,7 +403,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "black");
         }
 
-        [Test]
+        [Fact]
         public void ElementImportantClassInlineImportant()
         {
             string html = @"<style>
@@ -424,10 +423,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -442,7 +441,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void ElementImportantClassImportantInline()
         {
             string html = @"<style>
@@ -462,10 +461,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -480,7 +479,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void ClassElementImportantInline()
         {
             string html = @"<style>
@@ -500,10 +499,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -518,7 +517,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "black");
         }
 
-        [Test]
+        [Fact]
         public void ClassImportantElementInline()
         {
             string html = @"<style>
@@ -538,10 +537,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -556,7 +555,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void ClassImportantAttribute()
         {
             string html = @"<style>
@@ -576,10 +575,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -594,7 +593,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "blue");
         }
 
-        [Test]
+        [Fact]
         public void ClassImportantAttributeImportant()
         {
             string html = @"<style>
@@ -614,10 +613,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -632,7 +631,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "black");
         }
 
-        [Test]
+        [Fact]
         public void ClassAttributeInline()
         {
             string html = @"<style>
@@ -652,10 +651,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -671,7 +670,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void ClassImportantAttributeImportantInlineImportant()
         {
             string html = @"<style>
@@ -691,10 +690,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -710,7 +709,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void GlobalImportantClassAttributeInline()
         {
             string html = @"<style>
@@ -735,10 +734,10 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             IHtmlNode node = parser.Current;
 
@@ -754,7 +753,7 @@
             TestUtility.CheckKeyValuePair(node.Styles.ElementAt(0), "color", "white");
         }
 
-        [Test]
+        [Fact]
         public void NthChildPriority()
         {
             string path = TestUtility.GetFolderPath("Html\\nthchildpriority.htm");

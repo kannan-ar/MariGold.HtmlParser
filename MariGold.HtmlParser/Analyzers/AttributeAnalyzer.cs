@@ -158,7 +158,7 @@
                 Clear();
             }
         }
-       
+
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             analyze?.Invoke(position, node);

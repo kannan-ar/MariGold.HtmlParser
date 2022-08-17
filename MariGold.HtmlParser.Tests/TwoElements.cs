@@ -1,12 +1,11 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using NUnit.Framework;
     using MariGold.HtmlParser;
+    using Xunit;
 
-    [TestFixture]
     public class TwoElements
     {
-        [Test]
+        [Fact]
         public void OneDivStartWithSpace()
         {
             string html = " <div>test</div>";
@@ -15,13 +14,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual(" ", parser.Current.Html);
-                    Assert.AreEqual(" ", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal(" ", parser.Current.Html);
+                    Assert.Equal(" ", parser.Current.InnerHtml);
                 }
             }
             else
@@ -31,13 +30,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div>test</div>", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div>test</div>", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -45,10 +44,10 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
 
-        [Test]
+        [Fact]
         public void OneDivSpace()
         {
             string html = "<div>test</div> ";
@@ -57,13 +56,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div>test</div>", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div>test</div>", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -73,13 +72,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual(" ", parser.Current.Html);
-                    Assert.AreEqual(" ", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal(" ", parser.Current.Html);
+                    Assert.Equal(" ", parser.Current.InnerHtml);
                 }
             }
             else
@@ -87,10 +86,10 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
 
-        [Test]
+        [Fact]
         public void OneDivTextNext()
         {
             string html = "<div>this is a test</div>test";
@@ -99,13 +98,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div>this is a test</div>", parser.Current.Html);
-                    Assert.AreEqual("this is a test", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div>this is a test</div>", parser.Current.Html);
+                    Assert.Equal("this is a test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -115,13 +114,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual("test", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal("test", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -129,11 +128,11 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
 
         }
 
-        [Test]
+        [Fact]
         public void OneTextNextDiv()
         {
             string html = "test<div>this is a test</div>";
@@ -142,13 +141,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual("test", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal("test", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -158,13 +157,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div>this is a test</div>", parser.Current.Html);
-                    Assert.AreEqual("this is a test", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div>this is a test</div>", parser.Current.Html);
+                    Assert.Equal("this is a test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -172,11 +171,11 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
 
         }
 
-        [Test]
+        [Fact]
         public void OneTextNextDivWithSpaceOnOpenTag()
         {
             string html = "test< div>this is a test</div>";
@@ -185,13 +184,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual("test< div>this is a test", parser.Current.Html);
-                    Assert.AreEqual("test< div>this is a test", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal("test< div>this is a test", parser.Current.Html);
+                    Assert.Equal("test< div>this is a test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -199,10 +198,10 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
 
-        [Test]
+        [Fact]
         public void OneTextNextDivWithSpaceAtTheEndOfOpenTag()
         {
             string html = "test<div >this is a test</div>";
@@ -211,13 +210,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual("test", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal("test", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -227,13 +226,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div >this is a test</div>", parser.Current.Html);
-                    Assert.AreEqual("this is a test", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div >this is a test</div>", parser.Current.Html);
+                    Assert.Equal("this is a test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -241,10 +240,10 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
 
-        [Test]
+        [Fact]
         public void OneTextNextDivWithSpaceAtTheStartOfEndTag()
         {
             string html = "test<div>this is a test< /div>";
@@ -253,13 +252,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual("test", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal("test", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -269,13 +268,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div>this is a test< /div>", parser.Current.Html);
-                    Assert.AreEqual("this is a test< /div>", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div>this is a test< /div>", parser.Current.Html);
+                    Assert.Equal("this is a test< /div>", parser.Current.InnerHtml);
                 }
             }
             else
@@ -283,10 +282,10 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
 
-        [Test]
+        [Fact]
         public void OneTextNextDivWithSpaceAtTheEndOfEndTag()
         {
             string html = "test<div>this is a test</div >";
@@ -295,13 +294,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual("test", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal("test", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -311,13 +310,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div>this is a test</div >", parser.Current.Html);
-                    Assert.AreEqual("this is a test", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div>this is a test</div >", parser.Current.Html);
+                    Assert.Equal("this is a test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -325,7 +324,7 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
     }
 }

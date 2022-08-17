@@ -1,12 +1,11 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using NUnit.Framework;
     using MariGold.HtmlParser;
+    using Xunit;
 
-    [TestFixture]
     public class ThreeElements
     {
-        [Test]
+        [Fact]
         public void OneDivTextNext()
         {
             string html = "<div>this is a div</div>test<span>this is a span</span>";
@@ -15,13 +14,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div>this is a div</div>", parser.Current.Html);
-                    Assert.AreEqual("this is a div", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div>this is a div</div>", parser.Current.Html);
+                    Assert.Equal("this is a div", parser.Current.InnerHtml);
                 }
             }
             else
@@ -31,13 +30,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual("test", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal("test", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -47,13 +46,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("span", parser.Current.Tag);
-                    Assert.AreEqual("<span>this is a span</span>", parser.Current.Html);
-                    Assert.AreEqual("this is a span", parser.Current.InnerHtml);
+                    Assert.Equal("span", parser.Current.Tag);
+                    Assert.Equal("<span>this is a span</span>", parser.Current.Html);
+                    Assert.Equal("this is a span", parser.Current.InnerHtml);
                 }
             }
             else
@@ -61,11 +60,11 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
 
         }
 
-        [Test]
+        [Fact]
         public void TextDivSpan()
         {
             string html = "test<div>this is a div</div><span>this is a span</span>";
@@ -74,13 +73,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual("test", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal("test", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -90,13 +89,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div>this is a div</div>", parser.Current.Html);
-                    Assert.AreEqual("this is a div", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div>this is a div</div>", parser.Current.Html);
+                    Assert.Equal("this is a div", parser.Current.InnerHtml);
                 }
             }
             else
@@ -107,13 +106,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("span", parser.Current.Tag);
-                    Assert.AreEqual("<span>this is a span</span>", parser.Current.Html);
-                    Assert.AreEqual("this is a span", parser.Current.InnerHtml);
+                    Assert.Equal("span", parser.Current.Tag);
+                    Assert.Equal("<span>this is a span</span>", parser.Current.Html);
+                    Assert.Equal("this is a span", parser.Current.InnerHtml);
                 }
             }
             else
@@ -121,11 +120,11 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
 
         }
 
-        [Test]
+        [Fact]
         public void PTextDivSpan()
         {
             string html = "<p>ptag</p>test<div>this is a div</div><span>this is a span</span>";
@@ -134,13 +133,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("p", parser.Current.Tag);
-                    Assert.AreEqual("<p>ptag</p>", parser.Current.Html);
-                    Assert.AreEqual("ptag", parser.Current.InnerHtml);
+                    Assert.Equal("p", parser.Current.Tag);
+                    Assert.Equal("<p>ptag</p>", parser.Current.Html);
+                    Assert.Equal("ptag", parser.Current.InnerHtml);
                 }
             }
             else
@@ -150,13 +149,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("#text", parser.Current.Tag);
-                    Assert.AreEqual("test", parser.Current.Html);
-                    Assert.AreEqual("test", parser.Current.InnerHtml);
+                    Assert.Equal("#text", parser.Current.Tag);
+                    Assert.Equal("test", parser.Current.Html);
+                    Assert.Equal("test", parser.Current.InnerHtml);
                 }
             }
             else
@@ -166,13 +165,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("div", parser.Current.Tag);
-                    Assert.AreEqual("<div>this is a div</div>", parser.Current.Html);
-                    Assert.AreEqual("this is a div", parser.Current.InnerHtml);
+                    Assert.Equal("div", parser.Current.Tag);
+                    Assert.Equal("<div>this is a div</div>", parser.Current.Html);
+                    Assert.Equal("this is a div", parser.Current.InnerHtml);
                 }
             }
             else
@@ -183,13 +182,13 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
-                    Assert.AreEqual("span", parser.Current.Tag);
-                    Assert.AreEqual("<span>this is a span</span>", parser.Current.Html);
-                    Assert.AreEqual("this is a span", parser.Current.InnerHtml);
+                    Assert.Equal("span", parser.Current.Tag);
+                    Assert.Equal("<span>this is a span</span>", parser.Current.Html);
+                    Assert.Equal("this is a span", parser.Current.InnerHtml);
                 }
             }
             else
@@ -197,7 +196,7 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
 
         }
     }

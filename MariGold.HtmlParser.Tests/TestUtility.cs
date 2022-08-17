@@ -2,23 +2,23 @@
 {
     using System;
     using System.Linq;
-    using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.Collections.Generic;
+    using Xunit;
 
     public static class TestUtility
     {
         public static void AreEqual(IHtmlNode node, string tag, string text, string html)
         {
-            Assert.AreEqual(tag, node.Tag);
-            Assert.AreEqual(text, node.InnerHtml);
-            Assert.AreEqual(html, node.Html);
+            Assert.Equal(tag, node.Tag);
+            Assert.Equal(text, node.InnerHtml);
+            Assert.Equal(html, node.Html);
         }
 
         public static void CheckKeyValuePair(KeyValuePair<string, string> attribute, string key, string value)
         {
-            Assert.AreEqual(key, attribute.Key);
-            Assert.AreEqual(value, attribute.Value);
+            Assert.Equal(key, attribute.Key);
+            Assert.Equal(value, attribute.Value);
         }
 
         public static string GetFolderPath(string folderName)
@@ -42,13 +42,13 @@
             int childrenCount,
             int attributeCount)
         {
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             AreEqual(node, tag, text, html);
-            Assert.AreEqual(parent, node.Parent);
-            Assert.AreEqual(selfClosing, node.SelfClosing);
-            Assert.AreEqual(hasChildren, node.HasChildren);
-            Assert.AreEqual(childrenCount, node.Children.Count());
-            Assert.AreEqual(attributeCount, node.Attributes.Count);
+            Assert.Equal(parent, node.Parent);
+            Assert.Equal(selfClosing, node.SelfClosing);
+            Assert.Equal(hasChildren, node.HasChildren);
+            Assert.Equal(childrenCount, node.Children.Count());
+            Assert.Equal(attributeCount, node.Attributes.Count);
         }
 
         public static void AnalyzeNode(
@@ -63,30 +63,30 @@
             int attributeCount,
             int styleCount)
         {
-            Assert.IsNotNull(node);
+            Assert.NotNull(node);
             AreEqual(node, tag, text, html);
-            Assert.AreEqual(parent, node.Parent);
-            Assert.AreEqual(selfClosing, node.SelfClosing);
-            Assert.AreEqual(hasChildren, node.HasChildren);
-            Assert.AreEqual(childrenCount, node.Children.Count(), "Children count is " + node.Children.Count().ToString());
-            Assert.AreEqual(attributeCount, node.Attributes.Count, "Attribute count is " + node.Attributes.Count.ToString());
-            Assert.AreEqual(styleCount, node.Styles.Count, "Style count is " + node.Styles.Count.ToString());
+            Assert.Equal(parent, node.Parent);
+            Assert.Equal(selfClosing, node.SelfClosing);
+            Assert.Equal(hasChildren, node.HasChildren);
+            Assert.True(childrenCount == node.Children.Count(), "Children count is " + node.Children.Count().ToString());
+            Assert.True(attributeCount == node.Attributes.Count, "Attribute count is " + node.Attributes.Count.ToString());
+            Assert.True(styleCount == node.Styles.Count, "Style count is " + node.Styles.Count.ToString());
         }
 
         public static void CheckStyle(this IHtmlNode node, int index, string styleName, string styleValue)
         {
             Assert.True(index < node.Styles.Count, "No style at position " + index.ToString());
             KeyValuePair<string, string> style = node.Styles.ElementAt(index);
-            Assert.AreEqual(styleName, style.Key);
-            Assert.AreEqual(styleValue, style.Value);
+            Assert.Equal(styleName, style.Key);
+            Assert.Equal(styleValue, style.Value);
         }
 
         public static void CheckInheritedStyle(this IHtmlNode node, int index, string styleName, string styleValue)
         {
             Assert.True(index < node.InheritedStyles.Count, "No style at position " + index.ToString());
             KeyValuePair<string, string> style = node.InheritedStyles.ElementAt(index);
-            Assert.AreEqual(styleName, style.Key);
-            Assert.AreEqual(styleValue, style.Value);
+            Assert.Equal(styleName, style.Key);
+            Assert.Equal(styleValue, style.Value);
         }
     }
 }

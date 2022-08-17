@@ -7,7 +7,7 @@
     internal sealed class ApplyNextElement : CSSBehavior
     {
         private readonly Regex regex;
-        
+
         private string selectorText;
 
         internal ApplyNextElement(ISelectorContext context)
@@ -35,12 +35,12 @@
         {
             if (node.Next != null)
             {
-            	HtmlNode temp = node.GetNext();
+                HtmlNode temp = node.GetNext();
 
                 //Empty text nodes can be avoid. This loop will skip those.
                 while (temp != null && temp.Tag == HtmlTag.TEXT)
                 {
-                	temp = temp.GetNext();
+                    temp = temp.GetNext();
                 }
 
                 if (temp != null)

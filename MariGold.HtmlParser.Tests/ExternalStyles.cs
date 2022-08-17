@@ -1,14 +1,13 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-	using NUnit.Framework;
 	using MariGold.HtmlParser;
 	using System.Linq;
 	using System.IO;
+    using Xunit;
 
-	[TestFixture]
-	public class ExternalStyles
+    public class ExternalStyles
 	{
-		[Test]
+		[Fact]
 		public void BasicExternalStyleSheet()
 		{
 			string path = TestUtility.GetFolderPath("Html\\basicexternalstyle.htm");
@@ -21,10 +20,10 @@
 
 			HtmlParser parser = new HtmlTextParser(html);
 
-			Assert.AreEqual(true, parser.Parse());
+			Assert.True(parser.Parse());
 			parser.ParseStyles();
 
-			Assert.IsNotNull(parser.Current);
+			Assert.NotNull(parser.Current);
 
 			IHtmlNode node = parser.Current.Children.ElementAt(0);
 
@@ -42,7 +41,7 @@
 			node.Styles.CheckKeyValuePair(0, "font-size", "20px");
 		}
 
-		[Test]
+		[Fact]
 		public void BasicExternalStyleSheetWithImportant()
 		{
 			string path = TestUtility.GetFolderPath("Html\\basicstyleimportant.html");
@@ -55,10 +54,10 @@
 
 			HtmlParser parser = new HtmlTextParser(html);
 
-			Assert.AreEqual(true, parser.Parse());
+			Assert.True(parser.Parse());
 			parser.ParseStyles();
 
-			Assert.IsNotNull(parser.Current);
+			Assert.NotNull(parser.Current);
 
 			IHtmlNode node = parser.Current.Children.ElementAt(0);
 
@@ -77,7 +76,7 @@
 			node.Styles.CheckKeyValuePair(0, "font-size", "10px");
 		}
 
-		[Test]
+		[Fact]
 		public void BasicExternalStyleSheetWithTwoElements()
 		{
 			string path = TestUtility.GetFolderPath("Html\\basicstylewithtwoelements.html");
@@ -90,10 +89,10 @@
 
 			HtmlParser parser = new HtmlTextParser(html);
 
-			Assert.AreEqual(true, parser.Parse());
+			Assert.True(parser.Parse());
 			parser.ParseStyles();
 
-			Assert.IsNotNull(parser.Current);
+			Assert.NotNull(parser.Current);
 
 			IHtmlNode node = parser.Current.Children.ElementAt(0);
 
@@ -112,7 +111,7 @@
 			node.Styles.CheckKeyValuePair(0, "font-size", "10px");
 		}
 
-		[Test]
+		[Fact]
 		public void ATagWithStyle()
 		{
 			string path = TestUtility.GetFolderPath("Html\\atagwithstyle.htm");
@@ -125,10 +124,10 @@
 
 			HtmlParser parser = new HtmlTextParser(html);
 
-			Assert.AreEqual(true, parser.Parse());
+			Assert.True(parser.Parse());
 			parser.ParseStyles();
 
-			Assert.IsNotNull(parser.Current);
+			Assert.NotNull(parser.Current);
 
 			IHtmlNode node = parser.Current;
 
@@ -154,7 +153,7 @@
 
 		}
 
-		[Test]
+		[Fact]
 		public void RemoteStyleSheet()
 		{
 			string path = TestUtility.GetFolderPath("Html\\remotestylesheet.htm");
@@ -167,10 +166,10 @@
 
 			HtmlParser parser = new HtmlTextParser(html);
 
-			Assert.AreEqual(true, parser.Parse());
+			Assert.True(parser.Parse());
 			parser.ParseStyles();
 
-			Assert.IsNotNull(parser.Current);
+			Assert.NotNull(parser.Current);
 
 			IHtmlNode node = parser.Current.Children.ElementAt(0);
 
@@ -185,7 +184,7 @@
 				node = node.Next;
 
 			node.AnalyzeNode("p", "test", "<p class=\"well\">test</p>", body, false, true, 1, 1);
-			Assert.Less(0, node.Styles.Count);
+			Assert.True(node.Styles.Count > 0);
 		}
 	}
 }

@@ -1,7 +1,6 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
-    using System.Collections.Generic;
 
     internal sealed class CSSInheritance
     {
@@ -45,7 +44,7 @@
                     continue;
                 }
 
-                if(parent.HasStyle(parentStyle.Name))
+                if (parent.HasStyle(parentStyle.Name))
                 {
                     continue;
                 }
@@ -53,7 +52,7 @@
                 propertyParser.InheritStyle(parentStyle, node);
             }
         }
-       
+
         private string FindParentStyle(HtmlNode node, string styleName)
         {
             string value = string.Empty;
@@ -96,7 +95,7 @@
         {
             CSSPropertyParser propertyParser = new CSSPropertyParser();
 
-            foreach(HtmlStyle style in node.HtmlStyles)
+            foreach (HtmlStyle style in node.HtmlStyles)
             {
                 if (!propertyParser.CanInherit(style.Name))
                 {

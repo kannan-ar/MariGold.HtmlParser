@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Stores all the information of an HTML element including child elements, attributes and CSS styles
@@ -44,6 +45,7 @@
             this.parent = parent;
             this.context = context;
             this.htmlStyles = htmlStyles;
+            //this.inheritedStyles = inheritedStyles.ToDictionary(x => ;
             this.IsText = isText;
             this.htmlStart = htmlStart;
             this.textStart = textStart;
@@ -522,7 +524,7 @@
 
         public IHtmlNode Clone()
         {
-            return new HtmlNode(
+            var node = new HtmlNode(
                 this.Tag,
                 this.parent,
                 this.context,
@@ -539,6 +541,10 @@
                 next,
                 attributes,
                 styles);
+
+            node.ImportInheritedStyles(this.InheritedHtmlStyles);
+
+            return node;
         }
 
         public override string ToString()

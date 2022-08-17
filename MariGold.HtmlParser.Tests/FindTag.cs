@@ -1,140 +1,139 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System.Linq;
-    using NUnit.Framework;
     using MariGold.HtmlParser;
+    using System.Linq;
+    using Xunit;
 
-    [TestFixture]
     public class FindTag
     {
-        [Test]
+        [Fact]
         public void PInDiv()
         {
             string html = "<div><p>test</p></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.FindFirst("p"));
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.FindFirst("p"));
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "p", "test", "<p>test</p>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.True(parser.Current.HasChildren);
+            Assert.Single(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
+            Assert.False(parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Attributes);
         }
 
-        [Test]
+        [Fact]
         public void DivInsideTable()
         {
             string html = "<table><tr><td><div>test</div></td></tr></table>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.FindFirst("div"));
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.FindFirst("div"));
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "test", "<div>test</div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.True(parser.Current.HasChildren);
+            Assert.Single(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
+            Assert.False(parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Attributes);
         }
 
-        [Test]
+        [Fact]
         public void PDiv()
         {
             string html = "<p></p><div>test</div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.FindFirst("div"));
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.FindFirst("div"));
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "test", "<div>test</div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.True(parser.Current.HasChildren);
+            Assert.Single(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
+            Assert.False(parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Attributes);
         }
 
-        [Test]
+        [Fact]
         public void InvalidPOpenDiv()
         {
             string html = "<p><div>test</div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.FindFirst("div"));
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.FindFirst("div"));
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "test", "<div>test</div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.True(parser.Current.HasChildren);
+            Assert.Single(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
+            Assert.False(parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Attributes);
         }
 
-        [Test]
+        [Fact]
         public void InvalidPCloseDiv()
         {
             string html = "</p><div>test</div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.FindFirst("div"));
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.FindFirst("div"));
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "test", "<div>test</div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.True(parser.Current.HasChildren);
+            Assert.Single(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
+            Assert.False(parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Attributes);
         }
     }
 }

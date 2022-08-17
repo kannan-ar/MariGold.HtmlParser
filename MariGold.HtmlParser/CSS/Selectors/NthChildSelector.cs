@@ -1,8 +1,8 @@
 ﻿namespace MariGold.HtmlParser
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     internal sealed class NthChildSelector : CSSelector, IAttachedSelector

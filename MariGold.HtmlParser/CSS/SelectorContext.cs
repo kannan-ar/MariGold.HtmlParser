@@ -9,25 +9,25 @@
             AttachedSelectors = new List<IAttachedSelector>();
 
             CSSBehaviors = new List<CSSBehavior>() {
-				new ApplyImmediateChildren(this),
-				new ApplyNextElement(this),
-				new ApplyAllNextElement(this),
-				new ApplyAllChildren(this)
-			};
+                new ApplyImmediateChildren(this),
+                new ApplyNextElement(this),
+                new ApplyAllNextElement(this),
+                new ApplyAllChildren(this)
+            };
 
             Selectors = new List<CSSelector>() {
-				new IdentitySelector(this),
-				new ClassSelector(this),
-				new AttributeSelector(this),
-				new ElementSelector(this),
-				new FirstChildSelector(this),
-				new LastChildSelector(this),
-				new NotSelector(this),
-				new NthChildSelector(this),
-				new NthLastChildSelector(this),
-				new OnlyChildSelector(this),
-				new GlobalSelector(this)
-			};
+                new IdentitySelector(this),
+                new ClassSelector(this),
+                new AttributeSelector(this),
+                new ElementSelector(this),
+                new FirstChildSelector(this),
+                new LastChildSelector(this),
+                new NotSelector(this),
+                new NthChildSelector(this),
+                new NthLastChildSelector(this),
+                new OnlyChildSelector(this),
+                new GlobalSelector(this)
+            };
         }
 
         public List<CSSBehavior> CSSBehaviors { get; }

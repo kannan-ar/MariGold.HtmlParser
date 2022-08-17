@@ -1,14 +1,13 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.Linq;
     using System.IO;
+    using Xunit;
 
-    [TestFixture]
     public class CSSComments
     {
-        [Test]
+        [Fact]
         public void CommentWithMediaQuery()
         {
             string path = TestUtility.GetFolderPath("Html\\commentwithmediaquery.htm");
@@ -21,7 +20,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -44,7 +43,7 @@
             TestUtility.AnalyzeNode(node, "p", "test", "<p>test</p>", body, false, true, 1, 0, 0);
         }
 
-        [Test]
+        [Fact]
         public void CommentWithoutSpace()
         {
             string html = @"<style>/*styles*/.cls{color:red;}</style>
@@ -52,7 +51,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -64,7 +63,7 @@
             node.CheckStyle(0, "color", "red");
         }
 
-        [Test]
+        [Fact]
         public void CommentInStyles()
         {
             string html = @"<style>
@@ -78,7 +77,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -90,7 +89,7 @@
             node.CheckStyle(0, "color", "white");
         }
 
-        [Test]
+        [Fact]
         public void MultipleCommentsInStyles()
         {
             string html = @"<style>
@@ -105,7 +104,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -117,14 +116,14 @@
             node.CheckStyle(0, "color", "white");
         }
 
-        [Test]
+        [Fact]
         public void MultipleCommentsInStylesWithoutSpace()
         {
             string html = @"<style>.cls{/*color:red;*/color:white;/*color:blue*/}</style><div class='cls'>test</div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -136,7 +135,7 @@
             node.CheckStyle(0, "color", "white");
         }
 
-        [Test]
+        [Fact]
         public void MultipleCommentsInStyleSheet()
         {
             string html = @"<style>
@@ -162,7 +161,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;

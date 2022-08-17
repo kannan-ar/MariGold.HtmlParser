@@ -1,13 +1,12 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System.Linq;
-    using NUnit.Framework;
     using MariGold.HtmlParser;
+    using System.Linq;
+    using Xunit;
 
-    [TestFixture]
     public class OneLevelHierarchy
     {
-        [Test]
+        [Fact]
         public void DivInsideOneDiv()
         {
             string html = "<div><div>test2</div></div>";
@@ -16,21 +15,21 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 TestUtility.AreEqual(parser.Current, "div", "<div>test2</div>", "<div><div>test2</div></div>");
 
-                Assert.IsNull(parser.Current.Parent);
+                Assert.Null(parser.Current.Parent);
 
-                Assert.IsNotNull(parser.Current.Children);
+                Assert.NotNull(parser.Current.Children);
 
-                Assert.AreEqual(parser.Current.Children.Count(), 1);
+                Assert.Single(parser.Current.Children);
 
-                Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+                Assert.NotNull(parser.Current.Children.ElementAt(0));
 
                 IHtmlNode node = parser.Current.Children.ElementAt(0);
 
-                Assert.IsNotNull(node.Parent);
+                Assert.NotNull(node.Parent);
 
                 TestUtility.AreEqual(node, "div", "test2", "<div>test2</div>");
             }
@@ -39,107 +38,107 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
 
-        [Test]
+        [Fact]
         public void DivPDivSpan()
         {
             string html = "<div><p>t1</p></div><div><span>t2</span></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(parser.Traverse(), true);
+            Assert.True(parser.Traverse());
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             TestUtility.AreEqual(parser.Current, "div", "<p>t1</p>", "<div><p>t1</p></div>");
 
-            Assert.IsNull(parser.Current.Parent);
+            Assert.Null(parser.Current.Parent);
 
-            Assert.IsNotNull(parser.Current.Children);
+            Assert.NotNull(parser.Current.Children);
 
-            Assert.AreEqual(1, parser.Current.Children.Count());
+            Assert.Single(parser.Current.Children);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
 
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "t1", "<p>t1</p>");
 
 
 
-            Assert.AreEqual(parser.Traverse(), true);
+            Assert.True(parser.Traverse());
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             TestUtility.AreEqual(parser.Current, "div", "<span>t2</span>", "<div><span>t2</span></div>");
 
-            Assert.IsNull(parser.Current.Parent);
+            Assert.Null(parser.Current.Parent);
 
-            Assert.IsNotNull(parser.Current.Children);
+            Assert.NotNull(parser.Current.Children);
 
-            Assert.AreEqual(parser.Current.Children.Count(), 1);
+            Assert.Single(parser.Current.Children);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
 
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "span", "t2", "<span>t2</span>");
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
 
-            Assert.IsNull(parser.Current);
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void EmptyDivPDivSpan()
         {
             string html = "<div><p></p></div><div><span></span></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(parser.Traverse(), true);
+            Assert.True(parser.Traverse());
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             TestUtility.AreEqual(parser.Current, "div", "<p></p>", "<div><p></p></div>");
 
-            Assert.IsNull(parser.Current.Parent);
+            Assert.Null(parser.Current.Parent);
 
-            Assert.IsNotNull(parser.Current.Children);
+            Assert.NotNull(parser.Current.Children);
 
-            Assert.AreEqual(1, parser.Current.Children.Count());
+            Assert.Single(parser.Current.Children);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
 
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "", "<p></p>");
 
 
 
-            Assert.AreEqual(parser.Traverse(), true);
+            Assert.True(parser.Traverse());
 
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
 
             TestUtility.AreEqual(parser.Current, "div", "<span></span>", "<div><span></span></div>");
 
-            Assert.IsNull(parser.Current.Parent);
+            Assert.Null(parser.Current.Parent);
 
-            Assert.IsNotNull(parser.Current.Children);
+            Assert.NotNull(parser.Current.Children);
 
-            Assert.AreEqual(parser.Current.Children.Count(), 1);
+            Assert.Single(parser.Current.Children);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
 
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "span", "", "<span></span>");
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
 
-            Assert.IsNull(parser.Current);
+            Assert.Null(parser.Current);
         }
     }
 }

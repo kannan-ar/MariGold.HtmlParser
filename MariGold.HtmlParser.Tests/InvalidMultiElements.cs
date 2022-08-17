@@ -1,13 +1,12 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System.Linq;
-    using NUnit.Framework;
     using MariGold.HtmlParser;
+    using System.Linq;
+    using Xunit;
 
-    [TestFixture]
     public class InvalidMultiElements
     {
-        [Test]
+        [Fact]
         public void DivAndInvalidDiv()
         {
             string html = "<div>test1</div><div>test2";
@@ -16,7 +15,7 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 TestUtility.AreEqual(parser.Current, "div", "test1", "<div>test1</div>");
             }
@@ -27,7 +26,7 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 TestUtility.AreEqual(parser.Current, "div", "test2", "<div>test2");
             }
@@ -36,10 +35,10 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
 
-        [Test]
+        [Fact]
         public void InvalidDivAndDiv()
         {
             string html = "<div>test2<div>test1</div>";
@@ -48,21 +47,21 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 if (parser.Current != null)
                 {
                     TestUtility.AreEqual(parser.Current, "div", "test2<div>test1</div>", "<div>test2<div>test1</div>");
 
-                    Assert.IsNull(parser.Current.Parent);
+                    Assert.Null(parser.Current.Parent);
 
-                    Assert.IsNotNull(parser.Current.Children);
+                    Assert.NotNull(parser.Current.Children);
 
-                    Assert.AreEqual(2, parser.Current.Children.Count());
+                    Assert.Equal(2, parser.Current.Children.Count());
 
-                    Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+                    Assert.NotNull(parser.Current.Children.ElementAt(0));
 
-                    Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
+                    Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
 
                     TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test2", "test2");
 
@@ -74,10 +73,10 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
 
-        [Test]
+        [Fact]
         public void OpenOnlyDivAndValidDiv()
         {
             string html = "<div><div>test</div>";
@@ -86,21 +85,21 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 TestUtility.AreEqual(parser.Current, "div", "<div>test</div>", "<div><div>test</div>");
 
-                Assert.IsNull(parser.Current.Parent);
+                Assert.Null(parser.Current.Parent);
 
-                Assert.IsNotNull(parser.Current.Children);
+                Assert.NotNull(parser.Current.Children);
 
-                Assert.AreEqual(parser.Current.Children.Count(), 1);
+                Assert.Single(parser.Current.Children);
 
-                Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+                Assert.NotNull(parser.Current.Children.ElementAt(0));
 
                 IHtmlNode node = parser.Current.Children.ElementAt(0);
 
-                Assert.IsNotNull(node.Parent);
+                Assert.NotNull(node.Parent);
 
                 TestUtility.AreEqual(node, "div", "test", "<div>test</div>");
             }
@@ -109,10 +108,10 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
 
-        [Test]
+        [Fact]
         public void ValidDivAndOpenOnlyDivAndP()
         {
             string html = "<div>test</div><div><p>t1</p>";
@@ -121,7 +120,7 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 TestUtility.AreEqual(parser.Current, "div", "test", "<div>test</div>");
             }
@@ -132,21 +131,21 @@
 
             if (parser.Traverse())
             {
-                Assert.IsNotNull(parser.Current);
+                Assert.NotNull(parser.Current);
 
                 TestUtility.AreEqual(parser.Current, "div", "<p>t1</p>", "<div><p>t1</p>");
 
-                Assert.IsNull(parser.Current.Parent);
+                Assert.Null(parser.Current.Parent);
 
-                Assert.IsNotNull(parser.Current.Children);
+                Assert.NotNull(parser.Current.Children);
 
-                Assert.AreEqual(parser.Current.Children.Count(), 1);
+                Assert.Single(parser.Current.Children);
 
-                Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+                Assert.NotNull(parser.Current.Children.ElementAt(0));
 
                 IHtmlNode node = parser.Current.Children.ElementAt(0);
 
-                Assert.IsNotNull(node.Parent);
+                Assert.NotNull(node.Parent);
 
                 TestUtility.AreEqual(node, "p", "t1", "<p>t1</p>");
             }
@@ -155,7 +154,7 @@
                 Assert.Fail("Fail to traverse");
             }
 
-            Assert.AreEqual(parser.Traverse(), false);
+            Assert.False(parser.Traverse());
         }
     }
 }

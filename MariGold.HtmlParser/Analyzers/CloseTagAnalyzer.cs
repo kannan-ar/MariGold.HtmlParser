@@ -69,7 +69,7 @@
         {
             return this;
         }
-       
+
         protected override bool ProcessHtml(int position, ref HtmlNode node)
         {
             bool tagCreated = false;

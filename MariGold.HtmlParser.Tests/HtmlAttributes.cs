@@ -1,498 +1,497 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.Linq;
+    using Xunit;
 
-    [TestFixture]
     public class HtmlAttributes
     {
-        [Test]
+        [Fact]
         public void KeyOnly()
         {
             string html = "<div id></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void TwoKeyOnly()
         {
             string html = "<div id name></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id name></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(2, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Equal(2, parser.Current.Attributes.Count);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "");
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "name", "");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void KeyOnlyWithEqual()
         {
             string html = "<div id=></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id=></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void KeyOnlyWithValueWithoutQuote()
         {
             string html = "<div id=1></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id=1></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "1");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void KeyOnlyWithValueAndSingleQuote()
         {
             string html = "<div id='1'></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id='1'></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "1");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void KeyOnlyWithValueAndDoubleQuote()
         {
             string html = "<div id=\"1\"></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id=\"1\"></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "1");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void KeyOnlyWithValueAndDoubleQuoteAndSpace()
         {
             string html = "<div id= \"1\" ></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id= \"1\" ></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "1");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void KeyOnlyWithMultiCharValueWithoutQuote()
         {
             string html = "<div id=abc></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id=abc></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void KeyOnlyWithMultiCharValueWithoutQuoteAndWithSpace()
         {
             string html = "<div id = abc ></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id = abc ></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void KeyOnlyWithMultiCharValueWithQuoteAndWithSpace()
         {
             string html = "<div id =  \" abc\" ></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id =  \" abc\" ></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", " abc");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void TwoAttributes()
         {
             string html = "<div id='abc' type = \"text\" ></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id='abc' type = \"text\" ></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(2, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Equal(2, parser.Current.Attributes.Count);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "type", "text");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void AttributeOnInnerElement()
         {
             string html = "<div id='abc' type = \"text\" ><span id=\"sp\"></span></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<span id=\"sp\"></span>", html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(true, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Single(parser.Current.Children);
+            Assert.True(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(2, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Equal(2, parser.Current.Attributes.Count);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "type", "text");
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "span", "", "<span id=\"sp\"></span>");
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.False(parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Attributes);
-            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Attributes);
+            Assert.Single(parser.Current.Children.ElementAt(0).Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Children.ElementAt(0).Attributes.ElementAt(0), "id", "sp");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void AttributeOnInnerElementWithoutQuote()
         {
             string html = "<div id='abc' type = \"text\" ><span id=sp></span></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<span id=sp></span>", html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(true, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Single(parser.Current.Children);
+            Assert.True(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(2, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Equal(2, parser.Current.Attributes.Count);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "type", "text");
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "span", "", "<span id=sp></span>");
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.False(parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Attributes);
-            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Attributes);
+            Assert.Single(parser.Current.Children.ElementAt(0).Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Children.ElementAt(0).Attributes.ElementAt(0), "id", "sp");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void ThreeLevelInnerAttributes()
         {
             string html = "<div id='abc' type = \"text\" ><p width=\"100px\"><span style=\"color:#fff\">test<span></p></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<p width=\"100px\"><span style=\"color:#fff\">test<span></p>", html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(true, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Single(parser.Current.Children);
+            Assert.True(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(2, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Equal(2, parser.Current.Attributes.Count);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(1), "type", "text");
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "<span style=\"color:#fff\">test<span>",
                 "<p width=\"100px\"><span style=\"color:#fff\">test<span></p>");
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
-            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).HasChildren);
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.Single(parser.Current.Children.ElementAt(0).Children);
+            Assert.True(parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Attributes);
-            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Attributes);
+            Assert.Single(parser.Current.Children.ElementAt(0).Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Children.ElementAt(0).Attributes.ElementAt(0), "width", "100px");
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0).Children.ElementAt(0), "span", "test<span>", "<span style=\"color:#fff\">test<span>");
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
-            Assert.AreEqual(2, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(true, parser.Current.Children.ElementAt(0).Children.ElementAt(0).HasChildren);
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).Children.ElementAt(0).SelfClosing);
+            Assert.Equal(2, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Children.Count());
+            Assert.True(parser.Current.Children.ElementAt(0).Children.ElementAt(0).HasChildren);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current.Children.ElementAt(0), parser.Current.Children.ElementAt(0).Children.ElementAt(0).Parent);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes);
-            Assert.AreEqual(1, parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes);
+            Assert.Single(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Children.ElementAt(0).Children.ElementAt(0).Attributes.ElementAt(0), "style", "color:#fff");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void SingleQuoteInDoubleQuote()
         {
             string html = "<div style=\"font:'verdana arial'\">test</div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "test", html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.True(parser.Current.HasChildren);
+            Assert.Single(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "style", "font:'verdana arial'");
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
 
         }
 
-        [Test]
+        [Fact]
         public void DoubleQuoteInSingleQuote()
         {
             string html = "<div style='font:\"verdana arial\"'>test</div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "test", html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.True(parser.Current.HasChildren);
+            Assert.Single(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "style", "font:\"verdana arial\"");
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "#text", "test", "test");
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
 
         }
 
-        [Test]
+        [Fact]
         public void DuplicateAttributes()
         {
             string html = "<div id='abc' id='abc'></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void DuplicateAttributesWithZeroAttributeDiv()
         {
             string html = "<div id='abc' id='abc'></div><div>test</div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", "<div id='abc' id='abc'></div>");
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.HasChildren);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.HasChildren);
 
-            Assert.IsNotNull(parser.Current.Attributes);
-            Assert.AreEqual(1, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Attributes);
+            Assert.Single(parser.Current.Attributes);
             TestUtility.CheckKeyValuePair(parser.Current.Attributes.ElementAt(0), "id", "abc");
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AnalyzeNode(parser.Current, "div", "test", "<div>test</div>", null, false, true, 1, 0);
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void BracesInAttributeQuotes()
         {
             string html = "<a t=\"a<b>\">test</a>";
 
             HtmlParser parser = new HtmlTextParser(html);
             parser.Parse();
-            Assert.IsNotNull(parser.Current);
+            Assert.NotNull(parser.Current);
             parser.Current.AnalyzeNode("a", "test", html, null, false, true, 1, 1, 0);
             parser.Current.Attributes.CheckKeyValuePair(0, "t", "a<b>");
         }

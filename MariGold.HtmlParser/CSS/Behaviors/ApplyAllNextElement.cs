@@ -7,7 +7,7 @@
     internal sealed class ApplyAllNextElement : CSSBehavior
     {
         private readonly Regex regex;
-        
+
         private string selectorText;
 
         internal ApplyAllNextElement(ISelectorContext context)
@@ -21,10 +21,10 @@
         {
             if (node.Next != null)
             {
-            	if (nextSelector.IsValidNode(node.GetNext()))
+                if (nextSelector.IsValidNode(node.GetNext()))
                 {
                     nextSelector.AddSpecificity(specificity);
-            		nextSelector.Parse(node.GetNext(), htmlStyles);
+                    nextSelector.Parse(node.GetNext(), htmlStyles);
                 }
 
                 ApplyStyle(nextSelector, specificity, node.GetNext(), htmlStyles);

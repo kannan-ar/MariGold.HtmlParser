@@ -1,14 +1,13 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using NUnit.Framework;
     using MariGold.HtmlParser;
     using System.IO;
     using System.Linq;
+    using Xunit;
 
-    [TestFixture]
     public class FromFile
     {
-        [Test]
+        [Fact]
         public void Basic()
         {
             string path = TestUtility.GetFolderPath("Html\\basic.htm");
@@ -21,19 +20,19 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             IHtmlNode node = parser.Current;
             TestUtility.AnalyzeNode(node, "DOCTYPE", "<!DOCTYPE html>", "<!DOCTYPE html>", null, true, false, 0, 1);
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "html", "");
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             node = parser.Current;
             TestUtility.AnalyzeNode(node, "#text", "\r\n\r\n", "\r\n\r\n", null, false, false, 0, 0);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             node = parser.Current;
             html = "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\r\n<head>\r\n    <meta charset=\"utf-8\" />\r\n    <title></title>\r\n</head>\r\n<body>\r\n\r\n</body>\r\n</html>";
             string text = "\r\n<head>\r\n    <meta charset=\"utf-8\" />\r\n    <title></title>\r\n</head>\r\n<body>\r\n\r\n</body>\r\n";
@@ -41,55 +40,55 @@
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "lang", "en");
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "xmlns", "http://www.w3.org/1999/xhtml");
 
-            Assert.IsNotNull(node.Children.ElementAt(0));
+            Assert.NotNull(node.Children.ElementAt(0));
             TestUtility.AnalyzeNode(node.Children.ElementAt(0), "#text", "\r\n", "\r\n", node, false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(1));
+            Assert.NotNull(node.Children.ElementAt(1));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1), "head",
                 "\r\n    <meta charset=\"utf-8\" />\r\n    <title></title>\r\n",
                 "<head>\r\n    <meta charset=\"utf-8\" />\r\n    <title></title>\r\n</head>",
                 node, false, true, 5, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(0));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(0));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(0), "#text", "\r\n    ", "\r\n    ",
                 node.Children.ElementAt(1), false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(1));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(1));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(1), "meta", "<meta charset=\"utf-8\" />", "<meta charset=\"utf-8\" />",
                 node.Children.ElementAt(1), true, false, 0, 1);
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(1).Children.ElementAt(1).Attributes.ElementAt(0), "charset", "utf-8");
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(2));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(2));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(2), "#text", "\r\n    ", "\r\n    ",
                 node.Children.ElementAt(1), false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(3));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(3));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(3), "title", "", "<title></title>",
                 node.Children.ElementAt(1), false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(4));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(4));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(4), "#text", "\r\n", "\r\n",
                 node.Children.ElementAt(1), false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(2));
+            Assert.NotNull(node.Children.ElementAt(2));
             TestUtility.AnalyzeNode(node.Children.ElementAt(2), "#text", "\r\n", "\r\n", node, false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(3));
+            Assert.NotNull(node.Children.ElementAt(3));
             TestUtility.AnalyzeNode(node.Children.ElementAt(3), "body", "\r\n\r\n", "<body>\r\n\r\n</body>",
                 node, false, true, 1, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(3).Children.ElementAt(0));
+            Assert.NotNull(node.Children.ElementAt(3).Children.ElementAt(0));
             TestUtility.AnalyzeNode(node.Children.ElementAt(3).Children.ElementAt(0), "#text", "\r\n\r\n", "\r\n\r\n", node.Children.ElementAt(3),
                 false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(4));
+            Assert.NotNull(node.Children.ElementAt(4));
             TestUtility.AnalyzeNode(node.Children.ElementAt(4), "#text", "\r\n", "\r\n", node, false, false, 0, 0);
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void BasicWithAttributes()
         {
             string path = TestUtility.GetFolderPath("Html\\basicwithattributes.htm");
@@ -102,19 +101,19 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             IHtmlNode node = parser.Current;
             TestUtility.AnalyzeNode(node, "DOCTYPE", "<!DOCTYPE html>", "<!DOCTYPE html>", null, true, false, 0, 1);
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "html", "");
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             node = parser.Current;
             TestUtility.AnalyzeNode(node, "#text", "\r\n\r\n", "\r\n\r\n", null, false, false, 0, 0);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             node = parser.Current;
             html = "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\r\n<head id=\"hd\" style=\"margin:2px;\">\r\n    <meta charset=\"utf-8\" name=\"mt\" />\r\n    <title id=\"tt\">this is test</title>\r\n</head>\r\n<body id=\"bd\" role=\"application\" ng-app>\r\n\r\n</body>\r\n</html>";
             string text = "\r\n<head id=\"hd\" style=\"margin:2px;\">\r\n    <meta charset=\"utf-8\" name=\"mt\" />\r\n    <title id=\"tt\">this is test</title>\r\n</head>\r\n<body id=\"bd\" role=\"application\" ng-app>\r\n\r\n</body>\r\n";
@@ -122,10 +121,10 @@
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(0), "lang", "en");
             TestUtility.CheckKeyValuePair(node.Attributes.ElementAt(1), "xmlns", "http://www.w3.org/1999/xhtml");
 
-            Assert.IsNotNull(node.Children.ElementAt(0));
+            Assert.NotNull(node.Children.ElementAt(0));
             TestUtility.AnalyzeNode(node.Children.ElementAt(0), "#text", "\r\n", "\r\n", node, false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(1));
+            Assert.NotNull(node.Children.ElementAt(1));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1), "head",
                 "\r\n    <meta charset=\"utf-8\" name=\"mt\" />\r\n    <title id=\"tt\">this is test</title>\r\n",
                 "<head id=\"hd\" style=\"margin:2px;\">\r\n    <meta charset=\"utf-8\" name=\"mt\" />\r\n    <title id=\"tt\">this is test</title>\r\n</head>",
@@ -133,37 +132,37 @@
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(1).Attributes.ElementAt(0), "id", "hd");
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(1).Attributes.ElementAt(1), "style", "margin:2px;");
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(0));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(0));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(0), "#text", "\r\n    ", "\r\n    ",
                 node.Children.ElementAt(1), false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(1));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(1));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(1), "meta", "<meta charset=\"utf-8\" name=\"mt\" />", "<meta charset=\"utf-8\" name=\"mt\" />",
                 node.Children.ElementAt(1), true, false, 0, 2);
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(1).Children.ElementAt(1).Attributes.ElementAt(0), "charset", "utf-8");
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(1).Children.ElementAt(1).Attributes.ElementAt(1), "name", "mt");
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(2));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(2));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(2), "#text", "\r\n    ", "\r\n    ",
                 node.Children.ElementAt(1), false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(3));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(3));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(3), "title", "this is test", "<title id=\"tt\">this is test</title>",
                 node.Children.ElementAt(1), false, true, 1, 1);
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(1).Children.ElementAt(3).Attributes.ElementAt(0), "id", "tt");
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(3).Children.ElementAt(0));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(3).Children.ElementAt(0));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(3).Children.ElementAt(0), "#text", "this is test", "this is test",
                 node.Children.ElementAt(1).Children.ElementAt(3), false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(1).Children.ElementAt(4));
+            Assert.NotNull(node.Children.ElementAt(1).Children.ElementAt(4));
             TestUtility.AnalyzeNode(node.Children.ElementAt(1).Children.ElementAt(4), "#text", "\r\n", "\r\n",
                 node.Children.ElementAt(1), false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(2));
+            Assert.NotNull(node.Children.ElementAt(2));
             TestUtility.AnalyzeNode(node.Children.ElementAt(2), "#text", "\r\n", "\r\n", node, false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(3));
+            Assert.NotNull(node.Children.ElementAt(3));
             TestUtility.AnalyzeNode(node.Children.ElementAt(3), "body", "\r\n\r\n", "<body id=\"bd\" role=\"application\" ng-app>\r\n\r\n</body>",
                 node, false, true, 1, 3);
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(3).Attributes.ElementAt(0), "id", "bd");
@@ -171,18 +170,18 @@
             TestUtility.CheckKeyValuePair(node.Children.ElementAt(3).Attributes.ElementAt(2), "ng-app", "");
 
 
-            Assert.IsNotNull(node.Children.ElementAt(3).Children.ElementAt(0));
+            Assert.NotNull(node.Children.ElementAt(3).Children.ElementAt(0));
             TestUtility.AnalyzeNode(node.Children.ElementAt(3).Children.ElementAt(0), "#text", "\r\n\r\n", "\r\n\r\n", node.Children.ElementAt(3),
                 false, false, 0, 0);
 
-            Assert.IsNotNull(node.Children.ElementAt(4));
+            Assert.NotNull(node.Children.ElementAt(4));
             TestUtility.AnalyzeNode(node.Children.ElementAt(4), "#text", "\r\n", "\r\n", node, false, false, 0, 0);
 
-            Assert.AreEqual(false, parser.Traverse());
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void ElementIdentityStyles()
         {
             string path = TestUtility.GetFolderPath("Html\\elementidentity.htm");
@@ -215,7 +214,7 @@
             node.Styles.CheckKeyValuePair(0, "background-color", "#eee");
         }
 
-        [Test]
+        [Fact]
         public void BackgroundInheritance()
         {
             string path = TestUtility.GetFolderPath("Html\\backgroundinheritance.htm");
@@ -228,7 +227,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -251,14 +250,14 @@
             while (node.Tag != "a")
                 node = node.Next;
 
-            Assert.AreEqual(1, node.Styles.Count);
+            Assert.Single(node.Styles);
             node.CheckStyle(0, "background", "blue");
 
-            Assert.AreEqual(1, node.InheritedStyles.Count);
+            Assert.Single(node.InheritedStyles);
             node.CheckInheritedStyle(0, "background", "blue");
         }
 
-        [Test]
+        [Fact]
         public void BackgroundColorSpecifity()
         {
             string path = TestUtility.GetFolderPath("Html\\backgroundcolorspecificity.htm");
@@ -271,7 +270,7 @@
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.IsTrue(parser.Parse());
+            Assert.True(parser.Parse());
             parser.ParseStyles();
 
             IHtmlNode node = parser.Current;
@@ -299,10 +298,10 @@
             while (node.Tag != "a")
                 node = node.Next;
 
-            Assert.AreEqual(1, node.Styles.Count);
+            Assert.Single(node.Styles);
             node.CheckStyle(0, "background-color", "red");
 
-            Assert.AreEqual(1, node.InheritedStyles.Count);
+            Assert.Single(node.InheritedStyles);
             node.CheckInheritedStyle(0, "background-color", "red");
         }
     }

@@ -1,79 +1,78 @@
 ﻿namespace MariGold.HtmlParser.Tests
 {
-    using System.Linq;
-    using NUnit.Framework;
     using MariGold.HtmlParser;
+    using System.Linq;
+    using Xunit;
 
-    [TestFixture]
     public class CaseSensitiveTags
     {
-        [Test]
+        [Fact]
         public void DivWithUpperCaseClose()
         {
             string html = "<div></DIV>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "", html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.HasChildren);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.AreEqual(parser.Traverse(), false);
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void DivWithUpperCaseOpen()
         {
             string html = "<DIV></div>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "DIV", "", html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(false, parser.Current.HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.False(parser.Current.HasChildren);
+            Assert.Empty(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.AreEqual(parser.Traverse(), false);
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
 
-        [Test]
+        [Fact]
         public void DivInsidePWithUpperCaseClose()
         {
             string html = "<div><p></P></DIV>";
 
             HtmlParser parser = new HtmlTextParser(html);
 
-            Assert.AreEqual(true, parser.Traverse());
-            Assert.IsNotNull(parser.Current);
+            Assert.True(parser.Traverse());
+            Assert.NotNull(parser.Current);
             TestUtility.AreEqual(parser.Current, "div", "<p></P>", html);
-            Assert.IsNull(parser.Current.Parent);
-            Assert.AreEqual(true, parser.Current.HasChildren);
-            Assert.AreEqual(1, parser.Current.Children.Count());
-            Assert.AreEqual(false, parser.Current.SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.Null(parser.Current.Parent);
+            Assert.True(parser.Current.HasChildren);
+            Assert.Single(parser.Current.Children);
+            Assert.False(parser.Current.SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0));
+            Assert.NotNull(parser.Current.Children.ElementAt(0));
             TestUtility.AreEqual(parser.Current.Children.ElementAt(0), "p", "", "<p></P>");
-            Assert.IsNotNull(parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(parser.Current, parser.Current.Children.ElementAt(0).Parent);
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).HasChildren);
-            Assert.AreEqual(0, parser.Current.Children.ElementAt(0).Children.Count());
-            Assert.AreEqual(false, parser.Current.Children.ElementAt(0).SelfClosing);
-            Assert.AreEqual(0, parser.Current.Attributes.Count);
+            Assert.NotNull(parser.Current.Children.ElementAt(0).Parent);
+            Assert.Equal(parser.Current, parser.Current.Children.ElementAt(0).Parent);
+            Assert.False(parser.Current.Children.ElementAt(0).HasChildren);
+            Assert.Empty(parser.Current.Children.ElementAt(0).Children);
+            Assert.False(parser.Current.Children.ElementAt(0).SelfClosing);
+            Assert.Empty(parser.Current.Attributes);
 
-            Assert.AreEqual(parser.Traverse(), false);
-            Assert.IsNull(parser.Current);
+            Assert.False(parser.Traverse());
+            Assert.Null(parser.Current);
         }
     }
 }

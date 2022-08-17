@@ -7,7 +7,7 @@
         protected readonly IAnalyzerContext context;
 
         internal event Action<string> OnTagCreate;
-        
+
         protected bool IsOpenTag(int position, out IOpenTag openTag)
         {
             openTag = null;
@@ -98,7 +98,7 @@
         }
 
         protected abstract bool ProcessHtml(int position, ref HtmlNode node);
-       
+
         protected void TagCreated(string tag)
         {
             OnTagCreate?.Invoke(tag);
@@ -115,11 +115,11 @@
             //Closed a row of nodes. So current node assigned as previous node.
             context.PreviousNode = currentNode;
         }
-       
+
         public bool Process(int position, ref HtmlNode node)
         {
             bool tagCreated = ProcessHtml(position, ref node);
-            
+
             return tagCreated;
         }
     }

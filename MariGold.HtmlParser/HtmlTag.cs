@@ -21,7 +21,7 @@
 
         public static bool IsSelfClosing(string tag)
         {
-            if(string.IsNullOrEmpty(tag))
+            if (string.IsNullOrEmpty(tag))
             {
                 return false;
             }
