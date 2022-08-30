@@ -27,6 +27,7 @@
                 new string[]{CSSProperty.lineHeight},
                 new string[]{CSSProperty.fontVariant},
                 new string[]{CSSProperty.textAlign},
+                new string[]{CSSProperty.direction},
                 new string[]{CSSProperty.backgroundColor, CSSProperty.background}
             };
         }
