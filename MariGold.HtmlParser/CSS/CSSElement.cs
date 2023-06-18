@@ -1,17 +1,16 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System.Collections.Generic;
+
+internal sealed class CSSElement
 {
-    using System.Collections.Generic;
+    internal string Selector { get; }
 
-    internal sealed class CSSElement
+    internal List<HtmlStyle> HtmlStyles { get; }
+
+    internal CSSElement(string selector, List<HtmlStyle> htmlStyles)
     {
-        internal string Selector { get; }
-
-        internal List<HtmlStyle> HtmlStyles { get; }
-
-        internal CSSElement(string selector, List<HtmlStyle> htmlStyles)
-        {
-            this.Selector = selector;
-            this.HtmlStyles = htmlStyles;
-        }
+        this.Selector = selector;
+        this.HtmlStyles = htmlStyles;
     }
 }

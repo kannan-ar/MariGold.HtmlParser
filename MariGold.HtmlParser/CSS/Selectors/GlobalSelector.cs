@@ -1,81 +1,80 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+
+internal sealed class GlobalSelector : CSSelector
 {
-    using System;
-    using System.Collections.Generic;
+    private const string globalSelector = "*";
+    private string selectorText;
 
-    internal sealed class GlobalSelector : CSSelector
+    private GlobalSelector(ISelectorContext context, string selectorText, Specificity specificity)
     {
-        private const string globalSelector = "*";
-        private string selectorText;
+        this.context = context;
+        this.selectorText = selectorText;
+        this.specificity = specificity;
+    }
 
-        private GlobalSelector(ISelectorContext context, string selectorText, Specificity specificity)
+    internal GlobalSelector(ISelectorContext context)
+    {
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+    }
+
+    internal override bool Prepare(string selector)
+    {
+        this.specificity = new ();
+
+        if (selector == globalSelector)
         {
-            this.context = context;
-            this.selectorText = selectorText;
-            this.specificity = specificity;
+            return true;
         }
 
-        internal GlobalSelector(ISelectorContext context)
+        if (selector.StartsWith(globalSelector))
         {
-            this.context = context ?? throw new ArgumentNullException("context");
+            selectorText = selector.Remove(0, 1);
+            return true;
         }
 
-        internal override bool Prepare(string selector)
+        return false;
+    }
+
+    internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (string.IsNullOrEmpty(selectorText))
         {
-            this.specificity = new Specificity();
+            ApplyStyle(node, htmlStyles);
+        }
+        else
+        {
+            context.ParseSelectorOrBehavior(this.selectorText, CalculateSpecificity(SelectorType.Global), node, htmlStyles);
+        }
+    }
 
-            if (selector == globalSelector)
-            {
-                return true;
-            }
-
-            if (selector.StartsWith(globalSelector))
-            {
-                selectorText = selector.Remove(0, 1);
-                return true;
-            }
-
+    internal override bool IsValidNode(HtmlNode node)
+    {
+        if (node == null)
+        {
             return false;
         }
 
-        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+        if (node.Tag == HtmlTag.TEXT)
         {
-            if (string.IsNullOrEmpty(selectorText))
-            {
-                ApplyStyle(node, htmlStyles);
-            }
-            else
-            {
-                context.ParseSelectorOrBehavior(this.selectorText, CalculateSpecificity(SelectorType.Global), node, htmlStyles);
-            }
+            return false;
         }
 
-        internal override bool IsValidNode(HtmlNode node)
+        return !HtmlStyle.IsNonStyleElement(node.Tag);
+    }
+
+    internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (IsValidNode(node))
         {
-            if (node == null)
-            {
-                return false;
-            }
-
-            if (node.Tag == HtmlTag.TEXT)
-            {
-                return false;
-            }
-
-            return !HtmlStyle.IsNonStyleElement(node.Tag);
+            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Global));
         }
+    }
 
-        internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (IsValidNode(node))
-            {
-                node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.Global));
-            }
-        }
-
-        internal override CSSelector Clone()
-        {
-            return new GlobalSelector(context, selectorText, specificity.Clone());
-        }
+    internal override CSSelector Clone()
+    {
+        return new GlobalSelector(context, selectorText, specificity.Clone());
     }
 }

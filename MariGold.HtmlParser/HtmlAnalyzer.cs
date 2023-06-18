@@ -1,126 +1,125 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+
+internal abstract class HtmlAnalyzer
 {
-    using System;
+    protected readonly IAnalyzerContext context;
 
-    internal abstract class HtmlAnalyzer
+    internal event Action<string> OnTagCreate;
+
+    protected bool IsOpenTag(int position, out IOpenTag openTag)
     {
-        protected readonly IAnalyzerContext context;
+        openTag = null;
 
-        internal event Action<string> OnTagCreate;
-
-        protected bool IsOpenTag(int position, out IOpenTag openTag)
+        foreach (IOpenTag tag in context.OpenTags)
         {
-            openTag = null;
-
-            foreach (IOpenTag tag in context.OpenTags)
+            if (tag.IsOpenTag(position, context.Html))
             {
-                if (tag.IsOpenTag(position, context.Html))
-                {
-                    openTag = tag;
-                    return true;
-                }
+                openTag = tag;
+                return true;
             }
+        }
 
+        return false;
+    }
+
+    protected bool IsCloseTag(int position, out ICloseTag closeTag)
+    {
+        closeTag = null;
+
+        foreach (ICloseTag tag in context.CloseTags)
+        {
+            if (tag.IsCloseTag(position, context.Html))
+            {
+                closeTag = tag;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected static bool IsValidHtmlLetter(char letter)
+    {
+        return char.IsLetterOrDigit(letter) || letter == HtmlTag.hypen;
+    }
+
+    protected bool CreateTag(string tag, int htmlStart, int textStart, int textEnd, int htmlEnd,
+        HtmlNode parent, out HtmlNode node)
+    {
+        node = null;
+
+        if (htmlEnd != -1 && htmlEnd <= htmlStart)
+        {
             return false;
         }
 
-        protected bool IsCloseTag(int position, out ICloseTag closeTag)
+        if (textEnd != -1 && textEnd < textStart)
         {
-            closeTag = null;
-
-            foreach (ICloseTag tag in context.CloseTags)
-            {
-                if (tag.IsCloseTag(position, context.Html))
-                {
-                    closeTag = tag;
-                    return true;
-                }
-            }
-
             return false;
         }
 
-        protected bool IsValidHtmlLetter(char letter)
+        node = new HtmlNode(tag, htmlStart, textStart, textEnd, htmlEnd, context.HtmlContext, parent);
+
+        if (context.PreviousNode != null)
         {
-            return char.IsLetterOrDigit(letter) || letter == HtmlTag.hypen;
+            node.SetPreviousNode(context.PreviousNode);
+            context.PreviousNode.SetNextNode(node);
         }
 
-        protected bool CreateTag(string tag, int htmlStart, int textStart, int textEnd, int htmlEnd,
-            HtmlNode parent, out HtmlNode node)
+        context.PreviousNode = node;
+
+        return parent == null;
+    }
+
+    protected bool AssignNextAnalyzer(int position, HtmlNode node)
+    {
+        bool assigned = false;
+
+        if (IsOpenTag(position, out IOpenTag openTag))
         {
-            node = null;
-
-            if (htmlEnd != -1 && htmlEnd <= htmlStart)
-            {
-                return false;
-            }
-
-            if (textEnd != -1 && textEnd < textStart)
-            {
-                return false;
-            }
-
-            node = new HtmlNode(tag, htmlStart, textStart, textEnd, htmlEnd, context.HtmlContext, parent);
-
-            if (context.PreviousNode != null)
-            {
-                node.SetPreviousNode(context.PreviousNode);
-                context.PreviousNode.SetNextNode(node);
-            }
-
-            context.PreviousNode = node;
-
-            return parent == null;
+            context.SetAnalyzer(openTag.GetAnalyzer(position, node));
+            assigned = true;
+        }
+        else if (IsCloseTag(position, out ICloseTag closeTag))
+        {
+            closeTag.Init(position, node);
+            context.SetAnalyzer(closeTag.GetAnalyzer());
+            assigned = true;
         }
 
-        protected bool AssignNextAnalyzer(int position, HtmlNode node)
-        {
-            bool assigned = false;
+        return assigned;
+    }
 
-            if (IsOpenTag(position, out IOpenTag openTag))
-            {
-                context.SetAnalyzer(openTag.GetAnalyzer(position, node));
-                assigned = true;
-            }
-            else if (IsCloseTag(position, out ICloseTag closeTag))
-            {
-                closeTag.Init(position, node);
-                context.SetAnalyzer(closeTag.GetAnalyzer());
-                assigned = true;
-            }
+    protected HtmlAnalyzer(IAnalyzerContext context)
+    {
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
+    }
 
-            return assigned;
-        }
+    protected abstract bool ProcessHtml(int position, ref HtmlNode node);
 
-        protected HtmlAnalyzer(IAnalyzerContext context)
-        {
-            this.context = context ?? throw new ArgumentNullException("context");
-        }
+    protected void TagCreated(string tag)
+    {
+        OnTagCreate?.Invoke(tag);
+    }
 
-        protected abstract bool ProcessHtml(int position, ref HtmlNode node);
+    protected void InnerTagOpened()
+    {
+        //New inner rows opened. So clearing the previous node.
+        context.PreviousNode = null;
+    }
 
-        protected void TagCreated(string tag)
-        {
-            OnTagCreate?.Invoke(tag);
-        }
+    protected void InnerTagClosed(HtmlNode currentNode)
+    {
+        //Closed a row of nodes. So current node assigned as previous node.
+        context.PreviousNode = currentNode;
+    }
 
-        protected void InnerTagOpened(HtmlNode parentNode)
-        {
-            //New inner rows opened. So clearing the previous node.
-            context.PreviousNode = null;
-        }
+    public bool Process(int position, ref HtmlNode node)
+    {
+        bool tagCreated = ProcessHtml(position, ref node);
 
-        protected void InnerTagClosed(HtmlNode currentNode)
-        {
-            //Closed a row of nodes. So current node assigned as previous node.
-            context.PreviousNode = currentNode;
-        }
-
-        public bool Process(int position, ref HtmlNode node)
-        {
-            bool tagCreated = ProcessHtml(position, ref node);
-
-            return tagCreated;
-        }
+        return tagCreated;
     }
 }

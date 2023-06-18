@@ -1,114 +1,113 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+
+internal sealed class MetaTagAnalyzer : HtmlAnalyzer, IOpenTag
 {
-    using System;
+    private int startPosition;
+    private HtmlNode parent;
+    private int tagStart;
+    private string tag;
+    private AttributeAnalyzer attributeAnalyzer;
 
-    internal sealed class MetaTagAnalyzer : HtmlAnalyzer, IOpenTag
+    public MetaTagAnalyzer(IAnalyzerContext context) : base(context) { }
+
+    private bool IsQuotedValueSeek()
     {
-        private int startPosition;
-        private HtmlNode parent;
-        private int tagStart;
-        private string tag;
-        private AttributeAnalyzer attributeAnalyzer;
-
-        public MetaTagAnalyzer(IAnalyzerContext context) : base(context) { }
-
-        private bool IsQuotedValueSeek()
+        if (attributeAnalyzer == null)
         {
-            if (attributeAnalyzer == null)
-            {
-                return false;
-            }
-
-            return attributeAnalyzer.IsQuotedValueSeek();
+            return false;
         }
 
-        private void ExtractTag(int position)
-        {
-            if (tagStart > -1 && tagStart <= position)
-            {
-                tag = context.Html.Substring(tagStart, position - tagStart + 1);
+        return attributeAnalyzer.IsQuotedValueSeek();
+    }
 
-                TagCreated(tag);
-            }
+    private void ExtractTag(int position)
+    {
+        if (tagStart > -1 && tagStart <= position)
+        {
+            tag = context.Html.Substring(tagStart, position - tagStart + 1);
+
+            TagCreated(tag);
+        }
+    }
+
+    protected override bool ProcessHtml(int position, ref HtmlNode node)
+    {
+        bool tagCreated = false;
+        char letter = context.Html[position];
+
+        if (tagStart == -1 && IsValidHtmlLetter(letter))
+        {
+            tagStart = position;
         }
 
-        protected override bool ProcessHtml(int position, ref HtmlNode node)
+        if (string.IsNullOrEmpty(tag) && tagStart > -1 && !IsValidHtmlLetter(letter))
         {
-            bool tagCreated = false;
-            char letter = context.Html[position];
+            ExtractTag(position - 1);
 
-            if (tagStart == -1 && IsValidHtmlLetter(letter))
-            {
-                tagStart = position;
-            }
+            attributeAnalyzer = new AttributeAnalyzer(context);
+        }
 
-            if (string.IsNullOrEmpty(tag) && tagStart > -1 && !IsValidHtmlLetter(letter))
+        if (!IsQuotedValueSeek() && letter == HtmlTag.closeAngle)
+        {
+            if (string.IsNullOrEmpty(tag))
             {
                 ExtractTag(position - 1);
-
-                attributeAnalyzer = new AttributeAnalyzer(context);
             }
 
-            if (!IsQuotedValueSeek() && letter == HtmlTag.closeAngle)
+            tagCreated = CreateTag(tag, startPosition, startPosition, position + 1,
+                position + 1, parent, out node);
+
+            if (node != null)
             {
-                if (string.IsNullOrEmpty(tag))
-                {
-                    ExtractTag(position - 1);
-                }
-
-                tagCreated = CreateTag(tag, startPosition, startPosition, position + 1,
-                    position + 1, parent, out node);
-
-                if (node != null)
-                {
-                    node.SetSelfClosing(true);
-                }
-
-                if (attributeAnalyzer != null)
-                {
-                    attributeAnalyzer.Finalize(position, ref node);
-                }
-
-                if (!AssignNextAnalyzer(position + 1, parent))
-                {
-                    context.SetAnalyzer(context.GetTextAnalyzer(position + 1, parent));
-                }
+                node.SetSelfClosing(true);
             }
 
             if (attributeAnalyzer != null)
             {
-                attributeAnalyzer.Process(position, ref node);
+                attributeAnalyzer.Finalize(position, ref node);
             }
 
-            return tagCreated;
+            if (!AssignNextAnalyzer(position + 1, parent))
+            {
+                context.SetAnalyzer(context.GetTextAnalyzer(position + 1, parent));
+            }
         }
 
-        public bool IsOpenTag(int position, string html)
+        if (attributeAnalyzer != null)
         {
-            if (position + 2 >= context.EOF)
-            {
-                return false;
-            }
-
-            return html[position] == HtmlTag.openAngle && html[position + 1] == HtmlTag.exclamation;
+            attributeAnalyzer.Process(position, ref node);
         }
 
-        public HtmlAnalyzer GetAnalyzer(int position, HtmlNode parent)
+        return tagCreated;
+    }
+
+    public bool IsOpenTag(int position, string html)
+    {
+        if (position + 2 >= context.EOF)
         {
-            if (position < 0 || position > context.EOF)
-            {
-                throw new ArgumentOutOfRangeException("position");
-            }
-
-            MetaTagAnalyzer analyzer = new MetaTagAnalyzer(context)
-            {
-                startPosition = position,
-                parent = parent,
-                tagStart = -1,
-                tag = string.Empty
-            };
-
-            return analyzer;
+            return false;
         }
+
+        return html[position] == HtmlTag.openAngle && html[position + 1] == HtmlTag.exclamation;
+    }
+
+    public HtmlAnalyzer GetAnalyzer(int position, HtmlNode parent)
+    {
+        if (position < 0 || position > context.EOF)
+        {
+            throw new ArgumentOutOfRangeException(nameof(position));
+        }
+
+        MetaTagAnalyzer analyzer = new(context)
+        {
+            startPosition = position,
+            parent = parent,
+            tagStart = -1,
+            tag = string.Empty
+        };
+
+        return analyzer;
     }
 }

@@ -1,19 +1,18 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+
+internal sealed class HtmlContext
 {
-    using System;
-
-    internal sealed class HtmlContext
+    internal HtmlContext(string html)
     {
-        internal HtmlContext(string html)
+        if (string.IsNullOrEmpty(html))
         {
-            if (string.IsNullOrEmpty(html))
-            {
-                throw new ArgumentNullException("html");
-            }
-
-            this.Html = html;
+            throw new ArgumentNullException(nameof(html));
         }
 
-        internal string Html { get; }
+        this.Html = html;
     }
+
+    internal string Html { get; }
 }

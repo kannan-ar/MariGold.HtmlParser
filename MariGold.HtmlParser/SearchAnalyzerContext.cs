@@ -1,63 +1,62 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+
+internal sealed class SearchAnalyzerContext : IAnalyzerContext
 {
-    using System;
-    using System.Collections.Generic;
+    public event Action<HtmlAnalyzer> OnAnalyzerChange;
+    public event Action<int> OnPositionChange;
 
-    internal sealed class SearchAnalyzerContext : IAnalyzerContext
+    public string Html { get; }
+
+    public int EOF { get; }
+
+    public IList<IOpenTag> OpenTags { get; }
+
+    public IList<ICloseTag> CloseTags { get; }
+
+    public HtmlContext HtmlContext { get; }
+
+    public HtmlNode PreviousNode { get; set; }
+
+    public SearchAnalyzerContext(string html)
     {
-        public event Action<HtmlAnalyzer> OnAnalyzerChange;
-        public event Action<int> OnPositionChange;
+        this.Html = html;
+        this.EOF = html.Length;
 
-        public string Html { get; }
-
-        public int EOF { get; }
-
-        public IList<IOpenTag> OpenTags { get; }
-
-        public IList<ICloseTag> CloseTags { get; }
-
-        public HtmlContext HtmlContext { get; }
-
-        public HtmlNode PreviousNode { get; set; }
-
-        public SearchAnalyzerContext(string html)
+        this.OpenTags = new List<IOpenTag>()
         {
-            this.Html = html;
-            this.EOF = html.Length;
+            new OpenTagAnalyzer(this),
+            new MetaTagAnalyzer(this),
+            new CommentAnalyzer(this)
+        };
 
-            this.OpenTags = new List<IOpenTag>()
-            {
-                new OpenTagAnalyzer(this),
-                new MetaTagAnalyzer(this),
-                new CommentAnalyzer(this)
-            };
-
-            this.CloseTags = new List<ICloseTag>()
-            {
-                new CloseTagAnalyzer(this)
-            };
-
-            HtmlContext = new HtmlContext(html);
-        }
-
-        public void SetAnalyzer(HtmlAnalyzer analyzer)
+        this.CloseTags = new List<ICloseTag>()
         {
-            OnAnalyzerChange?.Invoke(analyzer);
-        }
+            new CloseTagAnalyzer(this)
+        };
 
-        public void SetPosition(int position)
-        {
-            OnPositionChange?.Invoke(position);
-        }
+        HtmlContext = new HtmlContext(html);
+    }
 
-        public HtmlAnalyzer GetTextAnalyzer(int position)
-        {
-            return new TextAnalyzer(this, position);
-        }
+    public void SetAnalyzer(HtmlAnalyzer analyzer)
+    {
+        OnAnalyzerChange?.Invoke(analyzer);
+    }
 
-        public HtmlAnalyzer GetTextAnalyzer(int position, HtmlNode parent)
-        {
-            return new TextAnalyzer(this, position, parent);
-        }
+    public void SetPosition(int position)
+    {
+        OnPositionChange?.Invoke(position);
+    }
+
+    public HtmlAnalyzer GetTextAnalyzer(int position)
+    {
+        return new TextAnalyzer(this, position);
+    }
+
+    public HtmlAnalyzer GetTextAnalyzer(int position, HtmlNode parent)
+    {
+        return new TextAnalyzer(this, position, parent);
     }
 }

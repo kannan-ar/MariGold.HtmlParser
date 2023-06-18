@@ -1,59 +1,45 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+internal sealed class MediaQuery
 {
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+    private readonly Regex mediaRegex;
 
-    internal sealed class MediaQuery
+    internal MediaQuery()
     {
-        private readonly Regex mediaRegex;
-        private readonly string selector;
-        private readonly List<CSSElement> elements;
+        mediaRegex = new Regex(@"^\s*@media");
+    }
 
-        internal MediaQuery()
+    internal bool Process(string selectorText, string styleText, List<MediaQuery> mediaQuries, ref int position)
+    {
+        List<CSSElement> elements = new();
+        Match match = mediaRegex.Match(selectorText);
+
+        if (string.IsNullOrEmpty(styleText))
         {
-            mediaRegex = new Regex(@"^\s*@media");
-            elements = new List<CSSElement>();
+            return false;
         }
 
-        internal MediaQuery(string selector, List<CSSElement> elements)
-            : base()
+        if (!match.Success)
         {
-            this.selector = selector;
-            this.elements = elements;
+            return false;
         }
 
-        internal bool Process(string selectorText, string styleText, List<MediaQuery> mediaQuries, ref int position)
+        string style = CSSTokenizer.FindOpenCloseBraceArea(styleText, position + 1, out int closeBraceIndex);
+
+        if (closeBraceIndex > position)
         {
-            CSSParser cssParser = new CSSParser();
-            List<CSSElement> elements = new List<CSSElement>();
-            Match match = mediaRegex.Match(selectorText);
-
-            if (string.IsNullOrEmpty(styleText))
+            if (!string.IsNullOrEmpty(style))
             {
-                return false;
+                CSSParser.ParseCSS(style, elements, mediaQuries);
+                mediaQuries.Add(new ());
             }
 
-            if (!match.Success)
-            {
-                return false;
-            }
-
-            string style = CSSTokenizer.FindOpenCloseBraceArea(styleText, position + 1, out int closeBraceIndex);
-
-            if (closeBraceIndex > position)
-            {
-                if (!string.IsNullOrEmpty(style))
-                {
-                    cssParser.ParseCSS(style, elements, mediaQuries);
-
-                    selectorText = selectorText.Substring(match.Length + 1);
-                    mediaQuries.Add(new MediaQuery(selectorText, elements));
-                }
-
-                position = closeBraceIndex + 1;
-            }
-
-            return match.Success;
+            position = closeBraceIndex + 1;
         }
+
+        return match.Success;
     }
 }

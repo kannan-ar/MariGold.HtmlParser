@@ -1,58 +1,57 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+internal sealed class ApplyAllNextElement : CSSBehavior
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+    private readonly Regex regex;
 
-    internal sealed class ApplyAllNextElement : CSSBehavior
+    private string selectorText;
+
+    internal ApplyAllNextElement(ISelectorContext context)
     {
-        private readonly Regex regex;
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
 
-        private string selectorText;
+        regex = new Regex(@"^\s*~\s*");
+    }
 
-        internal ApplyAllNextElement(ISelectorContext context)
+    private void ApplyStyle(CSSelector nextSelector, Specificity specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (node.Next != null)
         {
-            this.context = context ?? throw new ArgumentNullException("context");
-
-            regex = new Regex(@"^\s*~\s*");
-        }
-
-        private void ApplyStyle(CSSelector nextSelector, Specificity specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (node.Next != null)
+            if (nextSelector.IsValidNode(node.GetNext()))
             {
-                if (nextSelector.IsValidNode(node.GetNext()))
-                {
-                    nextSelector.AddSpecificity(specificity);
-                    nextSelector.Parse(node.GetNext(), htmlStyles);
-                }
-
-                ApplyStyle(nextSelector, specificity, node.GetNext(), htmlStyles);
-            }
-        }
-
-        internal override bool IsValidBehavior(string selectorText)
-        {
-            this.selectorText = string.Empty;
-
-            Match match = regex.Match(selectorText);
-
-            if (match.Success)
-            {
-                this.selectorText = selectorText.Substring(match.Value.Length);
+                nextSelector.AddSpecificity(specificity);
+                nextSelector.Parse(node.GetNext(), htmlStyles);
             }
 
-            return match.Success;
+            ApplyStyle(nextSelector, specificity, node.GetNext(), htmlStyles);
+        }
+    }
+
+    internal override bool IsValidBehavior(string selectorText)
+    {
+        this.selectorText = string.Empty;
+
+        Match match = regex.Match(selectorText);
+
+        if (match.Success)
+        {
+            this.selectorText = selectorText[match.Value.Length..];
         }
 
-        internal override void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles)
+        return match.Success;
+    }
+
+    internal override void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles)
+    {
+        if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
         {
-            if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
+            if (nextSelector != null)
             {
-                if (nextSelector != null)
-                {
-                    ApplyStyle(nextSelector, specificity, node, htmlStyles);
-                }
+                ApplyStyle(nextSelector, specificity, node, htmlStyles);
             }
         }
     }

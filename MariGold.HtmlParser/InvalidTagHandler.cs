@@ -1,41 +1,40 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System.Collections.Generic;
+
+internal class InvalidTagHandler
 {
-    using System.Collections.Generic;
+    private static readonly Dictionary<string, List<string>> nonNestedTags;
 
-    internal class InvalidTagHandler
+    static InvalidTagHandler()
     {
-        private static Dictionary<string, List<string>> nonNestedTags;
-
-        static InvalidTagHandler()
+        nonNestedTags = new Dictionary<string, List<string>>
         {
-            nonNestedTags = new Dictionary<string, List<string>>
-            {
-                { "li", new List<string> { "li" } },
-                { "td", new List<string> { "td" } },
-                { "tr", new List<string> { "tr" } }
-            };
+            { "li", new List<string> { "li" } },
+            { "td", new List<string> { "td" } },
+            { "tr", new List<string> { "tr" } }
+        };
+    }
+
+    internal static void CloseNonNestedParents(int htmlStart, string tag, IAnalyzerContext context, ref HtmlNode parent)
+    {
+        if (parent == null)
+        {
+            return;
         }
 
-        internal void CloseNonNestedParents(int htmlStart, string tag, IAnalyzerContext context, ref HtmlNode parent)
+        if (string.IsNullOrEmpty(tag) || string.IsNullOrEmpty(parent.Tag))
         {
-            if (parent == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            if (string.IsNullOrEmpty(tag) || string.IsNullOrEmpty(parent.Tag))
+        if (nonNestedTags.TryGetValue(tag.Trim().ToLower(), out List<string> parentTags))
+        {
+            if (parentTags.Contains(parent.Tag.Trim().ToLower()))
             {
-                return;
-            }
-
-            if (nonNestedTags.TryGetValue(tag.Trim().ToLower(), out List<string> parentTags))
-            {
-                if (parentTags.Contains(parent.Tag.Trim().ToLower()))
-                {
-                    parent.SetBoundary(htmlStart, htmlStart);
-                    context.PreviousNode = parent;
-                    parent = parent.GetParent();
-                }
+                parent.SetBoundary(htmlStart, htmlStart);
+                context.PreviousNode = parent;
+                parent = parent.GetParent();
             }
         }
     }

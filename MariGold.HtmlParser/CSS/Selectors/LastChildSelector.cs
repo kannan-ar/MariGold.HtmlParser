@@ -1,136 +1,75 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+internal sealed class LastChildSelector : CSSelector, IAttachedSelector
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+    private readonly Regex regex;
 
-    internal sealed class LastChildSelector : CSSelector, IAttachedSelector
+    private string selectorText;
+
+    private LastChildSelector(ISelectorContext context, string selectorText, Specificity specificity)
     {
-        private readonly Regex regex;
+        this.context = context;
+        regex = new Regex("^(:last-child)|(:last-of-type)");
+        this.selectorText = selectorText;
+        this.specificity = specificity;
+    }
 
-        private string selectorText;
-
-        private LastChildSelector(ISelectorContext context, string selectorText, Specificity specificity)
+    internal LastChildSelector(ISelectorContext context)
+    {
+        if (context == null)
         {
-            this.context = context;
-            regex = new Regex("^(:last-child)|(:last-of-type)");
-            this.selectorText = selectorText;
-            this.specificity = specificity;
+            throw new ArgumentNullException(nameof(context));
         }
 
-        internal LastChildSelector(ISelectorContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+        context.AddAttachedSelector(this);
+        this.context = context;
+        regex = new Regex("^(:last-child)|(:last-of-type)");
+    }
 
-            context.AddAttachedSelector(this);
-            this.context = context;
-            regex = new Regex("^(:last-child)|(:last-of-type)");
+    internal override bool Prepare(string selector)
+    {
+        Match match = regex.Match(selector);
+
+        this.selectorText = string.Empty;
+        this.specificity = new ();
+
+        if (match.Success)
+        {
+            this.selectorText = selector[match.Value.Length..];
         }
 
-        internal override bool Prepare(string selector)
+        return match.Success;
+    }
+
+    internal override bool IsValidNode(HtmlNode node)
+    {
+        bool isValid = false;
+
+        if (node != null && node.Parent != null)
         {
-            Match match = regex.Match(selector);
-
-            this.selectorText = string.Empty;
-            this.specificity = new Specificity();
-
-            if (match.Success)
-            {
-                this.selectorText = selector.Substring(match.Value.Length);
-            }
-
-            return match.Success;
-        }
-
-        internal override bool IsValidNode(HtmlNode node)
-        {
-            bool isValid = false;
-
-            if (node != null && node.Parent != null)
-            {
-                HtmlNode lastChild = null;
-
-                foreach (HtmlNode child in node.GetParent().GetChildren())
-                {
-                    if (string.Equals(node.Tag, child.Tag, StringComparison.OrdinalIgnoreCase))
-                    {
-                        lastChild = child;
-                    }
-                }
-
-                isValid = lastChild != null && lastChild == node;
-            }
-
-            return isValid;
-        }
-
-        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (IsValidNode(node))
-            {
-                if (string.IsNullOrEmpty(this.selectorText))
-                {
-                    ApplyStyle(node, htmlStyles);
-                }
-                else
-                {
-                    context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
-                }
-            }
-        }
-
-        internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
-        }
-
-        internal override CSSelector Clone()
-        {
-            return new LastChildSelector(context, selectorText, specificity.Clone());
-        }
-
-        bool IAttachedSelector.Prepare(string selector)
-        {
-            return Prepare(selector);
-        }
-
-        bool IAttachedSelector.IsValidNode(HtmlNode node)
-        {
-            if (node == null)
-            {
-                return false;
-            }
-
-            bool isValid = false;
-
-            HtmlNode parent = node.GetParent();
-
-            if (parent == null)
-            {
-                return false;
-            }
-
             HtmlNode lastChild = null;
 
-            foreach (HtmlNode child in parent.GetChildren())
+            foreach (HtmlNode child in node.GetParent().GetChildren())
             {
-                if (child.Tag != HtmlTag.TEXT)
+                if (string.Equals(node.Tag, child.Tag, StringComparison.OrdinalIgnoreCase))
                 {
                     lastChild = child;
                 }
             }
 
-            if (lastChild != null && lastChild == node)
-            {
-                isValid = true;
-            }
-            return isValid;
+            isValid = lastChild != null && lastChild == node;
         }
 
-        void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+        return isValid;
+    }
+
+    internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (IsValidNode(node))
         {
             if (string.IsNullOrEmpty(this.selectorText))
             {
@@ -140,6 +79,66 @@
             {
                 context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
             }
+        }
+    }
+
+    internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+    }
+
+    internal override CSSelector Clone()
+    {
+        return new LastChildSelector(context, selectorText, specificity.Clone());
+    }
+
+    bool IAttachedSelector.Prepare(string selector)
+    {
+        return Prepare(selector);
+    }
+
+    bool IAttachedSelector.IsValidNode(HtmlNode node)
+    {
+        if (node == null)
+        {
+            return false;
+        }
+
+        bool isValid = false;
+
+        HtmlNode parent = node.GetParent();
+
+        if (parent == null)
+        {
+            return false;
+        }
+
+        HtmlNode lastChild = null;
+
+        foreach (HtmlNode child in parent.GetChildren())
+        {
+            if (child.Tag != HtmlTag.TEXT)
+            {
+                lastChild = child;
+            }
+        }
+
+        if (lastChild != null && lastChild == node)
+        {
+            isValid = true;
+        }
+        return isValid;
+    }
+
+    void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (string.IsNullOrEmpty(this.selectorText))
+        {
+            ApplyStyle(node, htmlStyles);
+        }
+        else
+        {
+            context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+internal interface ICloseTag
 {
-    internal interface ICloseTag
-    {
-        bool IsCloseTag(int position, string html);
-        void Init(int position, HtmlNode current);
-        HtmlAnalyzer GetAnalyzer();
-    }
+    bool IsCloseTag(int position, string html);
+    void Init(int position, HtmlNode current);
+    HtmlAnalyzer GetAnalyzer();
 }

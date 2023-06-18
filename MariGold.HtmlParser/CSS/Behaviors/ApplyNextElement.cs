@@ -1,57 +1,56 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+internal sealed class ApplyNextElement : CSSBehavior
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+    private readonly Regex regex;
 
-    internal sealed class ApplyNextElement : CSSBehavior
+    private string selectorText;
+
+    internal ApplyNextElement(ISelectorContext context)
     {
-        private readonly Regex regex;
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
 
-        private string selectorText;
+        regex = new Regex(@"^\s*\+\s*");
+    }
 
-        internal ApplyNextElement(ISelectorContext context)
+    internal override bool IsValidBehavior(string selectorText)
+    {
+        this.selectorText = string.Empty;
+
+        Match match = regex.Match(selectorText);
+
+        if (match.Success)
         {
-            this.context = context ?? throw new ArgumentNullException("context");
-
-            regex = new Regex(@"^\s*\+\s*");
+            this.selectorText = selectorText[match.Value.Length..];
         }
 
-        internal override bool IsValidBehavior(string selectorText)
+        return match.Success;
+    }
+
+    internal override void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles)
+    {
+        if (node.Next != null)
         {
-            this.selectorText = string.Empty;
+            HtmlNode temp = node.GetNext();
 
-            Match match = regex.Match(selectorText);
-
-            if (match.Success)
+            //Empty text nodes can be avoid. This loop will skip those.
+            while (temp != null && temp.Tag == HtmlTag.TEXT)
             {
-                this.selectorText = selectorText.Substring(match.Value.Length);
+                temp = temp.GetNext();
             }
 
-            return match.Success;
-        }
-
-        internal override void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles)
-        {
-            if (node.Next != null)
+            if (temp != null)
             {
-                HtmlNode temp = node.GetNext();
-
-                //Empty text nodes can be avoid. This loop will skip those.
-                while (temp != null && temp.Tag == HtmlTag.TEXT)
+                if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
                 {
-                    temp = temp.GetNext();
-                }
-
-                if (temp != null)
-                {
-                    if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
+                    if (nextSelector != null && nextSelector.IsValidNode(temp))
                     {
-                        if (nextSelector != null && nextSelector.IsValidNode(temp))
-                        {
-                            nextSelector.AddSpecificity(specificity);
-                            nextSelector.Parse(temp, htmlStyles);
-                        }
+                        nextSelector.AddSpecificity(specificity);
+                        nextSelector.Parse(temp, htmlStyles);
                     }
                 }
             }

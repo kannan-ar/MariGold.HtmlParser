@@ -1,241 +1,240 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+internal sealed class FontSizeProperty : CSSProperty
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+    private const bool PROCESSED = true;
+    private const bool NOT_PROCESSED = false;
 
-    internal sealed class FontSizeProperty : CSSProperty
+    private const decimal defaultFontSize = 16;
+    private readonly Dictionary<string, decimal> defaultFontSizes;
+    private readonly Dictionary<string, decimal> absoluteNamedFontSizes;
+    private readonly Dictionary<string, decimal> relativeNamedFontSizes;
+    private readonly Regex decimalValue;
+
+    private void Init()
     {
-        private const bool PROCESSED = true;
-        private const bool NOT_PROCESSED = false;
+        defaultFontSizes.Add("px", 1);
+        defaultFontSizes.Add("pt", 1.33m);
+        defaultFontSizes.Add("em", 16);
+        defaultFontSizes.Add("in", 96);
 
-        private const decimal defaultFontSize = 16;
-        private readonly Dictionary<string, decimal> defaultFontSizes;
-        private readonly Dictionary<string, decimal> absoluteNamedFontSizes;
-        private readonly Dictionary<string, decimal> relativeNamedFontSizes;
-        private readonly Regex decimalValue;
+        absoluteNamedFontSizes.Add("xx-small", 9);
+        absoluteNamedFontSizes.Add("x-small", 10);
+        absoluteNamedFontSizes.Add("small", 13);
+        absoluteNamedFontSizes.Add("medium", 16);
+        absoluteNamedFontSizes.Add("large", 18);
+        absoluteNamedFontSizes.Add("x-large", 24);
+        absoluteNamedFontSizes.Add("xx-large", 32);
 
-        private void Init()
+        relativeNamedFontSizes.Add("smaller", .83m);
+        relativeNamedFontSizes.Add("larger", 1.2m);
+    }
+
+    private bool ExtractFontSize(string value, out decimal fontSize)
+    {
+        fontSize = 0;
+
+        foreach (var item in defaultFontSizes)
         {
-            defaultFontSizes.Add("px", 1);
-            defaultFontSizes.Add("pt", 1.33m);
-            defaultFontSizes.Add("em", 16);
-            defaultFontSizes.Add("in", 96);
-
-            absoluteNamedFontSizes.Add("xx-small", 9);
-            absoluteNamedFontSizes.Add("x-small", 10);
-            absoluteNamedFontSizes.Add("small", 13);
-            absoluteNamedFontSizes.Add("medium", 16);
-            absoluteNamedFontSizes.Add("large", 18);
-            absoluteNamedFontSizes.Add("x-large", 24);
-            absoluteNamedFontSizes.Add("xx-large", 32);
-
-            relativeNamedFontSizes.Add("smaller", .83m);
-            relativeNamedFontSizes.Add("larger", 1.2m);
-        }
-
-        private bool ExtractFontSize(string value, out decimal fontSize)
-        {
-            fontSize = 0;
-
-            foreach (var item in defaultFontSizes)
+            if (value.Contains(item.Key, StringComparison.OrdinalIgnoreCase))
             {
-                if (value.IndexOf(item.Key, StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    fontSize = item.Value;
-                    return true;
-                }
+                fontSize = item.Value;
+                return true;
             }
-
-            return false;
         }
 
-        private decimal ParseFontSize(string value)
-        {
-            Match match = decimalValue.Match(value);
+        return false;
+    }
 
-            if (match.Success && decimal.TryParse(match.Value, out decimal fontSize))
+    private decimal ParseFontSize(string value)
+    {
+        Match match = decimalValue.Match(value);
+
+        if (match.Success && decimal.TryParse(match.Value, out decimal fontSize))
+        {
+            return fontSize;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    private bool ExtractNamedFontSize(string value, out decimal fontSize)
+    {
+        fontSize = 0;
+
+        foreach (var item in absoluteNamedFontSizes)
+        {
+            if (item.Key.CompareOrdinalIgnoreCase(value))
+            {
+                fontSize = item.Value;
+                return true;
+            }
+        }
+
+        foreach (var item in relativeNamedFontSizes)
+        {
+            if (item.Key.CompareOrdinalIgnoreCase(value))
+            {
+                fontSize = item.Value;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private decimal ConvertParentFontSize(string fontSizeValue)
+    {
+        if (string.IsNullOrEmpty(fontSizeValue))
+        {
+            return 0;
+        }
+
+        if (fontSizeValue.Contains('%') &&
+            decimal.TryParse(fontSizeValue.Replace("%", ""), out decimal fontSize))
+        {
+            fontSize = defaultFontSize / 100 * fontSize;
+        }
+        else
+        {
+            if (ExtractNamedFontSize(fontSizeValue, out fontSize))
             {
                 return fontSize;
             }
-            else
+            else if (ExtractFontSize(fontSizeValue, out fontSize))
             {
-                return 0;
+                return fontSize * ParseFontSize(fontSizeValue);
             }
         }
 
-        private bool ExtractNamedFontSize(string value, out decimal fontSize)
+        return fontSize;
+    }
+
+    private decimal ConvertChildFontSize(string fontSizeValue, decimal parentFontSize)
+    {
+        decimal fontSize = 0;
+
+        if (fontSizeValue.Contains('%') &&
+            decimal.TryParse(fontSizeValue.Replace("%", ""), out fontSize))
         {
-            fontSize = 0;
-
-            foreach (var item in absoluteNamedFontSizes)
-            {
-                if (item.Key.CompareOrdinalIgnoreCase(value))
-                {
-                    fontSize = item.Value;
-                    return true;
-                }
-            }
-
-            foreach (var item in relativeNamedFontSizes)
-            {
-                if (item.Key.CompareOrdinalIgnoreCase(value))
-                {
-                    fontSize = item.Value;
-                    return true;
-                }
-            }
-
-            return false;
+            fontSize = parentFontSize / 100 * fontSize;
         }
-
-        private decimal ConvertParentFontSize(string fontSizeValue)
+        else if (fontSizeValue.Contains("em"))
         {
-            if (string.IsNullOrEmpty(fontSizeValue))
-            {
-                return 0;
-            }
+            Match match = decimalValue.Match(fontSizeValue);
 
-            if (fontSizeValue.Contains("%") &&
-                decimal.TryParse(fontSizeValue.Replace("%", ""), out decimal fontSize))
+            if (match.Success && decimal.TryParse(match.Value, out fontSize))
             {
-                fontSize = defaultFontSize / 100 * fontSize;
+                fontSize = (parentFontSize / defaultFontSize) * fontSize * defaultFontSize;
             }
-            else
-            {
-                if (ExtractNamedFontSize(fontSizeValue, out fontSize))
-                {
-                    return fontSize;
-                }
-                else if (ExtractFontSize(fontSizeValue, out fontSize))
-                {
-                    return fontSize * ParseFontSize(fontSizeValue);
-                }
-            }
-
-            return fontSize;
         }
-
-        private decimal ConvertChildFontSize(string fontSizeValue, decimal parentFontSize)
-        {
-            decimal fontSize = 0;
-
-            if (fontSizeValue.Contains("%") &&
-                decimal.TryParse(fontSizeValue.Replace("%", ""), out fontSize))
-            {
-                fontSize = parentFontSize / 100 * fontSize;
-            }
-            else if (fontSizeValue.Contains("em"))
-            {
-                Match match = decimalValue.Match(fontSizeValue);
-
-                if (match.Success && decimal.TryParse(match.Value, out fontSize))
-                {
-                    fontSize = (parentFontSize / defaultFontSize) * fontSize * defaultFontSize;
-                }
-            }
-            else
-            {
-                foreach (var item in relativeNamedFontSizes)
-                {
-                    if (item.Key.CompareOrdinalIgnoreCase(fontSizeValue))
-                    {
-                        fontSize = item.Value * parentFontSize;
-                        break;
-                    }
-                }
-            }
-
-            return fontSize;
-        }
-
-        private bool IsAbsoluteFont(string fontSizeValue)
+        else
         {
             foreach (var item in relativeNamedFontSizes)
             {
                 if (item.Key.CompareOrdinalIgnoreCase(fontSizeValue))
                 {
-                    return true;
+                    fontSize = item.Value * parentFontSize;
+                    break;
                 }
             }
-
-            return false;
         }
 
-        internal FontSizeProperty()
+        return fontSize;
+    }
+
+    private bool IsAbsoluteFont(string fontSizeValue)
+    {
+        foreach (var item in relativeNamedFontSizes)
         {
-            defaultFontSizes = new Dictionary<string, decimal>();
-            absoluteNamedFontSizes = new Dictionary<string, decimal>();
-            relativeNamedFontSizes = new Dictionary<string, decimal>();
-
-            decimalValue = new Regex("^(\\.)?\\d+(\\.?\\d+)?");
-
-            Init();
+            if (item.Key.CompareOrdinalIgnoreCase(fontSizeValue))
+            {
+                return true;
+            }
         }
 
-        internal decimal CalculateChildNodeFontSize(string parentFontSizeValue, string childFontSizeValue)
+        return false;
+    }
+
+    internal FontSizeProperty()
+    {
+        defaultFontSizes = new Dictionary<string, decimal>();
+        absoluteNamedFontSizes = new Dictionary<string, decimal>();
+        relativeNamedFontSizes = new Dictionary<string, decimal>();
+
+        decimalValue = new Regex("^(\\.)?\\d+(\\.?\\d+)?");
+
+        Init();
+    }
+
+    internal decimal CalculateChildNodeFontSize(string parentFontSizeValue, string childFontSizeValue)
+    {
+        if (!childFontSizeValue.Contains('%') && !childFontSizeValue.Contains("em") &&
+            !IsAbsoluteFont(childFontSizeValue))
         {
-            if (!childFontSizeValue.Contains("%") && !childFontSizeValue.Contains("em") &&
-                !IsAbsoluteFont(childFontSizeValue))
-            {
-                return 0;
-            }
-
-            decimal parentFontSize = ConvertParentFontSize(parentFontSizeValue);
-
-            if (parentFontSize == 0)
-            {
-                return 0;
-            }
-
-            return ConvertChildFontSize(childFontSizeValue, parentFontSize);
+            return 0;
         }
 
-        internal override bool AppendStyle(HtmlStyle parentStyle, HtmlNode child)
+        decimal parentFontSize = ConvertParentFontSize(parentFontSizeValue);
+
+        if (parentFontSize == 0)
         {
-            if (parentStyle == null || child == null)
-            {
-                return NOT_PROCESSED;
-            }
+            return 0;
+        }
 
-            if (!parentStyle.Name.CompareOrdinalIgnoreCase(fontSize))
-            {
-                return NOT_PROCESSED;
-            }
+        return ConvertChildFontSize(childFontSizeValue, parentFontSize);
+    }
 
-            HtmlStyle childFontSize;
+    internal override bool AppendStyle(HtmlStyle parentStyle, HtmlNode child)
+    {
+        if (parentStyle == null || child == null)
+        {
+            return NOT_PROCESSED;
+        }
 
-            if (!child.HasStyle(fontSize))
-            {
-                child.UpdateInheritedStyles(parentStyle);
-                return PROCESSED;
-            }
-            else if (!child.TryGetStyle(fontSize, out childFontSize) &&
-                !child.TryGetInheritedStyle(fontSize, out childFontSize))
-            {
-                return PROCESSED;
-            }
+        if (!parentStyle.Name.CompareOrdinalIgnoreCase(fontSize))
+        {
+            return NOT_PROCESSED;
+        }
 
-            string parentFontSizeValue = parentStyle.Value;
-            string childFontSizeValue = childFontSize.Value;
+        HtmlStyle childFontSize;
 
-            if ((string.IsNullOrEmpty(childFontSizeValue) || string.IsNullOrEmpty(parentFontSizeValue)))
-            {
-                return PROCESSED;
-            }
-
-            decimal childFont = CalculateChildNodeFontSize(parentFontSizeValue, childFontSizeValue);
-
-            if (childFont != 0)
-            {
-                childFontSize.ModifyStyle(string.Concat(childFont.ToString("G29"), "px"));
-            }
-
+        if (!child.HasStyle(fontSize))
+        {
+            child.UpdateInheritedStyles(parentStyle);
+            return PROCESSED;
+        }
+        else if (!child.TryGetStyle(fontSize, out childFontSize) &&
+            !child.TryGetInheritedStyle(fontSize, out childFontSize))
+        {
             return PROCESSED;
         }
 
-        internal override void ParseStyle(HtmlNode node)
+        string parentFontSizeValue = parentStyle.Value;
+        string childFontSizeValue = childFontSize.Value;
+
+        if ((string.IsNullOrEmpty(childFontSizeValue) || string.IsNullOrEmpty(parentFontSizeValue)))
         {
+            return PROCESSED;
         }
+
+        decimal childFont = CalculateChildNodeFontSize(parentFontSizeValue, childFontSizeValue);
+
+        if (childFont != 0)
+        {
+            childFontSize.ModifyStyle(string.Concat(childFont.ToString("G29"), "px"));
+        }
+
+        return PROCESSED;
+    }
+
+    internal override void ParseStyle(HtmlNode node)
+    {
     }
 }

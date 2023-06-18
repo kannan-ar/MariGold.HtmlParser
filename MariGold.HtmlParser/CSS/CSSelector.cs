@@ -1,27 +1,26 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System.Collections.Generic;
+
+internal abstract class CSSelector
 {
-    using System.Collections.Generic;
+    protected ISelectorContext context;
+    protected Specificity specificity;
 
-    internal abstract class CSSelector
+    protected Specificity CalculateSpecificity(SelectorType type)
     {
-        protected ISelectorContext context;
-        protected Specificity specificity;
+        return this.specificity += type;
+    }
 
-        protected Specificity CalculateSpecificity(SelectorType type)
-        {
-            return this.specificity += type;
-        }
+    internal abstract bool Prepare(string selector);
+    internal abstract bool IsValidNode(HtmlNode node);
+    internal abstract void Parse(HtmlNode node, List<HtmlStyle> htmlStyles);
+    internal abstract void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles);
+    internal abstract CSSelector Clone();
 
-        internal abstract bool Prepare(string selector);
-        internal abstract bool IsValidNode(HtmlNode node);
-        internal abstract void Parse(HtmlNode node, List<HtmlStyle> htmlStyles);
-        internal abstract void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles);
-        internal abstract CSSelector Clone();
-
-        //This is method is public because it can serve as the IAttachedSelector.AddSpecificity
-        public void AddSpecificity(Specificity specificity)
-        {
-            this.specificity = specificity;
-        }
+    //This is method is public because it can serve as the IAttachedSelector.AddSpecificity
+    public void AddSpecificity(Specificity specificity)
+    {
+        this.specificity = specificity;
     }
 }

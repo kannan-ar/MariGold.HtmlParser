@@ -1,122 +1,121 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+internal sealed class FirstChildSelector : CSSelector, IAttachedSelector
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+    private string selectorText;
 
-    internal sealed class FirstChildSelector : CSSelector, IAttachedSelector
+    private readonly Regex regex;
+
+    private FirstChildSelector(ISelectorContext context, string selectorText, Specificity specificity)
     {
-        private string selectorText;
+        this.context = context;
+        regex = new Regex("^:first-child");
+        this.selectorText = selectorText;
+        this.specificity = specificity;
+    }
 
-        private readonly Regex regex;
-
-        private FirstChildSelector(ISelectorContext context, string selectorText, Specificity specificity)
+    internal FirstChildSelector(ISelectorContext context)
+    {
+        if (context == null)
         {
-            this.context = context;
-            regex = new Regex("^:first-child");
-            this.selectorText = selectorText;
-            this.specificity = specificity;
+            throw new ArgumentNullException(nameof(context));
         }
 
-        internal FirstChildSelector(ISelectorContext context)
+        context.AddAttachedSelector(this);
+        this.context = context;
+
+        regex = new Regex("^:first-child");
+    }
+
+    internal override bool Prepare(string selector)
+    {
+        Match match = regex.Match(selector);
+
+        this.selectorText = string.Empty;
+        this.specificity = new();
+
+        if (match.Success)
         {
-            if (context == null)
+            this.selectorText = selector[match.Value.Length..];
+        }
+
+        return match.Success;
+    }
+
+    internal override bool IsValidNode(HtmlNode node)
+    {
+        if (node == null)
+        {
+            return false;
+        }
+
+        if (node.Parent == null)
+        {
+            return false;
+        }
+
+        bool isValid = false;
+
+        foreach (HtmlNode child in node.GetParent().GetChildren())
+        {
+            if (child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
             {
-                throw new ArgumentNullException("context");
+                continue;
             }
 
-            context.AddAttachedSelector(this);
-            this.context = context;
+            //Find first child tag which matches the node's tag. The break statement will discard the loop after finding the first matching node.
+            //If the node is the first child, it will apply the styles.
+            isValid = string.Equals(node.Tag, child.Tag, StringComparison.OrdinalIgnoreCase) && node == child;
 
-            regex = new Regex("^:first-child");
+            //The loop only needs to check the first child element except the empty text element. So we can skip here.
+            break;
+
         }
 
-        internal override bool Prepare(string selector)
+        return isValid;
+    }
+
+    internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (IsValidNode(node))
         {
-            Match match = regex.Match(selector);
-
-            this.selectorText = string.Empty;
-            this.specificity = new Specificity();
-
-            if (match.Success)
+            if (string.IsNullOrEmpty(this.selectorText))
             {
-                this.selectorText = selector.Substring(match.Value.Length);
+                ApplyStyle(node, htmlStyles);
             }
-
-            return match.Success;
-        }
-
-        internal override bool IsValidNode(HtmlNode node)
-        {
-            if (node == null)
+            else
             {
-                return false;
-            }
-
-            if (node.Parent == null)
-            {
-                return false;
-            }
-
-            bool isValid = false;
-
-            foreach (HtmlNode child in node.GetParent().GetChildren())
-            {
-                if (child.Tag == HtmlTag.TEXT && child.Html.Trim() == string.Empty)
-                {
-                    continue;
-                }
-
-                //Find first child tag which matches the node's tag. The break statement will discard the loop after finding the first matching node.
-                //If the node is the first child, it will apply the styles.
-                isValid = string.Equals(node.Tag, child.Tag, StringComparison.OrdinalIgnoreCase) && node == child;
-
-                //The loop only needs to check the first child element except the empty text element. So we can skip here.
-                break;
-
-            }
-
-            return isValid;
-        }
-
-        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (IsValidNode(node))
-            {
-                if (string.IsNullOrEmpty(this.selectorText))
-                {
-                    ApplyStyle(node, htmlStyles);
-                }
-                else
-                {
-                    context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
-                }
+                context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
             }
         }
+    }
 
-        internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
-        }
+    internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+    }
 
-        internal override CSSelector Clone()
-        {
-            return new FirstChildSelector(context, selectorText, specificity.Clone());
-        }
+    internal override CSSelector Clone()
+    {
+        return new FirstChildSelector(context, selectorText, specificity.Clone());
+    }
 
-        bool IAttachedSelector.Prepare(string selector)
-        {
-            return Prepare(selector);
-        }
+    bool IAttachedSelector.Prepare(string selector)
+    {
+        return Prepare(selector);
+    }
 
-        bool IAttachedSelector.IsValidNode(HtmlNode node)
-        {
-            return IsValidNode(node);
-        }
+    bool IAttachedSelector.IsValidNode(HtmlNode node)
+    {
+        return IsValidNode(node);
+    }
 
-        void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            Parse(node, htmlStyles);
-        }
+    void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        Parse(node, htmlStyles);
     }
 }

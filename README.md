@@ -63,7 +63,7 @@ HtmlParser parser = new HtmlTextParser(@"<html>
 
 if (parser.Parse())
 {
-	parser.ParseStyles();
+	await parser.ParseStylesAsync();
 }
 ```
 To resolve any protocol free or relative url of external style sheets, use the UriSchema and BaseURL properties.

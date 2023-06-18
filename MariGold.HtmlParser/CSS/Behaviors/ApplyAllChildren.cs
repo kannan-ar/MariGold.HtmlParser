@@ -1,68 +1,67 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+internal sealed class ApplyAllChildren : CSSBehavior
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+    private readonly Regex isValid;
+    private readonly Regex parse;
 
-    internal sealed class ApplyAllChildren : CSSBehavior
+    private string selectorText;
+
+    internal ApplyAllChildren(ISelectorContext context)
     {
-        private readonly Regex isValid;
-        private readonly Regex parse;
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
 
-        private string selectorText;
+        //Atleast one space should occur preceeded by an occurance of an element selector
+        isValid = new Regex(@"^\s+[^\s]+");
+        //Parse all the space
+        parse = new Regex(@"\s+");
+    }
 
-        internal ApplyAllChildren(ISelectorContext context)
+    private void ApplyStyle(CSSelector nextSelector, Specificity specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (nextSelector.IsValidNode(node))
         {
-            this.context = context ?? throw new ArgumentNullException("context");
-
-            //Atleast one space should occur preceeded by an occurance of an element selector
-            isValid = new Regex(@"^\s+[^\s]+");
-            //Parse all the space
-            parse = new Regex(@"\s+");
+            nextSelector.AddSpecificity(specificity);
+            nextSelector.Parse(node, htmlStyles);
         }
 
-        private void ApplyStyle(CSSelector nextSelector, Specificity specificity, HtmlNode node, List<HtmlStyle> htmlStyles)
+        foreach (HtmlNode child in node.GetChildren())
         {
-            if (nextSelector.IsValidNode(node))
-            {
-                nextSelector.AddSpecificity(specificity);
-                nextSelector.Parse(node, htmlStyles);
-            }
+            ApplyStyle(nextSelector.Clone(), specificity, child, htmlStyles);
+        }
+    }
 
-            foreach (HtmlNode child in node.GetChildren())
-            {
-                ApplyStyle(nextSelector.Clone(), specificity, child, htmlStyles);
-            }
+    internal override bool IsValidBehavior(string selectorText)
+    {
+        bool found = false;
+        this.selectorText = string.Empty;
+
+        if (isValid.IsMatch(selectorText))
+        {
+            found = true;
+
+            Match match = parse.Match(selectorText);
+
+            this.selectorText = selectorText[match.Length..];
         }
 
-        internal override bool IsValidBehavior(string selectorText)
+        return found;
+    }
+
+    internal override void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles)
+    {
+        if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
         {
-            bool found = false;
-            this.selectorText = string.Empty;
-
-            if (isValid.IsMatch(selectorText))
+            if (nextSelector != null)
             {
-                found = true;
-
-                Match match = parse.Match(selectorText);
-
-                this.selectorText = selectorText.Substring(match.Length);
-            }
-
-            return found;
-        }
-
-        internal override void Parse(HtmlNode node, Specificity specificity, List<HtmlStyle> htmlStyles)
-        {
-            if (context.ParseSelector(this.selectorText, out CSSelector nextSelector))
-            {
-                if (nextSelector != null)
+                foreach (HtmlNode child in node.GetChildren())
                 {
-                    foreach (HtmlNode child in node.GetChildren())
-                    {
-                        CSSelector clone = nextSelector.Clone();
-                        ApplyStyle(clone, specificity, child, htmlStyles);
-                    }
+                    CSSelector clone = nextSelector.Clone();
+                    ApplyStyle(clone, specificity, child, htmlStyles);
                 }
             }
         }

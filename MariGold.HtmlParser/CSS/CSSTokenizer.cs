@@ -1,43 +1,42 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+internal static class CSSTokenizer
 {
-    internal static class CSSTokenizer
+    internal const char openBrace = '{';
+    internal const char closeBrace = '}';
+    internal const string openComment = "/*";
+    internal const string closeComment = "*/";
+
+    internal static string FindOpenCloseBraceArea(
+       string styleText,
+       int position,
+       out int closeBraceIndex)
     {
-        internal const char openBrace = '{';
-        internal const char closeBrace = '}';
-        internal const string openComment = "/*";
-        internal const string closeComment = "*/";
+        int eof = styleText.Length;
+        closeBraceIndex = -1;
 
-        internal static string FindOpenCloseBraceArea(
-           string styleText,
-           int position,
-           out int closeBraceIndex)
+        //One open brace is already found before calling this function.
+        for (int openCount = 1, i = position; openCount > 0 && position < eof; ++i)
         {
-            int eof = styleText.Length;
-            closeBraceIndex = -1;
-
-            //One open brace is already found before calling this function.
-            for (int openCount = 1, i = position; openCount > 0 && position < eof; ++i)
+            if (styleText[i] == closeBrace)
             {
-                if (styleText[i] == closeBrace)
-                {
-                    closeBraceIndex = i;
-                    --openCount;
-                }
-
-                if (styleText[i] == openBrace)
-                {
-                    ++openCount;
-                }
+                closeBraceIndex = i;
+                --openCount;
             }
 
-            if (closeBraceIndex > position)
+            if (styleText[i] == openBrace)
             {
-                return styleText.Substring(position, closeBraceIndex - position);
+                ++openCount;
             }
-            else
-            {
-                return string.Empty;
-            }
+        }
+
+        if (closeBraceIndex > position)
+        {
+            return styleText[position..closeBraceIndex];
+        }
+        else
+        {
+            return string.Empty;
         }
     }
 }

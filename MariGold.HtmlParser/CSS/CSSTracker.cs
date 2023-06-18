@@ -1,76 +1,75 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+internal sealed class CSSTracker
 {
-    using System;
-    using System.Collections.Generic;
+    private const string rel = "stylesheet";
 
-    internal sealed class CSSTracker
+    internal string UriSchema { get; set; }
+
+    internal string BaseURL { get; set; }
+
+    private async Task TraverseHtmlNodesAsync(HtmlNode node, StyleSheet styleSheet)
     {
-        private const string rel = "stylesheet";
+        string style = string.Empty;
 
-        internal string UriSchema { get; set; }
-
-        internal string BaseURL { get; set; }
-
-        private void TraverseHtmlNodes(HtmlNode node, StyleSheet styleSheet)
+        if (string.Equals(node.Tag, HtmlTag.STYLE, StringComparison.OrdinalIgnoreCase))
         {
-            string style = string.Empty;
+            style = node.InnerHtml == null ? string.Empty : node.InnerHtml.Trim();
+        }
+        else if (string.Equals(node.Tag, HtmlTag.LINK, StringComparison.OrdinalIgnoreCase))
+        {
+            string relValue = node.ExtractAttributeValue("rel");
+            string media = node.ExtractAttributeValue("media");
 
-            if (string.Equals(node.Tag, HtmlTag.STYLE, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(rel, relValue, StringComparison.OrdinalIgnoreCase) &&
+                (string.IsNullOrEmpty(media) || media.CompareOrdinalIgnoreCase("screen")
+                || media.CompareOrdinalIgnoreCase("all")))
             {
-                style = node.InnerHtml == null ? string.Empty : node.InnerHtml.Trim();
-            }
-            else if (string.Equals(node.Tag, HtmlTag.LINK, StringComparison.OrdinalIgnoreCase))
-            {
-                string relValue = node.ExtractAttributeValue("rel");
-                string media = node.ExtractAttributeValue("media");
+                string url = node.ExtractAttributeValue("href");
 
-                if (string.Equals(rel, relValue, StringComparison.OrdinalIgnoreCase) &&
-                    (string.IsNullOrEmpty(media) || media.CompareOrdinalIgnoreCase("screen")
-                    || media.CompareOrdinalIgnoreCase("all")))
+                if (!string.IsNullOrEmpty(url))
                 {
-                    string url = node.ExtractAttributeValue("href");
-
-                    if (!string.IsNullOrEmpty(url))
-                    {
-                        WebManager web = new WebManager(UriSchema, BaseURL);
-                        style = web.ExtractStylesFromLink(url);
-                    }
+                    WebManager web = new(UriSchema, BaseURL);
+                    style = await web.ExtractStylesFromLinkAsync(url).ConfigureAwait(false);
                 }
             }
-
-            if (!string.IsNullOrEmpty(style))
-            {
-                List<CSSElement> styles = new List<CSSElement>();
-                List<MediaQuery> mediaQueries = new List<MediaQuery>();
-
-                CSSParser parser = new CSSParser();
-                parser.ParseCSS(style, styles, mediaQueries);
-
-                styleSheet.AddRange(styles);
-                styleSheet.AddMediaQueryRange(mediaQueries);
-            }
-
-            foreach (HtmlNode n in node.GetChildren())
-            {
-                TraverseHtmlNodes(n, styleSheet);
-            }
         }
 
-        internal StyleSheet TrackCSS(HtmlNode node)
+        if (!string.IsNullOrEmpty(style))
         {
-            StyleSheet styleSheet = new StyleSheet(new SelectorContext());
+            List<CSSElement> styles = new();
+            List<MediaQuery> mediaQueries = new();
 
-            TraverseHtmlNodes(node, styleSheet);
+            CSSParser.ParseCSS(style, styles, mediaQueries);
 
-            HtmlNode nextNode = node.GetNext();
-
-            while (nextNode != null)
-            {
-                TraverseHtmlNodes(nextNode, styleSheet);
-                nextNode = nextNode.GetNext();
-            }
-
-            return styleSheet;
+            styleSheet.AddRange(styles);
+            StyleSheet.AddMediaQueryRange(mediaQueries);
         }
+
+        foreach (HtmlNode n in node.GetChildren())
+        {
+            await TraverseHtmlNodesAsync(n, styleSheet).ConfigureAwait(false);
+        }
+    }
+
+    internal async Task<StyleSheet> TrackCSSAsync(HtmlNode node)
+    {
+        StyleSheet styleSheet = new(new SelectorContext());
+
+        await TraverseHtmlNodesAsync(node, styleSheet).ConfigureAwait(false);
+
+        HtmlNode nextNode = node.GetNext();
+
+        while (nextNode != null)
+        {
+            await TraverseHtmlNodesAsync(nextNode, styleSheet).ConfigureAwait(false);
+            nextNode = nextNode.GetNext();
+        }
+
+        return styleSheet;
     }
 }

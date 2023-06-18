@@ -1,19 +1,18 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System.Collections.Generic;
+
+internal interface IAnalyzerContext
 {
-    using System.Collections.Generic;
+    string Html { get; }
+    int EOF { get; }
+    IList<IOpenTag> OpenTags { get; }
+    IList<ICloseTag> CloseTags { get; }
+    HtmlContext HtmlContext { get; }
+    HtmlNode PreviousNode { get; set; }
 
-    internal interface IAnalyzerContext
-    {
-        string Html { get; }
-        int EOF { get; }
-        IList<IOpenTag> OpenTags { get; }
-        IList<ICloseTag> CloseTags { get; }
-        HtmlContext HtmlContext { get; }
-        HtmlNode PreviousNode { get; set; }
-
-        void SetAnalyzer(HtmlAnalyzer analyzer);
-        void SetPosition(int position);
-        HtmlAnalyzer GetTextAnalyzer(int position);
-        HtmlAnalyzer GetTextAnalyzer(int position, HtmlNode parent);
-    }
+    void SetAnalyzer(HtmlAnalyzer analyzer);
+    void SetPosition(int position);
+    HtmlAnalyzer GetTextAnalyzer(int position);
+    HtmlAnalyzer GetTextAnalyzer(int position, HtmlNode parent);
 }

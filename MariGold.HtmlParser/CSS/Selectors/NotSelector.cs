@@ -1,150 +1,149 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+internal sealed class NotSelector : CSSelector, IAttachedSelector
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+    private readonly Regex regex;
+    private readonly Regex elementName;
 
-    internal sealed class NotSelector : CSSelector, IAttachedSelector
+    private string selectorText;
+    private string currentSelector;
+
+    private NotSelector(ISelectorContext context, string selectorText, string currentSelector, Specificity specificity)
     {
-        private readonly Regex regex;
-        private readonly Regex elementName;
+        this.context = context;
+        regex = new Regex("^:not\\([a-zA-Z]+[0-9]*\\)");
+        elementName = new Regex("\\([a-zA-Z]+[0-9]*\\)");
+        this.selectorText = selectorText;
+        this.currentSelector = currentSelector;
+        this.specificity = specificity;
+    }
 
-        private string selectorText;
-        private string currentSelector;
-
-        private NotSelector(ISelectorContext context, string selectorText, string currentSelector, Specificity specificity)
+    internal NotSelector(ISelectorContext context)
+    {
+        if (context == null)
         {
-            this.context = context;
-            regex = new Regex("^:not\\([a-zA-Z]+[0-9]*\\)");
-            elementName = new Regex("\\([a-zA-Z]+[0-9]*\\)");
-            this.selectorText = selectorText;
-            this.currentSelector = currentSelector;
-            this.specificity = specificity;
+            throw new ArgumentNullException(nameof(context));
         }
 
-        internal NotSelector(ISelectorContext context)
+        context.AddAttachedSelector(this);
+        this.context = context;
+
+        regex = new Regex("^:not\\([a-zA-Z]+[0-9]*\\)");
+        elementName = new Regex("\\([a-zA-Z]+[0-9]*\\)");
+    }
+
+    private void ApplyToChildren(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (IsValidNode(node))
         {
-            if (context == null)
+            ApplyStyle(node, htmlStyles);
+
+            foreach (HtmlNode child in node.GetChildren())
             {
-                throw new ArgumentNullException("context");
-            }
-
-            context.AddAttachedSelector(this);
-            this.context = context;
-
-            regex = new Regex("^:not\\([a-zA-Z]+[0-9]*\\)");
-            elementName = new Regex("\\([a-zA-Z]+[0-9]*\\)");
-        }
-
-        private void ApplyToChildren(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (IsValidNode(node))
-            {
-                ApplyStyle(node, htmlStyles);
-
-                foreach (HtmlNode child in node.GetChildren())
-                {
-                    ApplyToChildren(child, htmlStyles);
-                }
+                ApplyToChildren(child, htmlStyles);
             }
         }
+    }
 
-        internal override bool Prepare(string selector)
+    internal override bool Prepare(string selector)
+    {
+        Match match = regex.Match(selector);
+
+        this.selectorText = string.Empty;
+        this.currentSelector = string.Empty;
+        this.specificity = new ();
+
+        if (match.Success)
         {
-            Match match = regex.Match(selector);
+            this.selectorText = selector[match.Value.Length..];
 
-            this.selectorText = string.Empty;
-            this.currentSelector = string.Empty;
-            this.specificity = new Specificity();
+            Match elementMatch = elementName.Match(match.Value);
 
-            if (match.Success)
+            if (elementMatch.Success)
             {
-                this.selectorText = selector.Substring(match.Value.Length);
-
-                Match elementMatch = elementName.Match(match.Value);
-
-                if (elementMatch.Success)
-                {
-                    this.currentSelector = elementMatch.Value.Replace("(", string.Empty).Replace(")", string.Empty);
-                }
-            }
-
-            return match.Success;
-        }
-
-        internal override bool IsValidNode(HtmlNode node)
-        {
-            if (node == null)
-            {
-                return false;
-            }
-
-            if (node.Tag == HtmlTag.TEXT)
-            {
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(currentSelector))
-            {
-                return false;
-            }
-
-            return !string.Equals(node.Tag, currentSelector, StringComparison.OrdinalIgnoreCase);
-        }
-
-        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            if (IsValidNode(node))
-            {
-                if (string.IsNullOrEmpty(this.selectorText))
-                {
-                    ApplyStyle(node, htmlStyles);
-                }
-                else
-                {
-                    context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
-                }
+                this.currentSelector = elementMatch.Value.Replace("(", string.Empty).Replace(")", string.Empty);
             }
         }
 
-        internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+        return match.Success;
+    }
+
+    internal override bool IsValidNode(HtmlNode node)
+    {
+        if (node == null)
         {
-            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+            return false;
         }
 
-        internal override CSSelector Clone()
+        if (node.Tag == HtmlTag.TEXT)
         {
-            return new NotSelector(context, selectorText, currentSelector, specificity.Clone());
+            return false;
         }
 
-        bool IAttachedSelector.Prepare(string selector)
+        if (string.IsNullOrEmpty(currentSelector))
         {
-            return Prepare(selector);
+            return false;
         }
 
-        bool IAttachedSelector.IsValidNode(HtmlNode node)
-        {
-            if (node == null)
-            {
-                return false;
-            }
+        return !string.Equals(node.Tag, currentSelector, StringComparison.OrdinalIgnoreCase);
+    }
 
-            return node.GetChildren().Count > 0;
-        }
-
-        void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (IsValidNode(node))
         {
             if (string.IsNullOrEmpty(this.selectorText))
             {
-                foreach (HtmlNode child in node.GetChildren())
-                {
-                    ApplyToChildren(child, htmlStyles);
-                }
+                ApplyStyle(node, htmlStyles);
             }
             else
             {
                 context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
             }
+        }
+    }
+
+    internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+    }
+
+    internal override CSSelector Clone()
+    {
+        return new NotSelector(context, selectorText, currentSelector, specificity.Clone());
+    }
+
+    bool IAttachedSelector.Prepare(string selector)
+    {
+        return Prepare(selector);
+    }
+
+    bool IAttachedSelector.IsValidNode(HtmlNode node)
+    {
+        if (node == null)
+        {
+            return false;
+        }
+
+        return node.GetChildren().Count > 0;
+    }
+
+    void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (string.IsNullOrEmpty(this.selectorText))
+        {
+            foreach (HtmlNode child in node.GetChildren())
+            {
+                ApplyToChildren(child, htmlStyles);
+            }
+        }
+        else
+        {
+            context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
         }
     }
 }

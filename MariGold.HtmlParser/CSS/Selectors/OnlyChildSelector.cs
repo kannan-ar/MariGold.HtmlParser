@@ -1,121 +1,120 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+internal sealed class OnlyChildSelector : CSSelector, IAttachedSelector
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
+    private readonly Regex regex;
 
-    internal sealed class OnlyChildSelector : CSSelector, IAttachedSelector
+    private string selectorText;
+
+    private OnlyChildSelector(ISelectorContext context, string selectorText, Specificity specificity)
     {
-        private readonly Regex regex;
+        this.context = context;
+        regex = new Regex("^:only-child");
+        this.selectorText = selectorText;
+        this.specificity = specificity;
+    }
 
-        private string selectorText;
-
-        private OnlyChildSelector(ISelectorContext context, string selectorText, Specificity specificity)
+    internal OnlyChildSelector(ISelectorContext context)
+    {
+        if (context == null)
         {
-            this.context = context;
-            regex = new Regex("^:only-child");
-            this.selectorText = selectorText;
-            this.specificity = specificity;
+            throw new ArgumentNullException(nameof(context));
         }
 
-        internal OnlyChildSelector(ISelectorContext context)
+        context.AddAttachedSelector(this);
+        this.context = context;
+
+        regex = new Regex("^:only-child");
+    }
+
+    internal override bool Prepare(string selector)
+    {
+        Match match = regex.Match(selector);
+
+        this.selectorText = string.Empty;
+        this.specificity = new Specificity();
+
+        if (match.Success)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            context.AddAttachedSelector(this);
-            this.context = context;
-
-            regex = new Regex("^:only-child");
+            this.selectorText = selector[match.Value.Length..];
         }
 
-        internal override bool Prepare(string selector)
+        return match.Success;
+    }
+
+    internal override bool IsValidNode(HtmlNode node)
+    {
+        if (node == null)
         {
-            Match match = regex.Match(selector);
-
-            this.selectorText = string.Empty;
-            this.specificity = new Specificity();
-
-            if (match.Success)
-            {
-                this.selectorText = selector.Substring(match.Value.Length);
-            }
-
-            return match.Success;
+            return false;
         }
 
-        internal override bool IsValidNode(HtmlNode node)
+        if (node.Tag == HtmlTag.TEXT)
         {
-            if (node == null)
-            {
-                return false;
-            }
-
-            if (node.Tag == HtmlTag.TEXT)
-            {
-                return false;
-            }
-
-            if (node.Parent == null)
-            {
-                return false;
-            }
-
-            bool isValid = true;
-
-            foreach (HtmlNode child in node.GetParent().GetChildren())
-            {
-                //There is a non text node other than current node. So the selector is not valid
-                if (child != node && child.Tag != HtmlTag.TEXT)
-                {
-                    isValid = false;
-                    break;
-                }
-            }
-
-            return isValid;
+            return false;
         }
 
-        internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+        if (node.Parent == null)
         {
-            if (IsValidNode(node))
+            return false;
+        }
+
+        bool isValid = true;
+
+        foreach (HtmlNode child in node.GetParent().GetChildren())
+        {
+            //There is a non text node other than current node. So the selector is not valid
+            if (child != node && child.Tag != HtmlTag.TEXT)
             {
-                if (string.IsNullOrEmpty(this.selectorText))
-                {
-                    ApplyStyle(node, htmlStyles);
-                }
-                else
-                {
-                    context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
-                }
+                isValid = false;
+                break;
             }
         }
 
-        internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
-        }
+        return isValid;
+    }
 
-        internal override CSSelector Clone()
+    internal override void Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        if (IsValidNode(node))
         {
-            return new OnlyChildSelector(context, selectorText, specificity.Clone());
+            if (string.IsNullOrEmpty(this.selectorText))
+            {
+                ApplyStyle(node, htmlStyles);
+            }
+            else
+            {
+                context.ParseBehavior(this.selectorText, CalculateSpecificity(SelectorType.PseudoClass), node, htmlStyles);
+            }
         }
+    }
 
-        bool IAttachedSelector.Prepare(string selector)
-        {
-            return Prepare(selector);
-        }
+    internal override void ApplyStyle(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        node.CopyHtmlStyles(htmlStyles, CalculateSpecificity(SelectorType.PseudoClass));
+    }
 
-        bool IAttachedSelector.IsValidNode(HtmlNode node)
-        {
-            return IsValidNode(node);
-        }
+    internal override CSSelector Clone()
+    {
+        return new OnlyChildSelector(context, selectorText, specificity.Clone());
+    }
 
-        void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
-        {
-            Parse(node, htmlStyles);
-        }
+    bool IAttachedSelector.Prepare(string selector)
+    {
+        return Prepare(selector);
+    }
+
+    bool IAttachedSelector.IsValidNode(HtmlNode node)
+    {
+        return IsValidNode(node);
+    }
+
+    void IAttachedSelector.Parse(HtmlNode node, List<HtmlStyle> htmlStyles)
+    {
+        Parse(node, htmlStyles);
     }
 }

@@ -1,13 +1,12 @@
-﻿namespace MariGold.HtmlParser
+﻿namespace MariGold.HtmlParser;
+
+internal enum SelectorType
 {
-    internal enum SelectorType
-    {
-        Global,
-        Element,
-        PseudoClass,
-        Attribute,
-        Class,
-        Identity,
-        Inline
-    }
+    Global,
+    Element,
+    PseudoClass,
+    Attribute,
+    Class,
+    Identity,
+    Inline
 }
